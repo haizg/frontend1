@@ -3,7 +3,6 @@
 
     <h2>Event Registration</h2>
 
-    <!-- Email -->
     <label>Email</label>
     <input
       type="email"
@@ -11,7 +10,6 @@
       placeholder="example@email.com"
     />
 
-    <!-- Participants -->
     <label>Number of participants</label>
     <select [(ngModel)]="participants">
       <option *ngFor="let n of [1,2,3,4,5]" [value]="n">
@@ -19,15 +17,12 @@
       </option>
     </select>
 
-    <!-- Message -->
     <p class="message" *ngIf="message">{{ message }}</p>
 
-    <!-- Submit -->
     <button (click)="submit()" [disabled]="isLoading">
       {{ isLoading ? 'Submitting...' : 'Submit' }}
     </button>
 
-    <!-- Cancel -->
     <button class="cancel" (click)="close()">Cancel</button>
 
   </div>

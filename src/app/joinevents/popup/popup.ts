@@ -45,7 +45,6 @@ export class Popup {
 
     console.log('Registration data:', data);
 
-    // simulate backend call
     setTimeout(() => {
       this.isLoading = false;
       this.message = 'Registration successful ✅';

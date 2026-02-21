@@ -1,0 +1,42 @@
+
+<form>
+  <h1>Sign Up</h1>
+  <div>
+    <label>Nom</label>
+    <input type="text" name="nom" placeholder="Nom" [(ngModel)]="nom" required #nomRef="ngModel" >
+    <br>
+  </div>
+  <small *ngIf="nomRef.errors?.['required'] && nomRef.touched">* Champs obligatoire</small>
+
+  <br>
+
+  <div>
+    <label>Prenom</label>
+    <input type="text" name="prenom" placeholder="Prenom" [(ngModel)]="prenom" required #prenomRef="ngModel">
+    <br>
+  </div>
+  <small *ngIf="prenomRef.errors?.['required'] && prenomRef.touched">* Champs obligatoire</small>
+
+  <br>
+
+  <div>
+    <label>Email</label>
+    <input type="text" name="email" placeholder="Email" [(ngModel)]="email" required email #emailRef="ngModel">
+    <br>
+  </div>
+  <small *ngIf="emailRef.errors?.['required'] && emailRef.touched">* Champs obligatoire</small>
+  <small *ngIf="emailRef.errors?.['email'] && emailRef.touched">Forme email incorrecte</small>
+  <br>
+
+  <div>
+    <label>Mot de passe</label>
+    <input type="password" name="mdp" placeholder="Mot de passe" [(ngModel)]="mdp" required #mdpRef="ngModel" minlength="5" >
+    <br>
+  </div>
+  <small *ngIf="mdpRef.errors?.['required'] && mdpRef.touched">* Champs obligatoire</small>
+  <small *ngIf="mdpRef.errors?.['minlength'] && mdpRef.touched">Taille minimale 5</small>
+  <br>
+
+  <button (click)="signUp()" type="submit">Sign Up</button>
+
+</form>

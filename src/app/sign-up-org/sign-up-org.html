@@ -1,0 +1,43 @@
+<form>
+<h1>Sign Up</h1>
+
+<div>
+  <label>Nom</label>
+  <input type="text" name="nom" placeholder="Nom" [(ngModel)]="nom" required #nomRef="ngModel">
+</div>
+<small *ngIf="nomRef.errors?.['required'] && nomRef.touched">* Champs obligatoire</small>
+<br>
+
+<div>
+  <label>Prenom</label>
+  <input type="text" name="prenom" placeholder="Prenom" [(ngModel)]="prenom" required #prenomRef="ngModel">
+</div>
+<small *ngIf="prenomRef.errors?.['required'] && prenomRef.touched">* Champs obligatoire</small>
+<br>
+
+<div>
+  <label>Adresse</label>
+  <input type="text" name="adresse" placeholder="Adresse" [(ngModel)]="adresse" required #adresseRef="ngModel">
+</div>
+<small *ngIf="adresseRef.errors?.['required'] && adresseRef.touched">* Champs obligatoire</small>
+<br>
+
+<div>
+  <label>Numéro CIN</label>
+  <input type="text" name="cin" placeholder="CIN" [(ngModel)]="cin" required #cinRef="ngModel" minlength="8" maxlength="8">
+</div>
+<small *ngIf="cinRef.errors?.['required'] && cinRef.touched">* Champs obligatoire</small>
+<small *ngIf="cinRef.errors?.['minlength'] && cinRef.touched">Longueur CIN doit etre 8 </small>
+<small *ngIf="cinRef.errors?.['maxlength'] && cinRef.touched">Longueur CIN doit etre 8 </small>
+<br>
+
+<div>
+  <label>Email</label>
+  <input type="text" name="email" placeholder="Email" [(ngModel)]="email" required email #emailRef="ngModel">
+</div>
+<small *ngIf="emailRef.errors?.['required'] && emailRef.touched">* Champs obligatoire</small>
+<small *ngIf="emailRef.errors?.['email'] && emailRef.touched">Forme email incorrecte</small>
+<br>
+
+<button type="submit" (click)="signed()">Sign Up</button>
+</form>

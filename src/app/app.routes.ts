@@ -5,5 +5,6 @@ import {Home} from './home/home';
 
 export const routes: Routes = [
   {path:'api/login', component:Login},
-  {path:'api/home',component: Home}
+  {path:'api/home',component: Home},
+
 ];

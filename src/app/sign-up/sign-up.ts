@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
+  standalone: true,
   imports: [
     FormsModule,
     CommonModule
@@ -21,7 +22,10 @@ export class SignUp {
   email='';
   mdp='';
 
-  signUp(){
-      this.router.navigate(['/api/home']);
+  signUp(form:any){
+    if (form.invalid){
+      return;
+    }
+    this.router.navigate(['/api/home']);
   }
 }

@@ -1,4 +1,4 @@
-<form>
+<form #formRef="ngForm" (ngSubmit)="signed(formRef)"   >
 <h1>Sign Up</h1>
 
 <div>
@@ -39,5 +39,5 @@
 <small *ngIf="emailRef.errors?.['email'] && emailRef.touched">Forme email incorrecte</small>
 <br>
 
-<button type="submit" (click)="signed()">Sign Up</button>
+<button type="submit" >Sign Up</button>
 </form>

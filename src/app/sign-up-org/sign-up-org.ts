@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-sign-up-org',
+  standalone: true,
   imports: [
     FormsModule,
     CommonModule
@@ -22,7 +23,11 @@ export class SignUpOrg {
   constructor(private router:Router) {
   }
 
-  signed(){
+  signed(form:any){
+    if (form.invalid){
+      return;
+    }
+
     this.router.navigate(['/api/home']);
   }
 

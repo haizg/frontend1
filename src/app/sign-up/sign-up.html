@@ -1,5 +1,5 @@
 
-<form>
+<form #formRef="ngForm" (ngSubmit)="signUp(formRef)"  >
   <h1>Sign Up</h1>
   <div>
     <label>Nom</label>
@@ -37,6 +37,6 @@
   <small *ngIf="mdpRef.errors?.['minlength'] && mdpRef.touched">Taille minimale 5</small>
   <br>
 
-  <button (click)="signUp()" type="submit">Sign Up</button>
+  <button type="submit">Sign Up</button>
 
 </form>

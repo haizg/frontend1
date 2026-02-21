@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-sign-up-option',
+  standalone: true,
   imports: [],
   templateUrl: './sign-up-option.html',
   styleUrl: './sign-up-option.css',

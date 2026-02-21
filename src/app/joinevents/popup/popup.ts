@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class Popup {
 
-  isVisible = false;
+  isVisible = true;
   isLoading = false;
   message = '';
 
@@ -48,7 +48,7 @@ export class Popup {
     // simulate backend call
     setTimeout(() => {
       this.isLoading = false;
-      this.message = 'Registration successful ✅';
+      this.message = 'Registration successful ';
 
       setTimeout(() => {
         this.close();

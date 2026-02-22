@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
     imports: [
         FormsModule,
         ReactiveFormsModule
@@ -28,12 +29,12 @@ export class Login {
       });
   }
 
-  username="";
+  email="";
   password="";
 
   login(){
     const body={
-      username:this.username,
+      email:this.email,
       password:this.password
     };
 
@@ -41,12 +42,10 @@ export class Login {
       .subscribe({
         next:(res:any)=> {
           console.log("success");
-          alert("login successful");
           this.router.navigate(['/api/home'])
         },
         error: (err) => {
           console.log("wrong credentials");
-          alert("invalid username or password")
         }
 
       });

@@ -39,5 +39,11 @@
 <small *ngIf="emailRef.errors?.['email'] && emailRef.touched">Forme email incorrecte</small>
 <br>
 
-<button type="submit" >Sign Up</button>
+  <div>
+    <label>Mot de passe</label>
+    <input type="password" name="mdp" placeholder="Mot de passe" [(ngModel)]="mdp" required #mdpRef="ngModel">
+  </div>
+  <small *ngIf="mdpRef.errors?.['required'] && mdpRef.touched">* Champs obligatoire</small>
+<br>
+  <button type="submit" >Sign Up</button>
 </form>

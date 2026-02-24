@@ -36,16 +36,16 @@ form label {
 form button {
   width: 100%;
   padding: 10px;
-  background: #5B3FD8;
+  background: #2a6262;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 19px;
   cursor: pointer;
 }
 form button:hover{
   font-weight: bold;
-  font-size: medium;
-  background: #5232e5;
+  font-size: small;
+  background: #306e6e;
 }
 small{
   color: red;

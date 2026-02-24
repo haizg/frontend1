@@ -5,8 +5,10 @@ header{
   border-radius: 30px;
   display: flex;
   justify-content: space-between;
+
 }
 .vera{
+  font-style: italic;
   font-size: 20px;
   padding: 8px 12px;
 }
@@ -14,14 +16,14 @@ header{
   background-color: #2a6262;
   color: white;
   border-radius: 30px;
-  padding: 5px;
+  padding: 3px;
   border: none;
   font-weight: bold;
   font-size: medium;
   padding: 10px 12px;
 }
 .btn:hover{
-  background-color: #165562;
+  background-color: #306e6e;
   color: whitesmoke;
 
 }

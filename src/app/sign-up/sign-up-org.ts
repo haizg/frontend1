@@ -3,7 +3,6 @@ import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
-import {response} from 'express';
 
 @Component({
   selector: 'app-sign-up-org',
@@ -22,6 +21,8 @@ export class SignUpOrg {
   cin='';
   email='';
   mdp='';
+  role= '';
+
   constructor(private router:Router, private http:HttpClient) {
   }
 
@@ -30,29 +31,32 @@ export class SignUpOrg {
 
   signed(form:any){
 
-    const newOrg= {
-      cin:this.cin,
-      nom:this.nom,
-      prenom:this.prenom,
-      adresse:this.adresse,
-      email:this.email,
-      password:this.mdp
-
-    }
-
+    console.log("form valid?", form.valid); // ✅ add this temporarily
+    console.log("role value:", this.role);   // ✅ add this too
 
     if (form.invalid){
       return;
     }
 
-    this.http.post("http://localhost:8081/api/signUpOrg", newOrg)
+    const newUser= {
+      nom:this.nom,
+      prenom:this.prenom,
+      email:this.email,
+      password:this.mdp,
+      role:this.role
+    }
+
+
+
+
+    this.http.post("http://localhost:8081/api/auth/signup", newUser, { responseType: 'text' })
       .subscribe({
         next: (response) => {
-          console.log("Signup successful, response:", response);
+          console.log("Signup successful:", response);
           this.router.navigate(['/api/home']);
         },
         error: (err) => {
-          console.error("error saving organizer",err);
+          console.error("Signup error",err);
         }
       });
   }

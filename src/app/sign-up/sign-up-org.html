@@ -15,21 +15,6 @@
 <small *ngIf="prenomRef.errors?.['required'] && prenomRef.touched">* Champs obligatoire</small>
 <br>
 
-<div>
-  <label>Adresse</label>
-  <input type="text" name="adresse" placeholder="Adresse" [(ngModel)]="adresse" required #adresseRef="ngModel">
-</div>
-<small *ngIf="adresseRef.errors?.['required'] && adresseRef.touched">* Champs obligatoire</small>
-<br>
-
-<div>
-  <label>Numéro CIN</label>
-  <input type="text" name="cin" placeholder="CIN" [(ngModel)]="cin" required #cinRef="ngModel" minlength="8" maxlength="8">
-</div>
-<small *ngIf="cinRef.errors?.['required'] && cinRef.touched">* Champs obligatoire</small>
-<small *ngIf="cinRef.errors?.['minlength'] && cinRef.touched">Longueur CIN doit etre 8 </small>
-<small *ngIf="cinRef.errors?.['maxlength'] && cinRef.touched">Longueur CIN doit etre 8 </small>
-<br>
 
 <div>
   <label>Email</label>
@@ -44,6 +29,15 @@
     <input type="password" name="mdp" placeholder="Mot de passe" [(ngModel)]="mdp" required #mdpRef="ngModel">
   </div>
   <small *ngIf="mdpRef.errors?.['required'] && mdpRef.touched">* Champs obligatoire</small>
+<br>
+
+<div class="role">
+    <input type="radio" name="role" value="ROLE_ORGANISATEUR" [(ngModel)]="role" required>
+    Organisateur
+
+    <input type="radio" name="role" value="ROLE_USER" [(ngModel)]="role" required>
+    Participant
+</div>
 <br>
   <button type="submit" >Sign Up</button>
 </form>

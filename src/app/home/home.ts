@@ -18,7 +18,7 @@ export class Home {
   }
 
   signUp(){
-    this.router.navigate(['/api/signupoption']);
+    this.router.navigate(['/api/signuporg']);
   }
 
 }

@@ -18,16 +18,7 @@ export class Login {
 
   constructor(private http: HttpClient, private router :Router) {}
 
-  ngOnInit() {
-    this.http.get('http://localhost:8081/api/hello', { responseType: 'text' })
-      .subscribe({
-        next: res => this.message = res,
-        error: err => {
-          console.error(err);
-          this.message = 'ERROR: Cannot connect to backend';
-        }
-      });
-  }
+
 
   email="";
   password="";
@@ -38,14 +29,22 @@ export class Login {
       password:this.password
     };
 
-    this.http.post('http://localhost:8081/api/login', body, { responseType: 'text' })
+    this.http.post('http://localhost:8081/api/auth/login', body, { responseType: 'text' })
       .subscribe({
-        next:(res:any)=> {
-          console.log("success");
+        next:(token)=> {
+          localStorage.setItem('token',token);
+          const payload = JSON.parse(atob(token.split('.')[1]));//extract payload where email and role
+          const role = payload.role;
+          localStorage.setItem('role',role);
+          console.log("log in successful",role);
           this.router.navigate(['/api/home'])
         },
         error: (err) => {
-          console.log("wrong credentials");
+          if (err.status===403){
+            console.error("Account not verified yet");
+          } else {
+            console.error("Invalid Credentials")
+          }
         }
 
       });

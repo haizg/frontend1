@@ -31,8 +31,8 @@ export class SignUpOrg {
 
   signed(form:any){
 
-    console.log("form valid?", form.valid); // ✅ add this temporarily
-    console.log("role value:", this.role);   // ✅ add this too
+    console.log("form valid?", form.valid);
+    console.log("role value:", this.role);
 
     if (form.invalid){
       return;

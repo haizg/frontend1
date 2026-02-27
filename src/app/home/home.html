@@ -1,7 +1,10 @@
 <header>
  <div class="vera">Véra</div>
   <div>
+    <ng-container *ngIf="!isLoggedIn">
     <button (click)="logIn()" class="btn">Log In</button>
     <button (click)="signUp()" class="btn">Sign Up</button>
+    </ng-container>
+    <button *ngIf="isLoggedIn" (click)="logOut()" class="btn" >Log Out</button>
   </div>
 </header>

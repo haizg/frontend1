@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component , Inject, PLATFORM_ID} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {CommonModule} from '@angular/common';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 
@@ -17,22 +17,22 @@ import {HttpClient} from '@angular/common/http';
 export class SignUpOrg {
   nom='';
   prenom='';
-  adresse='';
-  cin='';
   email='';
   mdp='';
   role= '';
 
-  constructor(private router:Router, private http:HttpClient) {
-  }
+  constructor(private router:Router,
+              private http:HttpClient,
+              @Inject(PLATFORM_ID) private platformId: Object)
+        {}
 
 
 
 
   signed(form:any){
 
-    console.log("form valid?", form.valid); // ✅ add this temporarily
-    console.log("role value:", this.role);   // ✅ add this too
+    console.log("form valid?", form.valid);
+    console.log("role value:", this.role);
 
     if (form.invalid){
       return;
@@ -52,8 +52,27 @@ export class SignUpOrg {
     this.http.post("http://localhost:8081/api/auth/signup", newUser, { responseType: 'text' })
       .subscribe({
         next: (response) => {
-          console.log("Signup successful:", response);
-          this.router.navigate(['/api/home']);
+          const credentials = {
+            email: this.email,
+            password:this.mdp
+          };
+
+          this.http.post("http://localhost:8081/api/auth/login",credentials, {responseType:'text'})
+            .subscribe({
+              next: (token) => {
+                if (isPlatformBrowser(this.platformId)){
+                  localStorage.setItem('token',token);
+                  const payload = JSON.parse(atob(token.split('.')[1]));
+                  localStorage.setItem('role',payload.role);
+                }
+                console.log("Signup successful:", response);
+                this.router.navigate(['/api/home']);
+              },
+              error: () => {
+                this.router.navigate(['/login']);
+              }
+            })
+
         },
         error: (err) => {
           console.error("Signup error",err);

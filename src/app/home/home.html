@@ -1,10 +1,36 @@
-<header>
- <div class="vera">Véra</div>
-  <div>
-    <ng-container *ngIf="!isLoggedIn">
-    <button (click)="logIn()" class="btn">Log In</button>
-    <button (click)="signUp()" class="btn">Sign Up</button>
-    </ng-container>
-    <button *ngIf="isLoggedIn" (click)="logOut()" class="btn" >Log Out</button>
+<app-navbar></app-navbar>
+
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">Véra</h1>
   </div>
-</header>
+</section>
+
+<section class="tagline">
+  <p>Organisez, gérez et participez à vos événements en toute simplicité.
+  Une plateforme moderne pour créer des expériences inoubliables.</p>
+</section>
+
+
+<section class="event-section">
+  <div class="event-grid">
+    <div class="event-card" *ngFor="let event of events">
+      <div class="event-image">
+        <img src="">
+      </div>
+      <div class="event-body">
+        <span class="event-category">{{event.category}}</span>
+        <h3 class="event-title">{{event.title}}</h3>
+        <p class="event-desc">{{event.description}}</p>
+        <p class="event-meta">{{event.date}} &nbsp; {{event.time}} </p>
+        <p class="event-meta">{{event.location}}</p>
+        <a [routerLink]="['/api/events',event.id]" class="see-more">See more></a>
+        <button class="btn btn-primary participate-btn">Participer</button>
+      </div>
+
+    </div>
+  </div>
+<p *ngIf="events.length === 0" class="no-events">No events available yet.</p>
+</section>
+

@@ -69,7 +69,7 @@ export class SignUpOrg {
                 this.router.navigate(['/api/home']);
               },
               error: () => {
-                this.router.navigate(['/login']);
+                this.router.navigate(['/api/login']);
               }
             })
 

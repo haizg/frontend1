@@ -1,0 +1,27 @@
+<header class="navbar">
+
+  <div class="nav-container">
+
+    <div class="left-section">
+      <div class="vera">Véra</div>
+
+      <nav class="nav-links">
+        <a routerLink="/">Home</a>
+        <a routerLink="/events">Events</a>
+        <a routerLink="/faqs">FAQs</a>
+        <a routerLink="/about">About Us</a>
+        <a routerLink="/contact">Contact</a>
+      </nav>
+    </div>
+
+    <div class="nav-buttons">
+      <ng-container *ngIf="!isLoggedIn">
+        <button (click)="logIn()" class="btn btn-outline">Log In</button>
+        <button (click)="signUp()" class="btn btn-primary">Sign Up</button>
+      </ng-container>
+
+      <button *ngIf="isLoggedIn" (click)="logOut()" class="btn btn-outline" >Log Out</button>
+
+    </div>
+  </div>
+</header>

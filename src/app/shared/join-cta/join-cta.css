@@ -1,0 +1,51 @@
+
+.join-section {
+  background: linear-gradient(135deg, #1a4d3e 0%, #2d6b4f 100%);
+  padding: 80px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.join-box {
+  background: white;
+  border-radius: 12px;
+  padding: 40px 50px;
+  max-width: 550px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  border: 5px solid black;
+
+}
+
+.join-box h2 {
+  font-family: 'Georgia', serif;
+  font-size: 42px;
+  font-weight: 600;
+  color: #1a4d3e;
+  margin: 0 0 30px 0;
+}
+
+.join-content {
+  background: #f8f5f0;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.join-description {
+  font-size: 19px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin: 0 0 15px 0;
+  line-height: 1.6;
+}
+
+.join-subtitle {
+  font-size: 17px;
+  color: #555;
+  line-height: 1.7;
+  margin: 0;
+}
+
+

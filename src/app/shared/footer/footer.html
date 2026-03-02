@@ -1,0 +1,44 @@
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-logo">
+      <h1>Véra</h1>
+    </div>
+
+    <div class="footer-links">
+      <div class="footer-column">
+        <h3>ÉVÉNEMENTS</h3>
+        <ul>
+          <li *ngFor="let link of eventLinks">
+            <a [routerLink]="link.route">{{ link.label }}</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>AIDE</h3>
+        <ul>
+          <li *ngFor="let link of helpLinks">
+            <a [routerLink]="link.route">{{ link.label }}</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>À PROPOS</h3>
+        <ul>
+          <li *ngFor="let link of aboutLinks">
+            <a [routerLink]="link.route">{{ link.label }}</a>
+          </li>
+          <li class="footer-email">
+            <span class="email-icon">✉</span>
+            <a [href]="'mailto:' + supportEmail">{{ supportEmail }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© {{ currentYear }} Véra— Tous droits réservés.</p>
+  </div>
+</footer>

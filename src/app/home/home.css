@@ -177,6 +177,16 @@
   padding: 40px;
   font-size: 16px;
 }
+.event-section {
+  padding-bottom: 0;
+}
 
+app-join-cta {
+  display: block;
+}
+
+app-footer {
+  display: block;
+}
 
 

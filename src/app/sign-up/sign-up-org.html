@@ -1,47 +1,43 @@
-<div class="modal-overlay" (click)="close()">
+<form #formRef="ngForm" (ngSubmit)="signed(formRef)"   >
+  <h1>Sign Up</h1>
 
-<form #formRef="ngForm" (ngSubmit)="signed(formRef)"  (click)="$event.stopPropagation()" >
-<h1>Sign Up</h1>
+  <div>ng
+    <label>Nom</label>
+    <input type="text" name="nom" placeholder="Nom" [(ngModel)]="nom" required #nomRef="ngModel">
+  </div>
+  <small *ngIf="nomRef.errors?.['required'] && nomRef.touched">* Champs obligatoire</small>
+  <br>
 
-<div>ng
-  <label>Nom</label>
-  <input type="text" name="nom" placeholder="Nom" [(ngModel)]="nom" required #nomRef="ngModel">
-</div>
-<small *ngIf="nomRef.errors?.['required'] && nomRef.touched">* Champs obligatoire</small>
-<br>
-
-<div>
-  <label>Prenom</label>
-  <input type="text" name="prenom" placeholder="Prenom" [(ngModel)]="prenom" required #prenomRef="ngModel">
-</div>
-<small *ngIf="prenomRef.errors?.['required'] && prenomRef.touched">* Champs obligatoire</small>
-<br>
+  <div>
+    <label>Prenom</label>
+    <input type="text" name="prenom" placeholder="Prenom" [(ngModel)]="prenom" required #prenomRef="ngModel">
+  </div>
+  <small *ngIf="prenomRef.errors?.['required'] && prenomRef.touched">* Champs obligatoire</small>
+  <br>
 
 
-<div>
-  <label>Email</label>
-  <input type="text" name="email" placeholder="Email" [(ngModel)]="email" required email #emailRef="ngModel">
-</div>
-<small *ngIf="emailRef.errors?.['required'] && emailRef.touched">* Champs obligatoire</small>
-<small *ngIf="emailRef.errors?.['email'] && emailRef.touched">Forme email incorrecte</small>
-<br>
+  <div>
+    <label>Email</label>
+    <input type="text" name="email" placeholder="Email" [(ngModel)]="email" required email #emailRef="ngModel">
+  </div>
+  <small *ngIf="emailRef.errors?.['required'] && emailRef.touched">* Champs obligatoire</small>
+  <small *ngIf="emailRef.errors?.['email'] && emailRef.touched">Forme email incorrecte</small>
+  <br>
 
   <div>
     <label>Mot de passe</label>
     <input type="password" name="mdp" placeholder="Mot de passe" [(ngModel)]="mdp" required #mdpRef="ngModel">
   </div>
   <small *ngIf="mdpRef.errors?.['required'] && mdpRef.touched">* Champs obligatoire</small>
-<br>
+  <br>
 
-<div class="role">
+  <div class="role">
     <input type="radio" name="role" value="ROLE_ORGANISATEUR" [(ngModel)]="role" required>
     Organisateur
 
     <input type="radio" name="role" value="ROLE_USER" [(ngModel)]="role" required>
     Participant
-</div>
-<br>
+  </div>
+  <br>
   <button type="submit" >Sign Up</button>
 </form>
-
-</div>

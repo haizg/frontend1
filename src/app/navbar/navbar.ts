@@ -10,7 +10,7 @@ import {ModalService} from '../services/modal.service';
         RouterLink
     ],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.css',
+  styleUrls: ['./navbar.css'],
 })
 export class Navbar {
   isLoggedIn=false;

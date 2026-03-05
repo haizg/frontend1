@@ -1,3 +1,5 @@
+<div [class.page-blur]="isModalOpen || isSignupModalOpen">
+
 <app-navbar></app-navbar>
 
 <section class="hero">
@@ -36,3 +38,9 @@
 
 <app-join-cta></app-join-cta>
 <app-footer></app-footer>
+
+
+</div>
+
+<app-login *ngIf="isModalOpen"></app-login>
+<app-sign-up-org *ngIf="isSignupModalOpen"></app-sign-up-org>

@@ -1,4 +1,6 @@
-<form #formRef="ngForm" (ngSubmit)="signed(formRef)"   >
+<div class="modal-overlay" (click)="close()">
+
+<form #formRef="ngForm" (ngSubmit)="signed(formRef)"  (click)="$event.stopPropagation()" >
 <h1>Sign Up</h1>
 
 <div>
@@ -41,3 +43,5 @@
 <br>
   <button type="submit" >Sign Up</button>
 </form>
+
+</div>

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
+import {ModalService} from '../services/modal.service';
 
 @Component({
   selector: 'app-login',
@@ -16,12 +17,17 @@ import {Router} from '@angular/router';
 export class Login {
   message = 'Loading...';
 
-  constructor(private http: HttpClient, private router :Router) {}
+  constructor(private http: HttpClient, private router :Router, private modalService: ModalService) {}
 
 
 
   email="";
   password="";
+
+  close(){
+    this.modalService.closeLoginModal();
+  }
+
 
   login(){
     const body={
@@ -37,7 +43,13 @@ export class Login {
           const role = payload.role;
           localStorage.setItem('role',role);
           console.log("log in successful",role);
-          this.router.navigate(['/api/home'])
+          this.modalService.closeLoginModal();
+          this.router.navigateByUrl('/',{skipLocationChange:true}).then(() => {
+            this.router.navigate(['/api/home'])
+          });
+
+
+
         },
         error: (err) => {
           if (err.status===403){
@@ -49,4 +61,5 @@ export class Login {
 
       });
   }
+
 }

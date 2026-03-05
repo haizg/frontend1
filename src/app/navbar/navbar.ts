@@ -1,6 +1,7 @@
 import {Component, Inject, PLATFORM_ID} from '@angular/core';
 import {isPlatformBrowser, NgIf} from "@angular/common";
 import {Router, RouterLink} from "@angular/router";
+import {ModalService} from '../services/modal.service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,6 +16,7 @@ export class Navbar {
   isLoggedIn=false;
 
   constructor(private router:Router,
+              private modalService: ModalService,
               @Inject(PLATFORM_ID) private platformId: Object) {
     if (isPlatformBrowser(this.platformId)){
       this.isLoggedIn=!!localStorage.getItem('token')
@@ -24,11 +26,11 @@ export class Navbar {
   }
 
   logIn(){
-    this.router.navigate(['/api/login']);
+    this.modalService.openLoginModal();
   }
 
   signUp(){
-    this.router.navigate(['/api/signuporg']);
+    this.modalService.openSignupModal();
   }
 
   logOut(){
@@ -37,6 +39,6 @@ export class Navbar {
       localStorage.removeItem('role');
     }
     this.isLoggedIn=false;
-    this.router.navigate(['/api/login'])
+    this.router.navigate(['/api/home'])
   }
 }

@@ -2,41 +2,44 @@
 
 <app-navbar></app-navbar>
 
+
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <h1 class="hero-title">Véra</h1>
+
+    <p class="hero-subtitle" *ngIf="isLoggedIn">
+      Bienvenue, {{ fullName }}
+    </p>
+
   </div>
 </section>
+
 
 <section class="tagline">
-  <p>Organisez, gérez et participez à vos événements en toute simplicité.
-  Une plateforme moderne pour créer des expériences inoubliables.</p>
+  <p *ngIf="isOrganisateur">
+    Créez, gérez et promouvez vos événements culturels en toute simplicité.<br>
+    Votre plateforme pour organiser des expériences inoubliables.
+  </p>
+
+  <p *ngIf="isParticipant">
+    Découvrez et participez à des événements culturels passionnants.<br>
+    Rejoignez une communauté engagée et vivez des expériences uniques.
+  </p>
+
+  <p *ngIf="!isLoggedIn">
+    Organisez, gérez et participez à vos événements en toute simplicité.<br>
+    Une plateforme moderne pour créer des expériences inoubliables.
+  </p>
 </section>
 
 
-<section class="event-section">
-  <div class="event-grid">
-    <div class="event-card" *ngFor="let event of events">
-      <div class="event-image">
-        <img src="">
-      </div>
-      <div class="event-body">
-        <span class="event-category">{{event.category}}</span>
-        <h3 class="event-title">{{event.title}}</h3>
-        <p class="event-desc">{{event.description}}</p>
-        <p class="event-meta">{{event.date}} &nbsp; {{event.time}} </p>
-        <p class="event-meta">{{event.location}}</p>
-        <a [routerLink]="['/api/events',event.id]" class="see-more">See more></a>
-        <button class="btn btn-primary participate-btn">Participer</button>
-      </div>
 
-    </div>
-  </div>
-<p *ngIf="events.length === 0" class="no-events">No events available yet.</p>
-</section>
 
-<app-join-cta></app-join-cta>
+
+<app-join-cta *ngIf="!isLoggedIn"></app-join-cta>
+
+
 <app-footer></app-footer>
 
 

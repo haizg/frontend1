@@ -19,7 +19,7 @@ export class SignUpOrg {
   prenom='';
   email='';
   mdp='';
-  role= '';
+  role= 'ROLE_USER';
 
   constructor(private router:Router,
               private http:HttpClient,
@@ -64,7 +64,16 @@ export class SignUpOrg {
                   localStorage.setItem('token',token);
                   const payload = JSON.parse(atob(token.split('.')[1]));
                   localStorage.setItem('role',payload.role);
+                  localStorage.setItem('user', JSON.stringify({
+                    email: this.email,
+                    nom: this.nom,
+                    prenom: this.prenom,
+                    role: payload.role
+                  }));
+
+                  console.log("User data saved to localStorage");
                 }
+
                 console.log("Signup successful:", response);
                 this.router.navigate(['/api/home']);
               },

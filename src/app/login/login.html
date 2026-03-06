@@ -1,4 +1,5 @@
-<form>
+<div class="modal-overlay" (click)="close()">
+<form (click)="$event.stopPropagation()">
   <h1>Login Page</h1>
   <div>
     <label>
@@ -21,3 +22,4 @@
 
 </form>
 
+</div>

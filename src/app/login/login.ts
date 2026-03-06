@@ -42,11 +42,12 @@ export class Login {
           const payload = JSON.parse(atob(token.split('.')[1]));//extract payload where email and role
           const role = payload.role;
           localStorage.setItem('role',role);
+          localStorage.removeItem('user');
           console.log("log in successful",role);
           this.modalService.closeLoginModal();
-          this.router.navigateByUrl('/',{skipLocationChange:true}).then(() => {
-            this.router.navigate(['/api/home'])
-          });
+          //  this.router.navigate(['/api/home'])
+          window.location.reload();
+
 
 
 

@@ -6,12 +6,15 @@ import {EventService} from '../services/event.service';
 import { Event } from '../models/event.model';
 import {JoinCta} from '../shared/join-cta/join-cta';
 import {Footer} from '../shared/footer/footer';
+import {ModalService} from '../services/modal.service';
+import {SignUpOrg} from '../sign-up/sign-up-org';
+import {Login} from '../login/login';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, Navbar,RouterModule,JoinCta,Footer],
+  imports: [CommonModule, Navbar, RouterModule, JoinCta, Footer, SignUpOrg, Login],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -21,26 +24,45 @@ export class Home {
   userName: string = '';
   userPrenom: string = '';
   isLoggedIn: boolean = false;
+  isModalOpen=false;
+  isSignupModalOpen=false;
 
-  constructor(private eventService: EventService,) {}
+
+  constructor(private eventService: EventService,
+              private modalService: ModalService,
+              @Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit(){
 
+    this.modalService.loginModal$.subscribe(state => this.isModalOpen=state);
+    this.modalService.signupModal$.subscribe(state=> this.isSignupModalOpen=state);
 
 
-    const userStr = localStorage.getItem('user');
-    if(userStr) {
-      const userData = JSON.parse(userStr);
-      this.userRole = userData.role;
-      this.userName = userData.nom;
-      this.userPrenom = userData.prenom;
-      this.isLoggedIn = true;
-      console.log("User role:", this.userRole);
-      console.log("Is Organisateur:", this.isOrganisateur);
-      console.log("Is Participant:", this.isParticipant);
+
+    if (isPlatformBrowser(this.platformId)){
+      const token = localStorage.getItem('token');
+      if(token) {
+        this.isLoggedIn = true;
+        this.userRole=localStorage.getItem('role');
+
+        const userStr = localStorage.getItem('user');
+        if (userStr){
+          const userData =JSON.parse(userStr);
+          this.userName=userData.nom;
+          this.userPrenom=userData.prenom;
+
+          console.log("User role:", this.userRole);
+          console.log("Is Organisateur:", this.isOrganisateur);
+          console.log("Is Participant:", this.isParticipant);
+        }
+
+
+
+      }
 
 
     }
+
     this.eventService.getEvents().subscribe({
       next:(data) => this.events = data,
       error:(err) => console.error('Failed to load events',err)

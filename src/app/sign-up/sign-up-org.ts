@@ -3,6 +3,7 @@ import {FormsModule} from '@angular/forms';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
+import {ModalService} from '../services/modal.service';
 
 @Component({
   selector: 'app-sign-up-org',
@@ -23,10 +24,13 @@ export class SignUpOrg {
 
   constructor(private router:Router,
               private http:HttpClient,
+              private modalService:ModalService,
               @Inject(PLATFORM_ID) private platformId: Object)
   {}
 
-
+  close(){
+    this.modalService.closeSignupModal();
+  }
 
 
   signed(form:any){
@@ -75,7 +79,10 @@ export class SignUpOrg {
                 }
 
                 console.log("Signup successful:", response);
-                this.router.navigate(['/api/home']);
+                this.modalService.closeSignupModal();
+                this.router.navigateByUrl('/',{skipLocationChange:true}).then(() => {
+                  this.router.navigate(['/api/home']);
+                });
               },
               error: () => {
                 this.router.navigate(['/api/login']);
@@ -88,4 +95,5 @@ export class SignUpOrg {
         }
       });
   }
+
 }

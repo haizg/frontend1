@@ -37,8 +37,12 @@ export class Navbar {
     if (isPlatformBrowser(this.platformId)){
       localStorage.removeItem('token');
       localStorage.removeItem('role');
+      localStorage.removeItem('user');
     }
     this.isLoggedIn=false;
-    this.router.navigate(['/api/home'])
+    window.location.reload();
+    //this.router.navigateByUrl('/', {skipLocationChange:true}).then(() => {
+    //  this.router.navigate(['/api/home']);
+    //});
   }
 }

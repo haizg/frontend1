@@ -43,11 +43,11 @@ export class Home {
       const token = localStorage.getItem('token');
       if(token) {
         this.isLoggedIn = true;
-        this.userRole=localStorage.getItem('role');
-
         const userStr = localStorage.getItem('user');
+        console.log(" User from localStorage:", userStr);
         if (userStr){
           const userData =JSON.parse(userStr);
+          this.userRole = userData.role;
           this.userName=userData.nom;
           this.userPrenom=userData.prenom;
 

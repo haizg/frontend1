@@ -38,16 +38,33 @@ export class Login {
     this.http.post('http://localhost:8081/api/auth/login', body, { responseType: 'text' })
       .subscribe({
         next:(token)=> {
-          localStorage.setItem('token',token);
-          const payload = JSON.parse(atob(token.split('.')[1]));//extract payload where email and role
-          const role = payload.role;
-          localStorage.setItem('role',role);
-          localStorage.removeItem('user');
-          console.log("log in successful",role);
-          this.modalService.closeLoginModal();
-          //  this.router.navigate(['/api/home'])
-          window.location.reload();
+          console.log("Token received:", token);
 
+          localStorage.setItem('token',token);
+
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          console.log(" Full JWT Payload:", payload);
+          console.log(" Role from payload:", payload.role);
+          console.log(" Nom from payload:", payload.nom);
+          console.log(" Prenom from payload:", payload.prenom);
+
+          const userData = {
+            email: payload.sub,
+            nom: payload.nom || '',
+            prenom: payload.prenom || '',
+            role: payload.role || ''
+          };
+
+          console.log(" User data object:", userData);
+
+          localStorage.setItem('user', JSON.stringify(userData));
+
+          const savedUser = localStorage.getItem('user');
+          console.log(" Saved to localStorage:", savedUser);
+          this.modalService.closeLoginModal();
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/api/home']);
+          });
 
 
 

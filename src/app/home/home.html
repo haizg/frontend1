@@ -9,7 +9,9 @@
   </div>
 </section>
 
-<section class="tagline">
+
+
+        <section class="tagline">
   <p *ngIf="isOrganisateur">
     Créez, gérez et promouvez vos événements culturels en toute simplicité.<br>
     Votre plateforme pour organiser des expériences inoubliables.
@@ -25,7 +27,22 @@
     Une plateforme moderne pour créer des expériences inoubliables.
   </p>
 </section>
+  <section class="quick-actions" *ngIf="isOrganisateur">
+    <div class="action-container">
+      <h2>créer vos évènements</h2>
 
+      <div class="action-buttons">
+        <button (click)="openCreateEventModal()" class="action-btn create-btn">
+          <span class="btn-icon">+</span>
+          <span class="btn-text">
+          <strong>Créer un événement</strong>
+          <small>Organisez votre prochain événement</small>
+        </span>
+        </button>
+      </div>
+    </div>
+
+  </section>
   <section class="event-section">
     <div class="event-grid">
       <div class="event-card" *ngFor="let event of events">
@@ -53,7 +70,8 @@
 
 <app-footer></app-footer>
 </div>
-
 <app-login *ngIf="isModalOpen"></app-login>
 <app-sign-up-org *ngIf="isSignupModalOpen"></app-sign-up-org>
 <app-popup *ngIf="isJoinModalOpen"></app-popup>
+<app-create-event-modal></app-create-event-modal>
+<app-create-event-modal (eventCreated)="onEventCreated()"></app-create-event-modal>

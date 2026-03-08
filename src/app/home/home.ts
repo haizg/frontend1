@@ -1,60 +1,53 @@
-import {ChangeDetectorRef, Component, Inject, PLATFORM_ID} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {CommonModule, isPlatformBrowser} from '@angular/common';
-import {Navbar} from '../navbar/navbar';
-import {EventService} from '../services/event.service';
+import { ChangeDetectorRef, Component, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Navbar } from '../navbar/navbar';
+import { EventService } from '../services/event.service';
 import { Event } from '../models/event.model';
-import {JoinCta} from '../shared/join-cta/join-cta';
-import {Footer} from '../shared/footer/footer';
-import {ModalService} from '../services/modal.service';
-import {SignUpOrg} from '../sign-up/sign-up-org';
-import {Login} from '../login/login';
-import {UserService} from '../services/user.service';
-import {Popup} from '../joinevents/popup/popup';
-
+import { JoinCta } from '../shared/join-cta/join-cta';
+import { Footer } from '../shared/footer/footer';
+import { ModalService } from '../services/modal.service';
+import { SignUpOrg } from '../sign-up/sign-up-org';
+import { Login } from '../login/login';
+import { UserService } from '../services/user.service';
+import { Popup } from '../joinevents/popup/popup';
+import { CreateEventModal } from '../create-event-modal/create-event-modal';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, Navbar, RouterModule, JoinCta, Footer, SignUpOrg, Login, Popup],
+  imports: [CommonModule, Navbar, RouterModule, JoinCta, Footer, SignUpOrg, Login, Popup, CreateEventModal],
   templateUrl: './home.html',
-  styleUrl: './home.css',
+  styleUrls: ['./home.css'],
 })
 export class Home {
+  @ViewChild(CreateEventModal) createEventModal!: CreateEventModal;
+
   events: Event[] = [];
   userRole: string | null = null;
   userName: string = '';
   userPrenom: string = '';
-  isLoggedIn: boolean = false;
+  isLoggedIn = false;
   isModalOpen = false;
   isSignupModalOpen = false;
-  isJoinModalOpen=false;
+  isJoinModalOpen = false;
 
-
-  constructor(private eventService: EventService,
-              private modalService: ModalService,
-              private userService: UserService,
-              private  cdr:ChangeDetectorRef,
-              @Inject(PLATFORM_ID) private platformId: Object) {
-  }
+  constructor(
+    private eventService: EventService,
+    private modalService: ModalService,
+    private userService: UserService,
+    private cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.modalService.loginModal$.subscribe(state => {
-        console.log('HOME received loginModal state:',state);
         this.isModalOpen = state;
         this.cdr.detectChanges();
       });
-
-      this.modalService.signupModal$.subscribe(state => {
-        this.isSignupModalOpen = state;
-      });
-
-      this.modalService.joinModal$.subscribe(state => {
-        console.log('joinModal state', state);
-        this.isJoinModalOpen = state;
-      })
-
+      this.modalService.signupModal$.subscribe(state => this.isSignupModalOpen = state);
+      this.modalService.joinModal$.subscribe(state => this.isJoinModalOpen = state);
 
       this.userService.currentUser$.subscribe(user => {
         if (user) {
@@ -68,18 +61,24 @@ export class Home {
           this.userName = '';
           this.userPrenom = '';
         }
-      this.cdr.detectChanges();
-      });
-    }
-      this.eventService.getEvents().subscribe({
-        next: (data) => {
-          console.log('Events received',data);
-          this.events = data;
-          this.cdr.detectChanges();
-        },
-        error: (err) => console.error('Failed to load events', err)
+        this.cdr.detectChanges();
       });
 
+      this.eventService.events$.subscribe(events => {
+        this.events = events;
+        this.cdr.detectChanges();
+      });
+
+      this.eventService.loadEvents();
+    }
+  }
+
+  openCreateEventModal() {
+    this.createEventModal.open();
+  }
+
+  onEventCreated() {
+    this.eventService.loadEvents();
   }
 
   get isOrganisateur(): boolean {
@@ -94,12 +93,7 @@ export class Home {
     return `${this.userPrenom} ${this.userName}`;
   }
 
-  openJoinModal(){
-    console.log('openJoinModal called')
+  openJoinModal() {
     this.modalService.openJoinModal();
   }
 }
-
-
-
-

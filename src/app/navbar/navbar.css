@@ -82,3 +82,16 @@
 .btn-primary:hover{
   background-color: #306e6e;
 }
+
+
+.user-info{
+  display:flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-name{
+  font-size: 14px;
+  color: #2a6262;
+  font-weight: 600;
+}

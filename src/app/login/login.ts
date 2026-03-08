@@ -3,6 +3,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {ModalService} from '../services/modal.service';
+import {UserService} from '../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,10 @@ import {ModalService} from '../services/modal.service';
 export class Login {
   message = 'Loading...';
 
-  constructor(private http: HttpClient, private router :Router, private modalService: ModalService) {}
+  constructor(private http: HttpClient,
+              private router :Router,
+              private modalService: ModalService,
+              private userService: UserService) {}
 
 
 
@@ -58,15 +62,12 @@ export class Login {
           console.log(" User data object:", userData);
 
           localStorage.setItem('user', JSON.stringify(userData));
-
-          const savedUser = localStorage.getItem('user');
-          console.log(" Saved to localStorage:", savedUser);
+          localStorage.setItem('role', payload.role);
+          this.userService.setUser(userData);
+          console.log('BEFORE closeLoginModal')
           this.modalService.closeLoginModal();
-          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-            this.router.navigate(['/api/home']);
-          });
-
-
+          console.log('AFTER closeLoginModal')
+          console.log(" Saved to localStorage:", userData);
 
         },
         error: (err) => {

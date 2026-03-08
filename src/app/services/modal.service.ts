@@ -16,4 +16,13 @@ export class ModalService {
   closeSignupModal(){this.signupModalOpen.next(false);}
 
 
+  private joinModalOpen = new BehaviorSubject<boolean>(false);
+  joinModal$=this.joinModalOpen.asObservable();
+
+  openJoinModal(){this.joinModalOpen.next(true);}
+  closeJoinModal(){this.joinModalOpen.next(false);}
+
+
+
+
 }

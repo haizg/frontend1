@@ -1,29 +1,40 @@
-<div class="overlay" *ngIf="isVisible">
-  <div class="popup">
+<div class="modal-overlay" (click)="close()">
+  <form (click)="$event.stopPropagation()">
 
-    <h2>Event Registration</h2>
+    <h1>Event Registration</h1>
 
+    <div>
     <label>Email</label>
     <input
       type="email"
       [(ngModel)]="email"
       placeholder="example@email.com"
+      name="email"
     />
+    </div>
 
+    <br>
+
+
+    <div>
     <label>Number of participants</label>
-    <select [(ngModel)]="participants">
+    <select [(ngModel)]="participants" name="participants">
       <option *ngFor="let n of [1,2,3,4,5]" [value]="n">
         {{ n }}
       </option>
     </select>
+    </div>
+
+    <br>
 
     <p class="message" *ngIf="message">{{ message }}</p>
 
-    <button (click)="submit()" [disabled]="isLoading">
+    <button type="button" (click)="submit()" [disabled]="isLoading">
       {{ isLoading ? 'Submitting...' : 'Submit' }}
     </button>
 
-    <button class="cancel" (click)="close()">Cancel</button>
 
-  </div>
+    <button type="button" class="cancel" (click)="close()">Cancel</button>
+</form>
 </div>
+

@@ -4,6 +4,7 @@ import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {ModalService} from '../services/modal.service';
+import {UserService} from '../services/user.service';
 
 @Component({
   selector: 'app-sign-up-org',
@@ -25,6 +26,7 @@ export class SignUpOrg {
   constructor(private router:Router,
               private http:HttpClient,
               private modalService:ModalService,
+              private userService: UserService,
               @Inject(PLATFORM_ID) private platformId: Object)
   {}
 
@@ -68,21 +70,20 @@ export class SignUpOrg {
                   localStorage.setItem('token',token);
                   const payload = JSON.parse(atob(token.split('.')[1]));
                   localStorage.setItem('role',payload.role);
-                  localStorage.setItem('user', JSON.stringify({
-                    email: this.email,
-                    nom: this.nom,
-                    prenom: this.prenom,
-                    role: payload.role
-                  }));
 
-                  console.log("User data saved to localStorage");
+                  const userData={
+                    email:this.email,
+                    nom:this.nom,
+                    prenom: this.prenom,
+                    role:payload.role
+                  };
+                  localStorage.setItem('user', JSON.stringify(userData));
+                  this.userService.setUser(userData);
+                  console.log("User data saved to localStorage and userService");
                 }
 
                 console.log("Signup successful:", response);
                 this.modalService.closeSignupModal();
-                this.router.navigateByUrl('/',{skipLocationChange:true}).then(() => {
-                  this.router.navigate(['/api/home']);
-                });
               },
               error: () => {
                 this.router.navigate(['/api/login']);

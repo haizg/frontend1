@@ -1,12 +1,13 @@
 import {Component, Inject, PLATFORM_ID} from '@angular/core';
-import {isPlatformBrowser, NgIf} from "@angular/common";
+import {isPlatformBrowser,CommonModule} from "@angular/common";
 import {Router, RouterLink} from "@angular/router";
 import {ModalService} from '../services/modal.service';
+import {UserService} from '../services/user.service';
 
 @Component({
   selector: 'app-navbar',
     imports: [
-        NgIf,
+        CommonModule,
         RouterLink
     ],
   templateUrl: './navbar.html',
@@ -14,16 +15,33 @@ import {ModalService} from '../services/modal.service';
 })
 export class Navbar {
   isLoggedIn=false;
+  userName='';
 
   constructor(private router:Router,
               private modalService: ModalService,
-              @Inject(PLATFORM_ID) private platformId: Object) {
+              private userService: UserService,
+              @Inject(PLATFORM_ID) private platformId: Object) {}
+
+  ngOnInit(){
     if (isPlatformBrowser(this.platformId)){
-      this.isLoggedIn=!!localStorage.getItem('token')
+      const userStr = localStorage.getItem('user');
+      if (userStr){
+        this.userService.setUser(JSON.parse(userStr));
+      }
     }
 
-
+    this.userService.currentUser$.subscribe(user => {
+      if (user) {
+        this.isLoggedIn=true;
+        this.userName=user.prenom+' '+user.nom;
+      }else {
+        this.isLoggedIn=false;
+        this.userName='';
+      }
+    });
   }
+
+
 
   logIn(){
     this.modalService.openLoginModal();
@@ -40,9 +58,7 @@ export class Navbar {
       localStorage.removeItem('user');
     }
     this.isLoggedIn=false;
-    window.location.reload();
-    //this.router.navigateByUrl('/', {skipLocationChange:true}).then(() => {
-    //  this.router.navigate(['/api/home']);
-    //});
+    this.userService.clearUser();
+
   }
 }

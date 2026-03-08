@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {ModalService} from '../../services/modal.service';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-popup',
@@ -11,23 +13,19 @@ import { FormsModule } from '@angular/forms';
 })
 export class Popup {
 
-  isVisible = true;
   isLoading = false;
   message = '';
-
   email = '';
   participants = 1;
 
-  open() {
-    this.isVisible = true;
-    this.email = '';
-    this.participants = 1;
-    this.message = '';
-    this.isLoading = false;
-  }
+  constructor(
+    private modalService:ModalService,
+    private http:HttpClient
+  ) {}
+
 
   close() {
-    this.isVisible = false;
+    this.modalService.closeJoinModal();
   }
 
   submit() {
@@ -37,22 +35,29 @@ export class Popup {
     }
 
     this.isLoading = true;
+    this.message='';
 
     const data = {
       email: this.email,
-      participants: this.participants
+      numberOfPeople: this.participants
     };
 
     console.log('Registration data:', data);
 
-    setTimeout(() => {
-      this.isLoading = false;
-      this.message = 'Registration successful ';
+    this.http.post('http://localhost:8081/api/events/join', data, {responseType:'text'})
+      .subscribe({
+        next:()=>{
+          this.isLoading=false;
+          this.message='Registration successful';
+          setTimeout(()=> {
+            this.close();
+          },1500);
+        },
+        error:()=>{
+          this.isLoading=false;
+          this.message='Something went wrong. Please try again.'
+        }
+      });
 
-      setTimeout(() => {
-        this.close();
-      }, 1500);
-
-    }, 1000);
   }
 }

@@ -20,8 +20,11 @@
         <button (click)="signUp()" class="btn btn-primary">Sign Up</button>
       </ng-container>
 
-      <button *ngIf="isLoggedIn" (click)="logOut()" class="btn btn-outline" >Log Out</button>
-
+      <div *ngIf="isLoggedIn" class="user-info">
+        <span class="user-name">{{userName}}</span>
+        <button *ngIf="isLoggedIn" (click)="logOut()" class="btn btn-outline" >Log Out</button>
+      </div>
     </div>
   </div>
+
 </header>

@@ -1,4 +1,4 @@
-<div  [class.page-blur]="isModalOpen || isSignupModalOpen">
+<div  [class.page-blur]="isModalOpen || isSignupModalOpen || isJoinModalOpen">
 <app-navbar></app-navbar>
 
 
@@ -6,11 +6,6 @@
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <h1 class="hero-title">Véra</h1>
-
-    <p class="hero-subtitle" *ngIf="isLoggedIn">
-      Bienvenue, {{ fullName }}
-    </p>
-
   </div>
 </section>
 
@@ -44,7 +39,7 @@
           <p class="event-meta">{{event.date}} &nbsp; {{event.time}}</p>
           <p class="event-meta">{{event.location}}</p>
           <a [routerLink]="['/api/events', event.id]" class="see-more">See more ›</a>
-          <button class="btn btn-primary">Participer</button>
+          <button (click)="openJoinModal(); $event.stopPropagation()" class="btn btn-primary">Participer</button>
         </div>
       </div>
     </div>
@@ -53,7 +48,7 @@
 
 
 
-<app-join-cta *ngIf="!isLoggedIn"></app-join-cta>
+<app-join-cta></app-join-cta>
 
 
 <app-footer></app-footer>
@@ -61,3 +56,4 @@
 
 <app-login *ngIf="isModalOpen"></app-login>
 <app-sign-up-org *ngIf="isSignupModalOpen"></app-sign-up-org>
+<app-popup *ngIf="isJoinModalOpen"></app-popup>

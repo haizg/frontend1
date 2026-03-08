@@ -1,1 +1,65 @@
-<p>event-detail works!</p>
+<div [class.page-blur]="isJoinModalOpen || isSignupModalOpen || isModalOpen">
+  <app-navbar></app-navbar>
+
+  <div class="event-detail-container" *ngIf="event">
+    <div class="event-hero">
+      <img [src]="event!.imageUrl" [alt]="event!.title">
+      <div class="event-hero-overlay"></div>
+      <div class="event-hero-content">
+        <span class="event-category">{{ event!.category }}</span>
+        <h1>{{ event!.title }}</h1>
+      </div>
+    </div>
+
+    <div class="event-body">
+      <div class="event-info">
+        <div class="info-card">
+          <span class="info-label">📅 Date</span>
+          <span class="info-value">{{ event!.date }}</span>
+        </div>
+        <div class="info-card">
+          <span class="info-label">🕐 Heure</span>
+          <span class="info-value">{{ event!.time }}</span>
+        </div>
+        <div class="info-card">
+          <span class="info-label">📍 Lieu</span>
+          <span class="info-value">{{ event!.location }}</span>
+        </div>
+        <div class="info-card">
+          <span class="info-label">👥 Capacité</span>
+          <span class="info-value">{{ event!.capacity }} personnes</span>
+        </div>
+      </div>
+
+      <div class="event-description">
+        <h2>À propos de cet événement</h2>
+        <p>{{ event!.description }}</p>
+      </div>
+
+      <button class="btn-participer" (click)="openJoinModal()">
+        Participer à cet événement
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!event" class="loading">
+    <p>Chargement...</p>
+  </div>
+
+  <app-footer></app-footer>
+</div>
+
+
+<app-login *ngIf="isModalOpen"></app-login>
+<app-sign-up-org *ngIf="isSignupModalOpen"></app-sign-up-org>
+<app-popup *ngIf="isJoinModalOpen"></app-popup>
+
+
+
+
+
+
+
+
+
+

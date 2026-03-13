@@ -1,17 +1,40 @@
-<div  [class.page-blur]="isModalOpen || isSignupModalOpen || isJoinModalOpen">
+<div [class.page-blur]="isModalOpen || isSignupModalOpen || isJoinModalOpen" xmlns="http://www.w3.org/1999/html">
 <app-navbar></app-navbar>
 
 
+
 <section class="hero">
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <h1 class="hero-title">Véra</h1>
+  <div class="carousel">
+    <div class="carousel-slide" *ngFor="let slide of slides; let i =index"
+        [class.active]="i===currentSlide">
+      <img [src]="slide.image" >
+      <div class="carousel-overlay"></div>
+    </div>
+
+      <div class="carousel-title">
+        <h1>Véra</h1>
+      </div>
+
+
+      <div class="carousel-dots">
+        <span *ngFor="let Slide of slides; let i = index"
+              class="dot" [class.active]="i === currentSlide"
+              (click)="goToSlide(i)">
+        </span>
+      </div>
+
   </div>
 </section>
 
 
 
-        <section class="tagline">
+
+
+
+
+
+
+  <section class="tagline">
   <p *ngIf="isOrganisateur">
     Créez, gérez et promouvez vos événements culturels en toute simplicité.<br>
     Votre plateforme pour organiser des expériences inoubliables.
@@ -45,9 +68,10 @@
   </section>
   <section class="event-section">
     <div class="event-grid">
-      <div class="event-card" *ngFor="let event of events">
+      <div class="event-card" *ngFor="let event of events"
+        [routerLink]="['/api/events', event.id]" style="cursor:pointer;">
         <div class="event-image">
-          <img [src]="event.imageUrl || 'assets/placeholder.jpg'" [alt]="event.title">
+          <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
         </div>
         <div class="event-body">
           <span class="event-category">{{event.category}}</span>
@@ -55,7 +79,8 @@
           <p class="event-desc">{{event.description}}</p>
           <p class="event-meta">{{event.date}} &nbsp; {{event.time}}</p>
           <p class="event-meta">{{event.location}}</p>
-          <a [routerLink]="['/api/events', event.id]" class="see-more">See more ›</a>
+          <br>
+
           <button (click)="openJoinModal(); $event.stopPropagation()" class="btn btn-primary">Participer</button>
         </div>
       </div>
@@ -73,5 +98,4 @@
 <app-login *ngIf="isModalOpen"></app-login>
 <app-sign-up-org *ngIf="isSignupModalOpen"></app-sign-up-org>
 <app-popup *ngIf="isJoinModalOpen"></app-popup>
-<app-create-event-modal></app-create-event-modal>
 <app-create-event-modal (eventCreated)="onEventCreated()"></app-create-event-modal>

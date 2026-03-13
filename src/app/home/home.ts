@@ -32,6 +32,18 @@ export class Home {
   isSignupModalOpen = false;
   isJoinModalOpen = false;
 
+  currentSlide=0;
+  slides=[
+    { image : 'assets/slide1.jpg'},
+    { image : 'assets/slide2.jpg'},
+    { image : 'assets/slide3.jpg'},
+    { image : 'assets/slide4.jpg'},
+    { image : 'assets/slide5.jpg'},
+
+  ]
+
+
+
   constructor(
     private eventService: EventService,
     private modalService: ModalService,
@@ -46,8 +58,15 @@ export class Home {
         this.isModalOpen = state;
         this.cdr.detectChanges();
       });
-      this.modalService.signupModal$.subscribe(state => this.isSignupModalOpen = state);
-      this.modalService.joinModal$.subscribe(state => this.isJoinModalOpen = state);
+      this.modalService.signupModal$.subscribe(state => {
+        this.isSignupModalOpen = state;
+        this.cdr.detectChanges();
+      });
+
+      this.modalService.joinModal$.subscribe(state => {
+        this.isJoinModalOpen = state;
+        this.cdr.detectChanges();
+      });
 
       this.userService.currentUser$.subscribe(user => {
         if (user) {
@@ -64,22 +83,46 @@ export class Home {
         this.cdr.detectChanges();
       });
 
-      this.eventService.events$.subscribe(events => {
-        this.events = events;
-        this.cdr.detectChanges();
+      this.eventService.getEvents().subscribe({
+        next:(data)=> {
+          this.events = data;
+          this.cdr.detectChanges();
+        },
+        error:(err) => console.error('Failed to load events',err)
       });
 
-      this.eventService.loadEvents();
+      setInterval(()=>{
+        this.currentSlide=(this.currentSlide+1) % this.slides.length;
+        this.cdr.detectChanges();
+      },3000)
+
     }
   }
+
+
+
+  goToSlide(index:number){
+    this.currentSlide=index;
+  }
+
 
   openCreateEventModal() {
     this.createEventModal.open();
   }
 
   onEventCreated() {
-    this.eventService.loadEvents();
+    this.eventService.getEvents().subscribe({
+      next:(data)=> {
+        this.events=data;
+        this.cdr.detectChanges();
+      },
+    error:(err) => console.error('Failed to load events',err)
+  });
   }
+
+
+
+
 
   get isOrganisateur(): boolean {
     return this.userRole === 'ROLE_ORGANISATEUR';

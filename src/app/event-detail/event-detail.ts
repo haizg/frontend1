@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, Inject, PLATFORM_ID} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {EventService} from '../services/event.service';
 import {ModalService} from '../services/modal.service';
-import { Event } from '../models/event.model';
+import { EventModel } from '../models/event.model';
 import {isPlatformBrowser, CommonModule} from '@angular/common';
 import {Navbar} from '../navbar/navbar';
 import {Footer} from '../shared/footer/footer';
@@ -27,7 +27,7 @@ import { NgZone } from '@angular/core';
   styleUrl: './event-detail.css',
 })
 export class EventDetail {
-  event: Event | null=null;
+  event: EventModel | null=null;
   isJoinModalOpen=false;
   isModalOpen=false;
   isSignupModalOpen=false;

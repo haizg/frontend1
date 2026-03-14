@@ -1,4 +1,4 @@
-export interface Event {
+export interface EventModel {
   id:number;
   title:string;
   description:string;
@@ -8,4 +8,5 @@ export interface Event {
   imageUrl:string;
   capacity:number;
   category:string;
+  organisateurEmail?: string;
 }

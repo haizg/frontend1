@@ -21,7 +21,10 @@ export class SignUpOrg {
   prenom='';
   email='';
   mdp='';
+  confirmMdp = '';
   role= 'ROLE_USER';
+  nomOrganisation = '';
+  errorMessage = '';
 
   constructor(private router:Router,
               private http:HttpClient,
@@ -41,15 +44,26 @@ export class SignUpOrg {
     console.log("role value:", this.role);
 
     if (form.invalid){
+      this.errorMessage = "Veuillez remplir tous les champs obligatoires";
       return;
     }
+    if (this.mdp !== this.confirmMdp) {
+      this.errorMessage = "Les mots de passe ne correspondent pas";
+      return;
+    }
+    if (this.role === 'ROLE_ORGANISATEUR' && !this.nomOrganisation.trim()) {
+      this.errorMessage = "Le nom de l'organisation est obligatoire pour les organisateurs";
+      return;
+    }
+    this.errorMessage = '';
 
     const newUser= {
       nom:this.nom,
       prenom:this.prenom,
       email:this.email,
       password:this.mdp,
-      role:this.role
+      role:this.role,
+      nomOrganisation: this.nomOrganisation
     }
 
 
@@ -75,7 +89,8 @@ export class SignUpOrg {
                     email:this.email,
                     nom:this.nom,
                     prenom: this.prenom,
-                    role:payload.role
+                    role:payload.role,
+                    nomOrganisation: this.nomOrganisation
                   };
                   localStorage.setItem('user', JSON.stringify(userData));
                   this.userService.setUser(userData);

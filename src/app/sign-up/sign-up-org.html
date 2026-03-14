@@ -1,6 +1,9 @@
 <div class="modal-overlay" (click)="close()">
 <form #formRef="ngForm" (ngSubmit)="signed(formRef)"  (click)="$event.stopPropagation()" >
   <h1>Sign Up</h1>
+  <div class="error-banner" *ngIf="errorMessage">
+     {{ errorMessage }}
+  </div>
 
   <div>
     <label>Nom</label>
@@ -31,6 +34,21 @@
   </div>
   <small *ngIf="mdpRef.errors?.['required'] && mdpRef.touched">* Champs obligatoire</small>
   <br>
+  <div>
+    <label>Confirmer le mot de passe</label>
+    <input
+      type="password"
+      name="confirmMdp"
+      placeholder="Confirmer le mot de passe"
+      [(ngModel)]="confirmMdp"
+      required
+      #confirmMdpRef="ngModel">
+  </div>
+  <small *ngIf="confirmMdpRef.errors?.['required'] && confirmMdpRef.touched">* Champs obligatoire</small>
+  <small *ngIf="mdp !== confirmMdp && confirmMdpRef.touched" class="error-text">* Les mots de passe ne correspondent pas
+  </small>
+  <br>
+
 
   <div class="role">
     <input type="radio" name="role" value="ROLE_ORGANISATEUR" [(ngModel)]="role" required>
@@ -40,6 +58,18 @@
     Participant
   </div>
   <br>
+  <div *ngIf="role === 'ROLE_ORGANISATEUR'">
+    <label>Nom de l'organisation</label>
+    <input
+      type="text"
+      name="nomOrganisation"
+      placeholder="Ex: Association Culturelle de Tunis"
+      [(ngModel)]="nomOrganisation"
+      [required]="role === 'ROLE_ORGANISATEUR'"
+      #nomOrgRef="ngModel">
+    <small *ngIf="nomOrgRef.errors?.['required'] && nomOrgRef.touched">* Champs obligatoire pour organisateurs</small>
+  </div>
+  <br *ngIf="role === 'ROLE_ORGANISATEUR'">
   <button type="submit" >Sign Up</button>
 </form>
 </div>

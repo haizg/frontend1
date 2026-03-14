@@ -22,12 +22,12 @@ form input {
 }
 form div {
   display: flex;
-  align-items: center;          /* vertically align label + input */
+  align-items: center;
 
 }
 form label {
-  width: 120px;                 /* fixed width for labels */
-  text-align: left;             /* optional, can be right if you like */
+  width: 120px;
+  text-align: left;
   margin-right: 10px;
 }
 
@@ -58,4 +58,17 @@ small{
   align-items: center;
   justify-content: center;
   z-index: 1000;
+}
+.error-banner {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  text-align: center;
+  font-weight: 600;
+}
+
+div[name="nomOrganisation"] {
+  margin-top: 10px;
 }

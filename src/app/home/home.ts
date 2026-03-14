@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Navbar } from '../navbar/navbar';
 import { EventService } from '../services/event.service';
-import { Event } from '../models/event.model';
+import { EventModel } from '../models/event.model';
 import { JoinCta } from '../shared/join-cta/join-cta';
 import { Footer } from '../shared/footer/footer';
 import { ModalService } from '../services/modal.service';
@@ -12,21 +12,25 @@ import { Login } from '../login/login';
 import { UserService } from '../services/user.service';
 import { Popup } from '../joinevents/popup/popup';
 import { CreateEventModal } from '../create-event-modal/create-event-modal';
+import { EditEventModal } from '../edit-event-modal/edit-event-modal';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, Navbar, RouterModule, JoinCta, Footer, SignUpOrg, Login, Popup, CreateEventModal],
+  imports: [CommonModule, Navbar, RouterModule, JoinCta, Footer, SignUpOrg, Login, Popup, CreateEventModal,EditEventModal],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
 export class Home {
   @ViewChild(CreateEventModal) createEventModal!: CreateEventModal;
+  @ViewChild(EditEventModal) editEventModal!: EditEventModal;
 
-  events: Event[] = [];
+  events: EventModel[] = [];
   userRole: string | null = null;
   userName: string = '';
   userPrenom: string = '';
+  userEmail: string = '';
   isLoggedIn = false;
   isModalOpen = false;
   isSignupModalOpen = false;
@@ -49,6 +53,7 @@ export class Home {
     private modalService: ModalService,
     private userService: UserService,
     private cdr: ChangeDetectorRef,
+    private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -74,11 +79,13 @@ export class Home {
           this.userRole = user.role;
           this.userName = user.nom;
           this.userPrenom = user.prenom;
+          this.userEmail = user.email;
         } else {
           this.isLoggedIn = false;
           this.userRole = null;
           this.userName = '';
           this.userPrenom = '';
+
         }
         this.cdr.detectChanges();
       });
@@ -98,6 +105,14 @@ export class Home {
 
     }
   }
+  canModifyEvent(event: EventModel): boolean {
+    if (!this.isOrganisateur) {
+      return false;
+    }
+
+    return event.organisateurEmail === this.userEmail;
+  }
+
 
 
 
@@ -138,5 +153,43 @@ export class Home {
 
   openJoinModal() {
     this.modalService.openJoinModal();
+  }
+  openEditEventModal(eventModel: EventModel, $event: MouseEvent) {
+    $event.stopPropagation();
+    this.editEventModal.open(eventModel);  }
+
+  deleteEvent(eventModel: EventModel, $event: MouseEvent) {
+    $event.stopPropagation();
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`)) {
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    this.http.delete(`http://localhost:8081/api/events/${eventModel.id}`, { headers })
+      .subscribe({
+        next: () => {
+          console.log('Event deleted successfully');
+
+          window.location.reload();
+        },
+        error: (error) => {
+          console.error('Error deleting event:', error);
+
+          if (error.status === 403) {
+            alert('Vous ne pouvez supprimer que vos propres événements');
+          } else {
+            alert('Erreur lors de la suppression de l\'événement');
+          }
+        }
+      });
+  }
+
+  onEventUpdated() {
+    window.location.reload();
   }
 }

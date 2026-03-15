@@ -141,11 +141,37 @@
   padding: 40px 60px;
 }
 
-.event-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  align-items: stretch;
+.section-title {
+  font-size: 28px;
+  font-weight: 700;
+  padding-left: 10px;
+  color: #2a6262;
+  margin-bottom: 24px;
+}
+
+.event-row {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: #2a6262 #f0f0f0;
+}
+
+.event-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.event-row::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.event-row::-webkit-scrollbar-thumb {
+  background: #2a6262;
+  border-radius: 10px;
 }
 
 .event-card {
@@ -157,7 +183,9 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   background: white;
-  height: 100%;
+  min-width: 260px;
+  max-width: 260px;
+  flex-shrink: 0;
 }
 
 .event-card:hover {
@@ -166,7 +194,7 @@
 }
 
 .event-image {
-  height: 220px;
+  height: 160px;
   overflow: hidden;
 }
 
@@ -182,54 +210,23 @@
 }
 
 .event-body {
-  padding: 16px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.event-category {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #2a6262;
-  font-weight: 600;
-  margin-bottom: 6px;
-  display: block;
-}
-
 .event-title {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
   color: #1a1a1a;
-  margin-bottom: 6px;
-}
-
-.event-desc {
-  font-size: 15px;
-  color: #666;
-  line-height: 1.5;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
 }
 
 .event-meta {
   font-size: 12px;
   color: #888;
-  margin-bottom: 4px;
-}
-
-.see-more {
-  display: block;
-  font-size: 15px;
-  color: #2a6262;
-  text-decoration: none;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  margin: 10px 0;
-}
-
-.see-more:hover {
-  text-decoration: underline;
+  margin-bottom: 5px;
 }
 
 .participate-btn {
@@ -361,4 +358,23 @@
 .btn-delete:hover {
   background: #c82333;
   transform: translateY(-2px);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.see-all {
+  font-size: 15px;
+  color: #2a6262;
+  font-weight: 600;
+  text-decoration: none;
+  padding-right: 10px;
+}
+
+.see-all:hover {
+  text-decoration: underline;
 }

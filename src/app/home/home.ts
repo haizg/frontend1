@@ -126,8 +126,10 @@ export class Home {
   }
 
   onEventCreated() {
+    console.log('onEventCreated called');
     this.eventService.getEvents().subscribe({
       next:(data)=> {
+        console.log('Events reloaded:', data);
         this.events=data;
         this.cdr.detectChanges();
       },
@@ -151,8 +153,8 @@ export class Home {
     return `${this.userPrenom} ${this.userName}`;
   }
 
-  openJoinModal() {
-    this.modalService.openJoinModal();
+  openJoinModal(eventId:number) {
+    this.modalService.openJoinModal(eventId);
   }
   openEditEventModal(eventModel: EventModel, $event: MouseEvent) {
     $event.stopPropagation();

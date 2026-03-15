@@ -12,16 +12,24 @@ import {HttpClient} from '@angular/common/http';
   styleUrls: ['./popup.css']
 })
 export class Popup {
-
   isLoading = false;
   message = '';
   email = '';
   participants = 1;
+  eventId:number|null=null;
 
   constructor(
     private modalService:ModalService,
     private http:HttpClient
   ) {}
+
+  ngOnInit(){
+    this.modalService.currentEventId$.subscribe(id => {
+      this.eventId=id;
+    });
+  }
+
+
 
 
   close() {
@@ -39,7 +47,8 @@ export class Popup {
 
     const data = {
       email: this.email,
-      numberOfPeople: this.participants
+      numberOfPeople: this.participants,
+      eventId:this.eventId
     };
 
     console.log('Registration data:', data);

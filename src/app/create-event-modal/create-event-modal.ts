@@ -69,7 +69,8 @@ export class CreateEventModal {
 
           setTimeout(() => {
             this.close();
-            window.location.reload();
+            this.eventCreated.emit();
+            //window.location.reload();
           }, 1500);
         },
         error: (error) => {

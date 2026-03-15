@@ -60,5 +60,8 @@ export class Navbar {
     this.isLoggedIn=false;
     this.userService.clearUser();
 
+    if (this.router.url.includes('/api/profile')){
+      this.router.navigate(['/api/home']);
+    }
   }
 }

@@ -36,7 +36,7 @@
         <p>{{ event!.description }}</p>
       </div>
 
-      <button class="btn-participer" (click)="openJoinModal()">
+      <button class="btn-participer" (click)="openJoinModal(event!.id)">
         Participer à cet événement
       </button>
     </div>

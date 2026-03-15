@@ -4,6 +4,8 @@ import {Home} from './home/home';
 import {SignUpOrg} from './sign-up/sign-up-org';
 import {Popup} from './joinevents/popup/popup';
 import {EventDetail} from './event-detail/event-detail';
+import {Profile} from './profile/profile';
+import {EventsPage} from './events-page/events-page';
 
 
 export const routes: Routes = [
@@ -11,5 +13,8 @@ export const routes: Routes = [
   {path:'api/home',component: Home},
   {path:'api/signuporg', component:SignUpOrg},
   {path:'api/joinevent', component:Popup},
+  {path:'api/profile', component:Profile},
+  {path:'api/events', component:EventsPage},
   {path:'api/events/:id', component:EventDetail}
+
 ];

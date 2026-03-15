@@ -61,3 +61,10 @@ small{
   justify-content: center;
   z-index: 1000;
 }
+
+.error-message {
+  color: #dc3545;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 8px;
+}

@@ -6,8 +6,8 @@
       <div class="vera">Véra</div>
 
       <nav class="nav-links">
-        <a routerLink="/">Home</a>
-        <a routerLink="/events">Events</a>
+        <a routerLink="/api/home">Home</a>
+        <a routerLink="/api/events">Events</a>
         <a routerLink="/faqs">FAQs</a>
         <a routerLink="/about">About Us</a>
         <a routerLink="/contact">Contact</a>
@@ -21,8 +21,7 @@
       </ng-container>
 
       <div *ngIf="isLoggedIn" class="user-info">
-        <span class="user-name">{{userName}}</span>
-        <button *ngIf="isLoggedIn" (click)="logOut()" class="btn btn-outline" >Log Out</button>
+        <a [routerLink]="['/api/profile']" class="user-name">{{ userName }}</a>        <button *ngIf="isLoggedIn" (click)="logOut()" class="btn btn-outline" >Log Out</button>
       </div>
     </div>
   </div>

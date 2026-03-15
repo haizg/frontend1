@@ -4,19 +4,22 @@ import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {ModalService} from '../services/modal.service';
 import {UserService} from '../services/user.service';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
     imports: [
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        CommonModule
     ],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
   message = 'Loading...';
+  errorMessage='';
 
   constructor(private http: HttpClient,
               private router :Router,
@@ -34,6 +37,7 @@ export class Login {
 
 
   login(){
+    this.errorMessage='';
     const body={
       email:this.email,
       password:this.password
@@ -72,8 +76,12 @@ export class Login {
         },
         error: (err) => {
           if (err.status===403){
+            this.errorMessage='Compte non vérifié';
             console.error("Account not verified yet");
-          } else {
+          } else if (err.status === 401 || err.status===400){
+            this.errorMessage='Email ou mot de passe incorrect';
+          }else {
+            this.errorMessage='Une erreur est survenue. Réessayer';
             console.error("Invalid Credentials")
           }
         }

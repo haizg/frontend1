@@ -19,8 +19,21 @@ export class ModalService {
   private joinModalOpen = new BehaviorSubject<boolean>(false);
   joinModal$=this.joinModalOpen.asObservable();
 
-  openJoinModal(){this.joinModalOpen.next(true);}
-  closeJoinModal(){this.joinModalOpen.next(false);}
+
+  private currentEventID = new BehaviorSubject<number|null>(null);
+  currentEventId$ = this.currentEventID.asObservable();
+
+
+  openJoinModal(eventId: number){
+    this.currentEventID.next(eventId);
+    this.joinModalOpen.next(true);
+
+  }
+  closeJoinModal(){
+    this.joinModalOpen.next(false);
+    this.currentEventID.next(null);
+  }
+
 
 
 

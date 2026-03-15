@@ -78,8 +78,8 @@ export class EventDetail {
   }
 
 
-  openJoinModal(){
-    this.modalService.openJoinModal();
+  openJoinModal(eventId:number){
+    this.modalService.openJoinModal(eventId);
   }
 
 

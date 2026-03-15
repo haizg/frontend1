@@ -46,6 +46,9 @@
     Une plateforme moderne pour créer des expériences inoubliables.
   </p>
 </section>
+
+
+
   <section class="quick-actions" *ngIf="isOrganisateur">
     <div class="action-container">
       <h2>créer vos évènements</h2>
@@ -62,44 +65,38 @@
     </div>
 
   </section>
+
+
+
+
   <section class="event-section">
-    <div class="event-grid">
-      <div class="event-card" *ngFor="let event of events"
-        [routerLink]="['/api/events', event.id]" style="cursor:pointer;">
-        <div class="event-image" [routerLink]="['/api/events', event.id]" style="cursor:pointer;">
+    <div class="section-header">
+      <h2 class="section-title">Événements à venir</h2>
+      <a routerLink="/api/events" class="see-all">See all events</a>
+    </div>
+    <div class="event-row">
+      <div class="event-card" *ngFor="let event of events.slice(0, 6)"
+           [routerLink]="['/api/events', event.id]" style="cursor:pointer;">
+        <div class="event-image">
           <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
         </div>
         <div class="event-body">
           <span class="event-category">{{event.category}}</span>
           <h3 class="event-title">{{event.title}}</h3>
-          <p class="event-desc">{{event.description}}</p>
           <p class="event-meta">{{event.date}} &nbsp; {{event.time}}</p>
           <p class="event-meta">{{event.location}}</p>
-          <br>
-
           <div *ngIf="canModifyEvent(event)" class="event-actions">
-            <button
-              (click)="openEditEventModal(event, $event)"
-              class="btn btn-edit">
-               Modifier
-            </button>
-
-            <button
-              (click)="deleteEvent(event, $event)"
-              class="btn btn-delete">
-               Supprimer
-            </button>
+            <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">Modifier</button>
+            <button (click)="deleteEvent(event, $event)" class="btn btn-delete">Supprimer</button>
           </div>
-          <button
-            *ngIf="!canModifyEvent(event)"
-            (click)="openJoinModal(); $event.stopPropagation()"
-            class="btn btn-primary">
+          <button *ngIf="!canModifyEvent(event)"
+                  (click)="openJoinModal(event.id); $event.stopPropagation()"
+                  class="btn btn-primary participate-btn">
             Participer
           </button>
         </div>
       </div>
     </div>
-
     <p *ngIf="events.length === 0" class="no-events">No events available yet.</p>
   </section>
 

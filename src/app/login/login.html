@@ -5,7 +5,9 @@
     <label>
       Email :
     </label>
-    <input type="text"  [(ngModel)]="email" name="email">
+    <input type="text"  [(ngModel)]="email" name="email" email #emailRef="ngModel">
+    <small *ngIf="emailRef.errors?.['email'] && emailRef.touched">Forme email incorrecte</small>
+
   </div>
   <br>
   <div>
@@ -14,7 +16,7 @@
     </label>
     <input type="password" [(ngModel)]="password" name="password" email>
   </div>
-
+<p *ngIf="errorMessage" class="error-message">{{errorMessage}}</p>
   <br>
 
   <button (click)="login()" type="button">Login</button>

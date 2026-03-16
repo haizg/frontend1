@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {ModalService} from '../../services/modal.service';
 import {HttpClient} from '@angular/common/http';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-popup',
@@ -20,23 +21,32 @@ export class Popup {
 
   constructor(
     private modalService:ModalService,
-    private http:HttpClient
+    private http:HttpClient,
+    private userService: UserService
   ) {}
 
   ngOnInit(){
     this.modalService.currentEventId$.subscribe(id => {
       this.eventId=id;
     });
+
+    const user = this.userService.getUser();
+    if (user) {
+      this.email = user.email;
+    }
   }
-
-
-
 
   close() {
     this.modalService.closeJoinModal();
   }
 
   submit() {
+    if (!this.userService.getUser()) {
+      this.message = 'Vous devez être connecté pour participer à un événement.';
+      return;
+    }
+
+
     if (!this.email) {
       this.message = 'Email is required';
       return;
@@ -60,7 +70,7 @@ export class Popup {
           this.message='Registration successful';
           setTimeout(()=> {
             this.close();
-          },1500);
+          },5000);
         },
         error:()=>{
           this.isLoading=false;

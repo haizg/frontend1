@@ -16,6 +16,14 @@
     </label>
     <input type="password" [(ngModel)]="password" name="password" email>
   </div>
+
+  <div class="forgot-password-link">
+    <a (click)="openForgotPassword(); $event.preventDefault()" href="#">
+      Mot de passe oublié ?
+    </a>
+  </div>
+
+
 <p *ngIf="errorMessage" class="error-message">{{errorMessage}}</p>
   <br>
 
@@ -23,5 +31,6 @@
 
 
 </form>
+  <app-forgot-password-modal></app-forgot-password-modal>
 
 </div>

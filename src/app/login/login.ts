@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component,ViewChild  } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {ModalService} from '../services/modal.service';
 import {UserService} from '../services/user.service';
 import {CommonModule} from '@angular/common';
+import { ForgotPasswordModal } from '../forgot-password-modal/forgot-password-modal';  // ✅ ADD THIS
 
 @Component({
   selector: 'app-login',
@@ -12,12 +13,14 @@ import {CommonModule} from '@angular/common';
     imports: [
         FormsModule,
         ReactiveFormsModule,
-        CommonModule
+        CommonModule, ForgotPasswordModal
     ],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
+  @ViewChild(ForgotPasswordModal) forgotPasswordModal!: ForgotPasswordModal;
+
   message = 'Loading...';
   errorMessage='';
 
@@ -34,7 +37,9 @@ export class Login {
   close(){
     this.modalService.closeLoginModal();
   }
-
+ openForgotPassword() {
+    this.forgotPasswordModal.open();
+  }
 
   login(){
     this.errorMessage='';

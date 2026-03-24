@@ -101,7 +101,7 @@ export class SignUpOrg {
                 this.modalService.closeSignupModal();
               },
               error: () => {
-                this.router.navigate(['/api/login']);
+                this.router.navigate(['/login']);
               }
             })
 

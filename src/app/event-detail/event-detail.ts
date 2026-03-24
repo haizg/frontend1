@@ -9,8 +9,10 @@ import {Footer} from '../shared/footer/footer';
 import {Popup} from '../joinevents/popup/popup';
 import { Login } from '../login/login';
 import { SignUpOrg } from '../sign-up/sign-up-org';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { NgZone } from '@angular/core';
+//import {userService}
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -37,6 +39,8 @@ export class EventDetail {
     private eventService:EventService,
     private modalService:ModalService,
     private  cdr:ChangeDetectorRef,
+    private router: Router,
+    private userService: UserService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -79,6 +83,11 @@ export class EventDetail {
 
 
   openJoinModal(eventId:number){
+    if (!this.userService.getUser()){
+      localStorage.setItem('redirectAfterLogin', this.router.url);
+      this.modalService.openLoginModal();
+      return;
+    }
     this.modalService.openJoinModal(eventId);
   }
 

@@ -16,7 +16,6 @@ export class Popup {
   isLoading = false;
   message = '';
   email = '';
-  participants = 1;
   eventId:number|null=null;
 
   constructor(
@@ -47,17 +46,16 @@ export class Popup {
     }
 
 
-    if (!this.email) {
-      this.message = 'Email is required';
-      return;
-    }
+   // if (!this.email) {
+     // this.message = 'Email is required';
+      //return;
+    //}
 
     this.isLoading = true;
     this.message='';
 
     const data = {
       email: this.email,
-      numberOfPeople: this.participants,
       eventId:this.eventId
     };
 

@@ -24,10 +24,13 @@ export class Login {
   message = 'Loading...';
   errorMessage='';
 
+
   constructor(private http: HttpClient,
               private router :Router,
               private modalService: ModalService,
               private userService: UserService) {}
+
+
 
 
 
@@ -37,8 +40,8 @@ export class Login {
   close(){
     this.modalService.closeLoginModal();
   }
- openForgotPassword() {
-    this.forgotPasswordModal.open();
+  openForgotPassword() {
+      this.forgotPasswordModal.open();
   }
 
   login(){
@@ -73,8 +76,20 @@ export class Login {
           localStorage.setItem('user', JSON.stringify(userData));
           localStorage.setItem('role', payload.role);
           this.userService.setUser(userData);
-          console.log('BEFORE closeLoginModal')
-          this.modalService.closeLoginModal();
+
+          const redirect=localStorage.getItem('redirectAfterLogin');
+
+          if (redirect){
+           localStorage.removeItem('redirectAfterLogin')
+           this.router.navigate([redirect]);
+           }else{
+             console.log('BEFORE closeLoginModal')
+             this.modalService.closeLoginModal();
+           }
+
+
+         // console.log('BEFORE closeLoginModal')
+          //this.modalService.closeLoginModal();
           console.log('AFTER closeLoginModal')
           console.log(" Saved to localStorage:", userData);
 

@@ -17,6 +17,7 @@ export class CreateEventModal {
   isLoading = false;
   errorMessage = '';
   successMessage = '';
+  today = new Date().toISOString().split('T')[0];
 
   constructor(
     private fb: FormBuilder,

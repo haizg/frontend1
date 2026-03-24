@@ -11,9 +11,6 @@
       <div class="carousel-overlay"></div>
     </div>
 
-      <div class="carousel-title">
-        <h1>Véra</h1>
-      </div>
 
 
       <div class="carousel-dots">
@@ -72,11 +69,11 @@
   <section class="event-section">
     <div class="section-header">
       <h2 class="section-title">Événements à venir</h2>
-      <a routerLink="/api/events" class="see-all">See all events</a>
+      <a routerLink="/events" class="see-all">See all events</a>
     </div>
     <div class="event-row">
       <div class="event-card" *ngFor="let event of events.slice(0, 6)"
-           [routerLink]="['/api/events', event.id]" style="cursor:pointer;">
+           [routerLink]="['/events', event.id]" style="cursor:pointer;">
         <div class="event-image">
           <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
         </div>

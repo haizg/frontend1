@@ -21,7 +21,7 @@
     <button [class.active]="activeTab === 'password'" (click)="activeTab = 'password'">Changer le mot de passe</button>
   </div>
 
-  <div class="events-section">
+  <div class="events-section" *ngIf="activeTab==='events' ">
     <h2>{{ isOrganisateur ? 'Mes événements créés' : 'Événements auxquels j\'ai participé' }}</h2>
 
     <div class="events-grid" *ngIf="events.length > 0">

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Navbar } from '../navbar/navbar';
 import { EventService } from '../services/event.service';
@@ -54,6 +54,7 @@ export class Home {
     private userService: UserService,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
+    private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -154,11 +155,21 @@ export class Home {
   }
 
   openJoinModal(eventId:number) {
+    if (!this.userService.getUser()){
+      localStorage.setItem('redirectAfterLogin', this.router.url);
+      this.modalService.openLoginModal();
+      return;
+      }
     this.modalService.openJoinModal(eventId);
   }
+
+
+
   openEditEventModal(eventModel: EventModel, $event: MouseEvent) {
     $event.stopPropagation();
     this.editEventModal.open(eventModel);  }
+
+
 
   deleteEvent(eventModel: EventModel, $event: MouseEvent) {
     $event.stopPropagation();

@@ -11,16 +11,16 @@ import { ResetPassword } from './reset-password/reset-password';
 
 
 export const routes: Routes = [
-  {path:'api/login', component:Login},
-  {path:'api/home',component: Home},
-  {path:'api/signuporg', component:SignUpOrg},
-  {path:'api/joinevent', component:Popup},
-  {path:'api/profile', component:Profile},
-  {path:'api/events', component:EventsPage},
-  {path:'api/events/:id', component:EventDetail},
-  {path:'api/confirm', component: Confirmation},
- { path: 'api/reset-password', component: ResetPassword },
-  { path: '', redirectTo: '/api/home', pathMatch: 'full' },
-  { path: '**', redirectTo: '/api/home' }
+  {path:'login', component:Login},
+  {path:'home',component: Home},
+  {path:'signuporg', component:SignUpOrg},
+  {path:'joinevent', component:Popup},
+  {path:'profile', component:Profile},
+  {path:'events', component:EventsPage},
+  {path:'events/:id', component:EventDetail},
+  {path:'confirm', component: Confirmation},
+ { path: 'reset-password', component: ResetPassword },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '**', redirectTo: 'home' }
 
 ];

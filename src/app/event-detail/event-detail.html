@@ -3,7 +3,7 @@
 
   <div class="event-detail-container" *ngIf="event">
     <div class="event-hero">
-      <img [src]="event!.imageUrl" [alt]="event!.title">
+      <img [src]="event!.imageUrl || 'assets/placeholder.png' " [alt]="event!.title">
       <div class="event-hero-overlay"></div>
       <div class="event-hero-content">
         <span class="event-category">{{ event!.category }}</span>

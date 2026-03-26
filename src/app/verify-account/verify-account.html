@@ -1,0 +1,44 @@
+<div class="verify-page">
+
+  <div class="verify-container" *ngIf="isVerifying">
+    <div class="verify-card">
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <h2>Vérification en cours...</h2>
+        <p>Veuillez patienter</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="verify-container" *ngIf="!isVerifying && isVerified">
+    <div class="verify-card">
+      <div class="success-state">
+        <div class="success-icon">✅</div>
+        <h2>Compte vérifié!</h2>
+        <p class="success-message">{{ successMessage }}</p>
+        <p class="redirect-text">Redirection vers la page d'accueil dans 3 secondes...</p>
+        <button class="btn-primary" (click)="router.navigate(['/api/home'])">
+          Aller à l'accueil maintenant
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="verify-container" *ngIf="!isVerifying && !isVerified">
+    <div class="verify-card">
+      <div class="error-state">
+        <div class="error-icon">❌</div>
+        <h2>Vérification échouée</h2>
+        <p class="error-message">{{ errorMessage }}</p>
+        <p class="help-text">
+          Le lien de vérification a peut-être expiré ou a déjà été utilisé.
+          Veuillez vous inscrire à nouveau ou contacter le support.
+        </p>
+        <button class="btn-primary" (click)="router.navigate(['/api/home'])">
+          Retour à l'accueil
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

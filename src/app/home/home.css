@@ -216,6 +216,18 @@
   flex: 1;
 }
 
+
+.event-category{
+   font-size: 11px;
+     text-transform: uppercase;
+     letter-spacing: 1px;
+     color: #2a6262;
+     font-weight: 600;
+     display: block;
+}
+
+
+
 .event-title {
   font-size: 15px;
   font-weight: 700;
@@ -296,7 +308,7 @@
 
 .btn-icon {
   font-size: 24px;
-  color: #2a6262;   /* green color */
+  color: #2a6262;
   background: white;
   border-radius: 50%;
   width: 36px;
@@ -325,7 +337,12 @@
   gap: 10px;
   margin-top: 15px;
 }
-
+.event-capacity {
+  color: #666;
+  font-size: 14px;
+  margin: 10px 0;
+  font-weight: 500;
+}
 .btn-edit {
   background: #2a6262;
   color: white;

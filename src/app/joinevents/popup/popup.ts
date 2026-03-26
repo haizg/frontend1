@@ -46,10 +46,7 @@ export class Popup {
     }
 
 
-   // if (!this.email) {
-     // this.message = 'Email is required';
-      //return;
-    //}
+
 
     this.isLoading = true;
     this.message='';

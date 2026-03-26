@@ -21,7 +21,7 @@
       </ng-container>
 
       <div *ngIf="isLoggedIn" class="user-info">
-        <a [routerLink]="['/api/profile']" class="user-name">{{ userName }}</a>
+        <a [routerLink]="['/profile']" class="user-name">{{ userName }}</a>
         <button *ngIf="isLoggedIn" (click)="logOut()" class="btn btn-outline" >Log Out</button>
       </div>
     </div>

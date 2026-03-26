@@ -8,17 +8,20 @@ import {Profile} from './profile/profile';
 import {EventsPage} from './events-page/events-page';
 import {Confirmation} from './confirmation/confirmation';
 import { ResetPassword } from './reset-password/reset-password';
+import { VerifyAccount } from './verify-account/verify-account';
 
 
 export const routes: Routes = [
   {path:'login', component:Login},
   {path:'home',component: Home},
+    { path: 'home', redirectTo: 'home', pathMatch: 'full' },
   {path:'signuporg', component:SignUpOrg},
   {path:'joinevent', component:Popup},
   {path:'profile', component:Profile},
   {path:'events', component:EventsPage},
   {path:'events/:id', component:EventDetail},
   {path:'confirm', component: Confirmation},
+  { path: 'verify-account', component: VerifyAccount },
  { path: 'reset-password', component: ResetPassword },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' }

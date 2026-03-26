@@ -25,7 +25,6 @@ export class Profile {
   isOrganisateur = false;
 
 
-  // Edit profile form
   editNom = '';
   editPrenom = '';
   editEmail = '';
@@ -33,7 +32,6 @@ export class Profile {
   profileMessage = '';
   profileError = '';
 
-  // Change password form
   oldPassword = '';
   newPassword = '';
   confirmPassword = '';

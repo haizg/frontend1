@@ -5,7 +5,7 @@ import {Router} from '@angular/router';
 import {ModalService} from '../services/modal.service';
 import {UserService} from '../services/user.service';
 import {CommonModule} from '@angular/common';
-import { ForgotPasswordModal } from '../forgot-password-modal/forgot-password-modal';  // ✅ ADD THIS
+import { ForgotPasswordModal } from '../forgot-password-modal/forgot-password-modal';
 
 @Component({
   selector: 'app-login',
@@ -88,25 +88,25 @@ export class Login {
            }
 
 
-         // console.log('BEFORE closeLoginModal')
-          //this.modalService.closeLoginModal();
+
           console.log('AFTER closeLoginModal')
           console.log(" Saved to localStorage:", userData);
 
         },
         error: (err) => {
-          if (err.status===403){
-            this.errorMessage='Compte non vérifié';
-            console.error("Account not verified yet");
-          } else if (err.status === 401 || err.status===400){
-            this.errorMessage='Email ou mot de passe incorrect';
-          }else {
-            this.errorMessage='Une erreur est survenue. Réessayer';
-            console.error("Invalid Credentials")
+          console.error("Login error:", err);
+                  if (err.status === 403) {
+                    if (err.error?.error === 'ACCOUNT_NOT_VERIFIED') {
+                      this.errorMessage = '⚠️ Veuillez vérifier votre email avant de vous connecter. Consultez votre boîte de réception.';
+                    } else {
+                      this.errorMessage = 'Compte non vérifié';
+                    }
+                  } else if (err.status === 401 || err.status === 400) {
+                    this.errorMessage = 'Email ou mot de passe incorrect';
+                  } else {
+                    this.errorMessage = 'Une erreur est survenue. Réessayez';
+                  }
+                }
+              });
           }
         }
-
-      });
-  }
-
-}

@@ -71,6 +71,10 @@ export class EventsPage {
       });
     }
   }
+ get fullEventsCount(): number {
+    return this.events.filter(event => event.isFull).length;
+  }
+
 
   openJoinModal(eventId: number) {
     this.modalService.openJoinModal(eventId);

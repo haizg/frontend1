@@ -106,6 +106,9 @@ export class Home {
 
     }
   }
+  get availableEvents(): EventModel[] {
+      return this.events.filter(event => !event.isFull);
+    }
   canModifyEvent(event: EventModel): boolean {
     if (!this.isOrganisateur) {
       return false;

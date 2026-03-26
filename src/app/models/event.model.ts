@@ -9,4 +9,7 @@ export interface EventModel {
   capacity:number;
   category:string;
   organisateurEmail?: string;
+    participantCount?: number;
+    maxParticipants?: number;
+     isFull?: boolean;
 }

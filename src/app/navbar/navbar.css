@@ -95,3 +95,31 @@
   color: #2a6262;
   font-weight: 600;
 }
+
+.lang-switcher {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.lang-switcher button {
+  background: transparent;
+  border: 1px solid #2a6262;
+  color: #2a6262;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lang-switcher button.active {
+  background: #2a6262;
+  color: white;
+}
+
+.lang-switcher button:hover {
+  background: #2a6262;
+  color: white;
+}

@@ -38,6 +38,10 @@ export class Profile {
   passwordMessage = '';
   passwordError = '';
 
+  createdEvents: EventModel[] = [];
+  participatedEvents: EventModel[] = [];
+
+
   activeTab = 'events';
 
 
@@ -72,22 +76,46 @@ export class Profile {
     }
   }
 
-  loadEvents(email: String) {
+  loadEvents(email: string) {
     const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
-    const url = this.isOrganisateur
-      ? `http://localhost:8081/api/events/created?email=${email}`
-      : 'http://localhost:8081/api/events/my-events?email=$email';
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.http.get<EventModel[]>(url, {headers})
-      .subscribe({
-        next: (data) => {
-          this.events = data;
-          this.cdr.detectChanges();
-        },
-        error: (err) => console.error('Failed to load events', err)
-      });
+    if (this.isOrganisateur) {
+      // Organizer: load both created and participated events
+      this.http.get<EventModel[]>(`http://localhost:8081/api/events/created?email=${email}`, { headers })
+        .subscribe({
+          next: (created) => {
+            this.createdEvents = created;
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Failed to load created events', err)
+        });
+
+      this.http.get<EventModel[]>(`http://localhost:8081/api/events/my-events?email=${email}`, { headers })
+        .subscribe({
+          next: (participated) => {
+            this.participatedEvents = participated;
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Failed to load participated events', err)
+        });
+    } else {
+      // Participant: only load participated events
+      this.http.get<EventModel[]>(`http://localhost:8081/api/events/my-events?email=${email}`, { headers })
+        .subscribe({
+          next: (data) => {
+            this.participatedEvents = data;
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Failed to load events', err)
+        });
+    }
   }
+
+
+
+
+
 
 
   updateProfile() {

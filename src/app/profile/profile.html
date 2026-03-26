@@ -21,6 +21,65 @@
     <button [class.active]="activeTab === 'password'" (click)="activeTab = 'password'">Changer le mot de passe</button>
   </div>
 
+
+
+
+
+
+
+  <div class="events-section" *ngIf="activeTab==='events'">
+
+    <!-- Organizer: Created events -->
+    <div *ngIf="isOrganisateur">
+      <h2>Mes événements créés</h2>
+      <div class="events-grid" *ngIf="createdEvents.length > 0; else noCreated">
+        <div class="event-card" *ngFor="let event of createdEvents">
+          <div class="event-image">
+            <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
+          </div>
+          <div class="event-body">
+            <span class="event-category">{{ event.category }}</span>
+            <h3>{{ event.title }}</h3>
+            <p class="event-meta">📅 {{ event.date }}</p>
+            <p class="event-meta">📍 {{ event.location }}</p>
+          </div>
+        </div>
+      </div>
+      <ng-template #noCreated>
+        <p class="no-events">Vous n'avez pas encore créé d'événements.</p>
+      </ng-template>
+    </div>
+
+    <!-- Participated events -->
+    <h2>{{ isOrganisateur ? 'Événements auxquels j\'ai participé' : 'Mes participations' }}</h2>
+    <div class="events-grid" *ngIf="participatedEvents.length > 0; else noParticipated">
+      <div class="event-card" *ngFor="let event of participatedEvents">
+        <div class="event-image">
+          <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
+        </div>
+        <div class="event-body">
+          <span class="event-category">{{ event.category }}</span>
+          <h3>{{ event.title }}</h3>
+          <p class="event-meta">📅 {{ event.date }}</p>
+          <p class="event-meta">📍 {{ event.location }}</p>
+        </div>
+      </div>
+    </div>
+    <ng-template #noParticipated>
+      <p class="no-events">
+        {{ isOrganisateur ? 'Vous n\'avez participé à aucun événement.' : 'Vous n\'avez participé à aucun événement.' }}
+      </p>
+    </ng-template>
+
+  </div>
+
+
+
+
+
+
+
+  <!--
   <div class="events-section" *ngIf="activeTab==='events' ">
     <h2>{{ isOrganisateur ? 'Mes événements créés' : 'Événements auxquels j\'ai participé' }}</h2>
 
@@ -42,6 +101,24 @@
       {{ isOrganisateur ? 'Vous n\'avez pas encore créé d\'événements.' : 'Vous n\'avez participé à aucun événement.' }}
     </p>
   </div>
+
+  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <div *ngIf="activeTab === 'edit'" class="form-section">
     <h2>Modifier le profil</h2>

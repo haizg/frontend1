@@ -72,13 +72,38 @@
             class="form-input">
         </div>
 
+
         <div class="form-group full-width">
-          <label>URL de l'image (optionnel)</label>
+          <label>Image de l'événement</label>
+
           <input
-            type="url"
-            formControlName="imageUrl"
-            placeholder="https://example.com/image.jpg"
-            class="form-input">
+            type="file"
+            #fileInput
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            style="display: none;">
+
+          <button
+            type="button"
+            class="btn-upload"
+            (click)="fileInput.click()"
+            *ngIf="!imagePreview">
+            📷 Choisir une image
+          </button>
+
+          <div class="image-preview-container" *ngIf="imagePreview">
+            <img [src]="imagePreview" alt="Preview" class="image-preview">
+            <div class="image-actions">
+              <button type="button" class="btn-change" (click)="fileInput.click()">
+                🔄 Changer
+              </button>
+              <button type="button" class="btn-remove" (click)="removeImage()">
+                🗑️ Supprimer
+              </button>
+            </div>
+          </div>
+
+          <small class="info-text">Formats acceptés: JPEG, PNG, GIF (max 10 MB)</small>
         </div>
 
         <div class="form-group">
@@ -93,19 +118,24 @@
       </div>
 
       <div class="error-message" *ngIf="errorMessage">
-        {{ errorMessage }}
+        ❌ {{ errorMessage }}
       </div>
 
       <div class="success-message" *ngIf="successMessage">
-         {{ successMessage }}
+        ✅ {{ successMessage }}
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn-cancel" (click)="close()">
+        <button type="button" class="btn-cancel" (click)="close()" [disabled]="isLoading || isUploadingImage">
           Annuler
         </button>
-        <button type="submit" class="btn-submit" [disabled]="isLoading || eventForm.invalid">
-          {{ isLoading ? 'Création...' : 'Créer l\'événement' }}
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="isLoading || isUploadingImage || eventForm.invalid">
+          <span *ngIf="isUploadingImage">📤 Téléchargement...</span>
+          <span *ngIf="!isUploadingImage && isLoading">⏳ Création...</span>
+          <span *ngIf="!isUploadingImage && !isLoading"> Créer l'événement</span>
         </button>
       </div>
     </form>

@@ -200,6 +200,81 @@ textarea.form-input {
     transform: translate(-50%, -50%);
   }
 }
+.btn-upload {
+    width: 100%;
+    padding: 15px;
+    background: #e8f5f5;
+    color: #2a6262;
+    border: 2px dashed #2a6262;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-upload:hover {
+    background: #d0e8e8;
+    border-color: #1a4d4d;
+  }
+
+  .image-preview-container {
+    width: 100%;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .image-preview {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .image-actions {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+  }
+
+  .btn-change,
+  .btn-remove {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-change {
+    background: #2a6262;
+    color: white;
+  }
+
+  .btn-change:hover {
+    background: #306e6e;
+  }
+
+  .btn-remove {
+    background: #dc3545;
+    color: white;
+  }
+
+  .btn-remove:hover {
+    background: #c82333;
+  }
+
+  .info-text {
+    display: block;
+    color: #666;
+    font-size: 12px;
+    margin-top: 8px;
+  }
 
 @media (max-width: 768px) {
   .modal-container {
@@ -223,4 +298,5 @@ textarea.form-input {
   .btn-submit {
     width: 100%;
   }
+
 }

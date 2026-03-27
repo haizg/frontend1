@@ -11,7 +11,6 @@ import { Login } from '../login/login';
 import { SignUpOrg } from '../sign-up/sign-up-org';
 import { RouterModule, Router } from '@angular/router';
 import { NgZone } from '@angular/core';
-//import {userService}
 import { UserService } from '../services/user.service';
 
 @Component({

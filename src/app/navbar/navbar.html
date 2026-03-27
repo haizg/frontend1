@@ -4,31 +4,55 @@
 
     <div class="left-section">
       <div class="vera">Véra</div>
-
+<!--
       <nav class="nav-links">
         <a routerLink="/home">{{ 'navbar.home' | translate }}</a>
         <a routerLink="/events">{{ 'navbar.events' | translate }}</a>
         <a routerLink="/about">{{ 'navbar.about' | translate }}</a>
         <a routerLink="/contact">{{ 'navbar.contact' | translate }}</a>
       </nav>
+-->
+      <nav class="nav-links">
+        <a routerLink="/home">{{ lang.get('navbar.home') }}</a>
+        <a routerLink="/events">{{ lang.get('navbar.events') }}</a>
+        <a routerLink="/about">{{ lang.get('navbar.about') }}</a>
+        <a routerLink="/contact">{{ lang.get('navbar.contact') }}</a>
+      </nav>
+
     </div>
 
-
+<!--
     <div class="lang-switcher">
       <button (click)="switchLang('fr')" [class.active]="currentLang === 'fr'">FR</button>
       <button (click)="switchLang('en')" [class.active]="currentLang === 'en'">EN</button>
+    </div>
+-->
+
+    <div class="lang-switcher">
+      <button (click)="lang.switchTo('fr')" [class.active]="lang.getCurrentLang() === 'fr'">FR</button>
+      <button (click)="lang.switchTo('en')" [class.active]="lang.getCurrentLang() === 'en'">EN</button>
     </div>
 
 
     <div class="nav-buttons">
       <ng-container *ngIf="!isLoggedIn">
+        <!--
         <button (click)="logIn()" class="btn btn-outline">{{ 'navbar.login' | translate }}</button>
         <button (click)="signUp()" class="btn btn-primary">{{ 'navbar.signup' | translate }}</button>
+        -->
+        <button (click)="logIn()" class="btn btn-outline">{{ lang.get('navbar.login') }}</button>
+        <button (click)="signUp()" class="btn btn-primary">{{ lang.get('navbar.signup') }}</button>
+
       </ng-container>
 
       <div *ngIf="isLoggedIn" class="user-info">
         <a [routerLink]="['/profile']" class="user-name">{{ userName }}</a>
+        <button *ngIf="isLoggedIn" (click)="logOut()" class="btn btn-outline" >{{ lang.get('navbar.logout') }}</button>
+
+
+        <!--
         <button *ngIf="isLoggedIn" (click)="logOut()" class="btn btn-outline" >{{ 'navbar.logout' | translate }}</button>
+        -->
       </div>
     </div>
   </div>

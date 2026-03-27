@@ -8,7 +8,6 @@ import { LangService } from '../services/translate.service';
 import { importProvidersFrom } from '@angular/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-
 @Component({
   selector: 'app-navbar',
     imports: [

@@ -12,11 +12,18 @@ const translations: any = {
     'navbar.login': 'Se connecter',
     'navbar.signup': "S'inscrire",
     'navbar.logout': 'Se déconnecter',
-    'events.title': 'Tous les événements',
+    'events.allevents': 'Tous les événements',
+    'events.upcomingevents': 'Événements à venir',
     'events.participate': 'Participer',
     'events.full': 'COMPLET',
     'events.allcategories': 'Toutes les catégories',
-    'events.noevents': 'Aucun événement disponible.'
+    'events.noevents': 'Aucun événement disponible.',
+    'home.organisateur':'Créez, gérez et promouvez vos événements culturels en toute simplicité. Votre plateforme pour organiser des expériences inoubliables.',
+    'home.participant':'Découvrez et participez à des événements culturels passionnants. Rejoignez une communauté engagée et vivez des expériences uniques.',
+    'home.visiteur':'Organisez, gérez et participez à vos événements en toute simplicité. Une plateforme moderne pour créer des expériences inoubliables.',
+    'joincta.join':'Rejoignez Véra',
+    'joincta.faitespartie':'Faites partie d une communauté engagée.',
+    'joincta.joinsubtitle':'Découvrez, organisez et partagez des événements culturels en toute simplicité. L adhésion est entièrement gratuite.'
   },
   en: {
     'navbar.home': 'Home',
@@ -26,12 +33,19 @@ const translations: any = {
     'navbar.login': 'Log In',
     'navbar.signup': 'Sign Up',
     'navbar.logout': 'Log Out',
-    'events.title': 'All Events',
+    'events.allevents': 'See all events',
+    'events.upcomingevents': 'Upcoming Events',
     'events.participate': 'Participate',
     'events.full': 'FULL',
     'events.allcategories': 'All categories',
-    'events.noevents': 'No events available.'
-  }
+    'events.noevents': 'No events available.',
+    'home.organisateur':'Create, manage, and promote your cultural events with ease. Your platform for organizing unforgettable experiences.',
+    'home.participant':'Discover and participate in exciting cultural events. Join an engaged community and enjoy unique experiences.',
+    'home.visiteur':'Organize, manage, and participate in your events with ease. A modern platform to create unforgettable experiences.',
+    'joincta.join':'Join Véra',
+    'joincta.faitespartie':'Be part of an engaged community.',
+    'joincta.joinsubtitle':'Discover, organize, and share cultural events with ease. Membership is completely free.'
+    }
 };
 
 @Injectable({ providedIn: 'root' })

@@ -56,66 +56,70 @@ export class CreateEventModal {
         this.imagePreview = null;
         this.uploadedImageUrl = null;
   }
-onFileSelected(event: any) {
-    const file = event.target.files[0];
 
-    if (!file) {
-      return;
+
+  onFileSelected(event: any) {
+      const file = event.target.files[0];
+
+      if (!file) {
+        return;
+      }
+
+      if (!file.type.startsWith('image/')) {
+        this.errorMessage = 'Veuillez sélectionner une image (JPEG, PNG, GIF)';
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        this.errorMessage = 'L\'image ne doit pas dépasser 10 MB';
+        return;
+      }
+
+      this.selectedFile = file;
+      this.errorMessage = '';
+
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.imagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+
+      console.log('✅ File selected:', file.name, file.size, 'bytes');
     }
 
-    if (!file.type.startsWith('image/')) {
-      this.errorMessage = 'Veuillez sélectionner une image (JPEG, PNG, GIF)';
-      return;
+
+   async uploadImage(): Promise<string | null> {
+      if (!this.selectedFile) {
+        return null;
+      }
+
+      this.isUploadingImage = true;
+
+      try {
+        const formData = new FormData();
+        formData.append('file', this.selectedFile);
+
+        console.log('📤 Uploading image to MinIO...');
+
+        const response: any = await this.http.post(
+          'http://localhost:8081/api/upload',
+          formData
+        ).toPromise();
+
+        console.log('✅ Image uploaded:', response);
+
+        this.uploadedImageUrl = response.url;
+        this.isUploadingImage = false;
+
+        return response.url;
+
+      } catch (error) {
+        console.error('❌ Error uploading image:', error);
+        this.isUploadingImage = false;
+        this.errorMessage = 'Erreur lors du téléchargement de l\'image';
+        return null;
+      }
     }
-
-    if (file.size > 10 * 1024 * 1024) {
-      this.errorMessage = 'L\'image ne doit pas dépasser 10 MB';
-      return;
-    }
-
-    this.selectedFile = file;
-    this.errorMessage = '';
-
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      this.imagePreview = e.target.result;
-    };
-    reader.readAsDataURL(file);
-
-    console.log('✅ File selected:', file.name, file.size, 'bytes');
-  }
- async uploadImage(): Promise<string | null> {
-    if (!this.selectedFile) {
-      return null;
-    }
-
-    this.isUploadingImage = true;
-
-    try {
-      const formData = new FormData();
-      formData.append('file', this.selectedFile);
-
-      console.log('📤 Uploading image to MinIO...');
-
-      const response: any = await this.http.post(
-        'http://localhost:8081/api/upload',
-        formData
-      ).toPromise();
-
-      console.log('✅ Image uploaded:', response);
-
-      this.uploadedImageUrl = response.url;
-      this.isUploadingImage = false;
-
-      return response.url;
-
-    } catch (error) {
-      console.error('❌ Error uploading image:', error);
-      this.isUploadingImage = false;
-      this.errorMessage = 'Erreur lors du téléchargement de l\'image';
-      return null;
-    }
-  }
 
    async onSubmit() {
       if (this.eventForm.invalid) {

@@ -14,6 +14,7 @@ import { Popup } from '../joinevents/popup/popup';
 import { CreateEventModal } from '../create-event-modal/create-event-modal';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {LangService} from '../services/lang.service';
 
 @Component({
   selector: 'app-home',
@@ -55,6 +56,7 @@ export class Home {
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private router: Router,
+    public lang: LangService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 

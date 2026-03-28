@@ -29,18 +29,15 @@
 
   <section class="tagline">
   <p *ngIf="isOrganisateur">
-    Créez, gérez et promouvez vos événements culturels en toute simplicité.<br>
-    Votre plateforme pour organiser des expériences inoubliables.
+    {{ lang.get('home.organisateur') }}
   </p>
 
   <p *ngIf="isParticipant">
-    Découvrez et participez à des événements culturels passionnants.<br>
-    Rejoignez une communauté engagée et vivez des expériences uniques.
+    {{ lang.get('home.participant') }}
   </p>
 
   <p *ngIf="!isLoggedIn">
-    Organisez, gérez et participez à vos événements en toute simplicité.<br>
-    Une plateforme moderne pour créer des expériences inoubliables.
+    {{ lang.get('home.visiteur') }}
   </p>
 </section>
 
@@ -68,8 +65,8 @@
 
   <section class="event-section">
     <div class="section-header">
-      <h2 class="section-title">Événements à venir</h2>
-      <a routerLink="/events" class="see-all">See all events</a>
+      <h2 class="section-title">{{ lang.get('events.upcomingevents') }}</h2>
+      <a routerLink="/events" class="see-all">{{ lang.get('events.allevents') }}</a>
     </div>
     <div class="event-row">
       <div class="event-card" *ngFor="let event of availableEvents.slice(0, 6)"
@@ -92,7 +89,7 @@
           <button *ngIf="!canModifyEvent(event)"
                   (click)="openJoinModal(event.id); $event.stopPropagation()"
                   class="btn btn-primary participate-btn">
-            Participer
+            {{ lang.get('events.participate') }}
           </button>
         </div>
       </div>

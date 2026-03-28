@@ -33,7 +33,9 @@
     <div *ngIf="isOrganisateur">
       <h2>Mes événements créés</h2>
       <div class="events-grid" *ngIf="createdEvents.length > 0; else noCreated">
-        <div class="event-card" *ngFor="let event of createdEvents">
+        <div class="event-card" *ngFor="let event of createdEvents"
+          [routerLink]="['/events',event.id]" style="cursor:pointer">
+
           <div class="event-image">
             <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
           </div>
@@ -53,7 +55,9 @@
     <!-- Participated events -->
     <h2>{{ isOrganisateur ? 'Événements auxquels j\'ai participé' : 'Mes participations' }}</h2>
     <div class="events-grid" *ngIf="participatedEvents.length > 0; else noParticipated">
-      <div class="event-card" *ngFor="let event of participatedEvents">
+      <div class="event-card" *ngFor="let event of participatedEvents"
+           [routerLink]="['/events', event.id]"
+           style="cursor:pointer">
         <div class="event-image">
           <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
         </div>

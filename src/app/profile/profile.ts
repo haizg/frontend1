@@ -7,14 +7,16 @@ import {Navbar} from '../navbar/navbar';
 import {Footer} from '../shared/footer/footer';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-
+import {LangService} from '../services/lang.service';
+import {RouterModule} from '@angular/router';
 @Component({
   selector: 'app-profile',
   imports: [
     Navbar,
     Footer,
     CommonModule,
-    FormsModule
+    FormsModule,
+    RouterModule
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
@@ -49,6 +51,7 @@ export class Profile {
     private userService: UserService,
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
+    public lang: LangService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
   }

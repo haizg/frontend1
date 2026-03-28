@@ -3,7 +3,7 @@
 
   <div class="event-detail-container" *ngIf="event">
     <div class="event-hero">
-      <img [src]="event!.imageUrl || 'assets/placeholder.png' " [alt]="event!.title">
+      <img [src]="event!.imageUrl || 'assets/placeholder.png'" [alt]="event!.title">
       <div class="event-hero-overlay"></div>
       <div class="event-hero-content">
         <span class="event-category">{{ event!.category }}</span>
@@ -27,7 +27,7 @@
         </div>
         <div class="info-card">
           <span class="info-label">👥 Capacité</span>
-          <span class="info-value">{{ event!.capacity }} personnes</span>
+          <span class="info-value">{{ event!.maxParticipants }} personnes</span>
         </div>
       </div>
 
@@ -36,9 +36,84 @@
         <p>{{ event!.description }}</p>
       </div>
 
-      <button class="btn-participer" (click)="openJoinModal(event!.id)">
+      <!-- ORGANISATEUR ACTIONS -->
+      <div *ngIf="isOrganisateur && isMyEvent" class="org-actions">
+        <button (click)="openEditEventModal()" class="btn-edit">✏️ Modifier</button>
+        <button (click)="deleteEvent()" class="btn-delete">🗑️ Supprimer</button>
+      </div>
+
+      <!-- ORGANISATEUR STATS -->
+      <div *ngIf="isOrganisateur && isMyEvent" class="stats-section">
+        <h2>Statistiques</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-number">{{ verifiedParticipants.length }}</span>
+            <span class="stat-label">Inscriptions confirmées</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">{{ totalPeople }}</span>
+            <span class="stat-label">Personnes attendues</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">{{ event!.maxParticipants }}</span>
+            <span class="stat-label">Capacité totale</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">{{ capacityPercentage }}%</span>
+            <span class="stat-label">Taux de remplissage</span>
+          </div>
+        </div>
+
+        <div class="capacity-bar-container">
+          <div class="capacity-bar-label">
+            <span>Remplissage</span>
+            <span>{{ totalPeople }}/{{ event!.maxParticipants }}</span>
+          </div>
+          <div class="capacity-bar">
+            <div class="capacity-bar-fill"
+                 [style.width.%]="capacityPercentage"
+                 [class.bar-warning]="capacityPercentage >= 75"
+                 [class.bar-full]="capacityPercentage >= 100">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORGANISATEUR PARTICIPANTS TABLE -->
+      <div *ngIf="isOrganisateur && isMyEvent" class="participants-section">
+        <h2>Liste des participants</h2>
+        <div *ngIf="participants.length === 0" class="no-participants">
+          Aucun participant pour le moment.
+        </div>
+        <table *ngIf="participants.length > 0" class="participants-table">
+          <thead>
+          <tr>
+            <th>Email</th>
+            <th>Personnes</th>
+            <th>Statut</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let p of participants">
+            <td>{{ p.email }}</td>
+            <td>{{ p.numberOfPeople }}</td>
+            <td>
+                <span class="status-badge" [class.verified]="p.verified" [class.pending]="!p.verified">
+                  {{ p.verified ? '✅ Confirmé' : '⏳ En attente' }}
+                </span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PARTICIPANT BUTTON -->
+      <button *ngIf="!isOrganisateur"
+              class="btn-participer"
+              (click)="openJoinModal(event!.id)">
         Participer à cet événement
       </button>
+
     </div>
   </div>
 
@@ -49,17 +124,7 @@
   <app-footer></app-footer>
 </div>
 
-
 <app-login *ngIf="isModalOpen"></app-login>
 <app-sign-up-org *ngIf="isSignupModalOpen"></app-sign-up-org>
 <app-popup *ngIf="isJoinModalOpen"></app-popup>
-
-
-
-
-
-
-
-
-
-
+<app-edit-event-modal (eventUpdated)="onEventUpdated()"></app-edit-event-modal>

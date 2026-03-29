@@ -9,6 +9,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {LangService} from '../services/lang.service';
 import {RouterModule} from '@angular/router';
+
 @Component({
   selector: 'app-profile',
   imports: [

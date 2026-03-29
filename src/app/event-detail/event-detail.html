@@ -14,59 +14,59 @@
     <div class="event-body">
       <div class="event-info">
         <div class="info-card">
-          <span class="info-label">📅 Date</span>
+          <span class="info-label">📅 {{ lang.get('eventdetail.date') }}</span>
           <span class="info-value">{{ event!.date }}</span>
         </div>
         <div class="info-card">
-          <span class="info-label">🕐 Heure</span>
+          <span class="info-label">🕐 {{ lang.get('eventdetail.heure') }}</span>
           <span class="info-value">{{ event!.time }}</span>
         </div>
         <div class="info-card">
-          <span class="info-label">📍 Lieu</span>
+          <span class="info-label">📍 {{ lang.get('eventdetail.lieu') }}</span>
           <span class="info-value">{{ event!.location }}</span>
         </div>
         <div class="info-card">
-          <span class="info-label">👥 Capacité</span>
-          <span class="info-value">{{ event!.maxParticipants }} personnes</span>
+          <span class="info-label">👥 {{ lang.get('eventdetail.capacity') }}</span>
+          <span class="info-value">{{ event!.maxParticipants }} {{ lang.get('eventdetail.personnes') }}</span>
         </div>
       </div>
 
       <div class="event-description">
-        <h2>À propos de cet événement</h2>
+        <h2>{{ lang.get('eventdetail.about') }}</h2>
         <p>{{ event!.description }}</p>
       </div>
 
       <!-- ORGANISATEUR ACTIONS -->
       <div *ngIf="isOrganisateur && isMyEvent" class="org-actions">
-        <button (click)="openEditEventModal()" class="btn-edit">✏️ Modifier</button>
-        <button (click)="deleteEvent()" class="btn-delete">🗑️ Supprimer</button>
+        <button (click)="openEditEventModal()" class="btn-edit">✏️ {{ lang.get('eventdetail.modifier') }}</button>
+        <button (click)="deleteEvent()" class="btn-delete">🗑️ {{ lang.get('eventdetail.supprimer') }}</button>
       </div>
 
       <!-- ORGANISATEUR STATS -->
       <div *ngIf="isOrganisateur && isMyEvent" class="stats-section">
-        <h2>Statistiques</h2>
+        <h2>{{ lang.get('eventdetail.stats') }}</h2>
         <div class="stats-grid">
           <div class="stat-card">
             <span class="stat-number">{{ verifiedParticipants.length }}</span>
-            <span class="stat-label">Inscriptions confirmées</span>
+            <span class="stat-label">{{ lang.get('eventdetail.confirmed') }}</span>
           </div>
           <div class="stat-card">
             <span class="stat-number">{{ totalPeople }}</span>
-            <span class="stat-label">Personnes attendues</span>
+            <span class="stat-label">{{ lang.get('eventdetail.expected') }}</span>
           </div>
           <div class="stat-card">
             <span class="stat-number">{{ event!.maxParticipants }}</span>
-            <span class="stat-label">Capacité totale</span>
+            <span class="stat-label">{{ lang.get('eventdetail.totalcapacity') }}</span>
           </div>
           <div class="stat-card">
             <span class="stat-number">{{ capacityPercentage }}%</span>
-            <span class="stat-label">Taux de remplissage</span>
+            <span class="stat-label">{{ lang.get('eventdetail.fillrate') }}</span>
           </div>
         </div>
 
         <div class="capacity-bar-container">
           <div class="capacity-bar-label">
-            <span>Remplissage</span>
+            <span>{{ lang.get('eventdetail.filling') }}</span>
             <span>{{ totalPeople }}/{{ event!.maxParticipants }}</span>
           </div>
           <div class="capacity-bar">
@@ -81,16 +81,16 @@
 
       <!-- ORGANISATEUR PARTICIPANTS TABLE -->
       <div *ngIf="isOrganisateur && isMyEvent" class="participants-section">
-        <h2>Liste des participants</h2>
+        <h2>{{ lang.get('eventdetail.participants') }}</h2>
         <div *ngIf="participants.length === 0" class="no-participants">
-          Aucun participant pour le moment.
+          {{ lang.get('eventdetail.noparticipants') }}
         </div>
         <table *ngIf="participants.length > 0" class="participants-table">
           <thead>
           <tr>
-            <th>Email</th>
-            <th>Personnes</th>
-            <th>Statut</th>
+            <th>{{ lang.get('eventdetail.email') }}</th>
+            <th>{{ lang.get('eventdetail.people') }}</th>
+            <th>{{ lang.get('eventdetail.status') }}</th>
           </tr>
           </thead>
           <tbody>
@@ -99,7 +99,7 @@
             <td>{{ p.numberOfPeople }}</td>
             <td>
                 <span class="status-badge" [class.verified]="p.verified" [class.pending]="!p.verified">
-                  {{ p.verified ? '✅ Confirmé' : '⏳ En attente' }}
+                  {{ p.verified ? '✅ ' + lang.get('eventdetail.confirmed_badge') : '⏳ ' + lang.get('eventdetail.pending_badge') }}
                 </span>
             </td>
           </tr>
@@ -108,17 +108,17 @@
       </div>
 
       <!-- PARTICIPANT BUTTON -->
-      <button *ngIf="!isOrganisateur"
+      <button *ngIf="!isMyEvent"
               class="btn-participer"
               (click)="openJoinModal(event!.id)">
-        Participer à cet événement
+        {{ lang.get('eventdetail.participate') }}
       </button>
 
     </div>
   </div>
 
   <div *ngIf="!event" class="loading">
-    <p>Chargement...</p>
+    <p>{{ lang.get('eventdetail.loading') }}</p>
   </div>
 
   <app-footer></app-footer>

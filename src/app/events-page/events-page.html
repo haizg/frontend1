@@ -2,13 +2,13 @@
   <app-navbar></app-navbar>
 
   <div class="events-page-container">
-    <h1 class="page-title">Tous les événements</h1>
+    <h1 class="page-title">{{ lang.get('events.allevents') }}</h1>
 
 
 
     <div class="events-filters">
       <select #categorySelect (change)="onCategoryChange(categorySelect.value)">
-        <option value="all">Toutes les catégories</option>
+        <option value="all">{{ lang.get('events.ttcategories') }}</option>
         <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
       </select>
 
@@ -26,8 +26,7 @@
         <div class="event-image">
           <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
 
-          <div *ngIf="event.isFull" class="full-badge">COMPLET</div>
-        </div>
+          <div *ngIf="event.isFull" class="full-badge">{{ lang.get('events.full') }}</div>        </div>
 
         <div class="event-body">
           <span class="event-category">{{ event.category }}</span>
@@ -37,23 +36,19 @@
 
           <p class="event-capacity"
              [class.capacity-full]="event.isFull">
-             <!--*ngIf="event.maxParticipants"-->
-            👥 {{ event.participantCount }}/{{ event.maxParticipants }} participants
+            👥 {{ event.participantCount }}/{{ event.maxParticipants }} {{ lang.get('profile.participant') }}
           </p>
 
-          <!-- <button class="btn-participate" (click)="openJoinModal(event.id); $event.stopPropagation()">
-              *ngIf="!isOrganisateur && !event.isFull"
-            Participer
-          </button>-->
+
 
           <div *ngIf="canModifyEvent(event)" class="event-actions">
-            <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">Modifier</button>
-            <button (click)="deleteEvent(event, $event)" class="btn btn-delete">Supprimer</button>
+            <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">{{ lang.get('events.modifier') }}</button>
+            <button (click)="deleteEvent(event, $event)" class="btn btn-delete">{{ lang.get('events.supprimer') }}</button>
           </div>
           <button *ngIf="!canModifyEvent(event)"
                   (click)="openJoinModal(event.id); $event.stopPropagation()"
                   class="btn-participate">
-            Participer
+            {{ lang.get('events.participate') }}
           </button>
 
 
@@ -61,26 +56,27 @@
 
 
 
-          <button *ngIf="!isOrganisateur && event.isFull"
-                  class="btn-full"
-                  disabled>
-            ✋ COMPLET
+          <button *ngIf="!isOrganisateur && event.isFull" class="btn-full" disabled>
+            ✋ {{ lang.get('events.full') }}
           </button>
         </div>
       </div>
     </div>
 
 
-    <p *ngIf="filteredEvents.length === 0" class="no-events">Aucun événement disponible.</p>
+    <p *ngIf="filteredEvents.length === 0" class="no-events">{{ lang.get('events.noevents') }}</p>
   </div>
 
 
   <div class="events-summary">
     <p class="summary-text">
-      {{ filteredEvents.length }} événement{{ filteredEvents.length > 1 ? 's' : '' }} au total
+      {{ filteredEvents.length }}
+      {{ filteredEvents.length > 1 ? lang.get('events.summaryplural') : lang.get('events.summary') }}
+      {{ lang.get('events.total') }}
       <span *ngIf="fullEventsCount > 0" class="full-count">
-          ({{ fullEventsCount }} complet{{ fullEventsCount > 1 ? 's' : '' }})
-        </span>
+      ({{ fullEventsCount }}
+      {{ fullEventsCount > 1 ? lang.get('events.complets') : lang.get('events.complet') }})
+    </span>
     </p>
   </div>
 

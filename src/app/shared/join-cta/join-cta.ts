@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LangService } from '../../services/lang.service';
 @Component({
@@ -7,8 +7,14 @@ import { LangService } from '../../services/lang.service';
   imports: [CommonModule],
   templateUrl: './join-cta.html',
   styleUrl: './join-cta.css',
-  providers: [LangService],
+
 })
 export class JoinCta {
-  constructor(public lang: LangService){}
+  constructor(public lang: LangService, private cdr: ChangeDetectorRef){}
+
+  ngOnInit() {
+      this.lang.lang$.subscribe(() => {
+        this.cdr.detectChanges();
+      });
+    }
 }

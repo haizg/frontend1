@@ -13,6 +13,8 @@ import {RouterLink} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {LangService} from '../services/lang.service';
+
 @Component({
   selector: 'app-events-page',
   imports: [
@@ -56,11 +58,16 @@ export class EventsPage {
     private userService: UserService,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
+    public lang: LangService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
 
   ngOnInit() {
+    this.lang.lang$.subscribe(() => {
+      this.cdr.detectChanges();
+    });
+
     if (isPlatformBrowser(this.platformId)) {
       const userStr = localStorage.getItem('user');
       if (userStr) this.userService.setUser(JSON.parse(userStr));

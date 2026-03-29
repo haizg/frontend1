@@ -13,6 +13,7 @@ import {RouterModule, Router} from '@angular/router';
 import {UserService} from '../services/user.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {EditEventModal} from '../edit-event-modal/edit-event-modal';
+import { LangService } from '../services/lang.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -40,10 +41,15 @@ export class EventDetail {
     private router: Router,
     private userService: UserService,
     private http: HttpClient,
+    public lang: LangService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
+    this.lang.lang$.subscribe(() => {
+      this.cdr.detectChanges();
+    });
+
     if (isPlatformBrowser(this.platformId)) {
       const userStr = localStorage.getItem('user');
       if (userStr) this.userService.setUser(JSON.parse(userStr));

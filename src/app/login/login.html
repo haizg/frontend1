@@ -1,6 +1,6 @@
 <div class="modal-overlay" (click)="close()">
 <form (click)="$event.stopPropagation()">
-  <h1>Login Page</h1>
+  <h1>{{ lang.get('navbar.login') }}</h1>
   <div>
     <label>
       Email :
@@ -12,14 +12,14 @@
   <br>
   <div>
     <label>
-      Password:
+      {{ lang.get('login.mdp') }}
     </label>
     <input type="password" [(ngModel)]="password" name="password" email>
   </div>
 
   <div class="forgot-password-link">
     <a (click)="openForgotPassword(); $event.preventDefault()" href="#">
-      Mot de passe oublié ?
+      {{ lang.get('login.forgotpsw') }}
     </a>
   </div>
 
@@ -27,7 +27,7 @@
 <p *ngIf="errorMessage" class="error-message">{{errorMessage}}</p>
   <br>
 
-  <button (click)="login()" type="button">Login</button>
+  <button (click)="login()" type="button">{{ lang.get('navbar.login') }}</button>
 
 
 </form>

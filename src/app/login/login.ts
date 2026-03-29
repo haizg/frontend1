@@ -6,6 +6,7 @@ import {ModalService} from '../services/modal.service';
 import {UserService} from '../services/user.service';
 import {CommonModule} from '@angular/common';
 import { ForgotPasswordModal } from '../forgot-password-modal/forgot-password-modal';
+import {LangService} from '../services/lang.service';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +29,7 @@ export class Login {
   constructor(private http: HttpClient,
               private router :Router,
               private modalService: ModalService,
+              public lang: LangService,
               private userService: UserService) {}
 
 

@@ -1,19 +1,19 @@
 <div class="modal-overlay" (click)="close()">
 <form #formRef="ngForm" (ngSubmit)="signed(formRef)"  (click)="$event.stopPropagation()" >
-  <h1>Sign Up</h1>
+  <h1>{{ lang.get('navbar.signup') }}</h1>
   <div class="error-banner" *ngIf="errorMessage">
      {{ errorMessage }}
   </div>
 
   <div>
-    <label>Nom</label>
+    <label>{{ lang.get('signup.nom' )}}</label>
     <input type="text" name="nom" placeholder="Nom" [(ngModel)]="nom" required #nomRef="ngModel">
   </div>
   <small *ngIf="nomRef.errors?.['required'] && nomRef.touched">* Champs obligatoire</small>
   <br>
 
   <div>
-    <label>Prenom</label>
+    <label>{{ lang.get('signup.prenom') }}</label>
     <input type="text" name="prenom" placeholder="Prenom" [(ngModel)]="prenom" required #prenomRef="ngModel">
   </div>
   <small *ngIf="prenomRef.errors?.['required'] && prenomRef.touched">* Champs obligatoire</small>
@@ -29,13 +29,13 @@
   <br>
 
   <div>
-    <label>Mot de passe</label>
+    <label>{{ lang.get('login.mdp') }}</label>
     <input type="password" name="mdp" placeholder="Mot de passe" [(ngModel)]="mdp" required #mdpRef="ngModel">
   </div>
   <small *ngIf="mdpRef.errors?.['required'] && mdpRef.touched">* Champs obligatoire</small>
   <br>
   <div>
-    <label>Confirmer le mot de passe</label>
+    <label>{{ lang.get('signup.confirmmdp') }}</label>
     <input
       type="password"
       name="confirmMdp"
@@ -52,14 +52,14 @@
 
   <div class="role">
     <input type="radio" name="role" value="ROLE_ORGANISATEUR" [(ngModel)]="role" required>
-    Organisateur
+    {{ lang.get('signup.org') }}
 
     <input type="radio" name="role" value="ROLE_USER" [(ngModel)]="role" required>
     Participant
   </div>
   <br>
   <div *ngIf="role === 'ROLE_ORGANISATEUR'">
-    <label>Nom de l'organisation</label>
+    <label>{{ lang.get('signup.nomorg') }}</label>
     <input
       type="text"
       name="nomOrganisation"
@@ -70,6 +70,6 @@
     <small *ngIf="nomOrgRef.errors?.['required'] && nomOrgRef.touched">* Champs obligatoire pour organisateurs</small>
   </div>
   <br *ngIf="role === 'ROLE_ORGANISATEUR'">
-  <button type="submit" >Sign Up</button>
+  <button type="submit" >{{ lang.get('navbar.signup') }}</button>
 </form>
 </div>

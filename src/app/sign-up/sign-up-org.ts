@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ModalService } from '../services/modal.service';
 import { UserService } from '../services/user.service';
+import {LangService} from '../services/lang.service';
 
 @Component({
   selector: 'app-sign-up-org',
@@ -29,6 +30,7 @@ export class SignUpOrg {
     private http: HttpClient,
     private modalService: ModalService,
     private userService: UserService,
+    public lang: LangService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 

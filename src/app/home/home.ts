@@ -197,36 +197,35 @@ export class Home implements AfterViewInit{
 
   deleteEvent(eventModel: EventModel, $event: MouseEvent) {
     $event.stopPropagation();
-    if (!confirm(`Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`)) {
-      return;
-    }
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`)) return;
 
     const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
+    const url = this.isAdmin
+      ? `http://localhost:8081/api/events/admin/${eventModel.id}`
+      : `http://localhost:8081/api/events/${eventModel.id}`;
 
-    this.http.delete(`http://localhost:8081/api/events/${eventModel.id}`, { headers })
-      .subscribe({
-        next: () => {
-          console.log('Event deleted successfully');
-
-          window.location.reload();
-        },
-        error: (error) => {
-          console.error('Error deleting event:', error);
-
-          if (error.status === 403) {
-            alert('Vous ne pouvez supprimer que vos propres événements');
-          } else {
-            alert('Erreur lors de la suppression de l\'événement');
-          }
+    this.http.delete(url, { headers }).subscribe({
+      next: () => window.location.reload(),
+      error: (error) => {
+        if (error.status === 403) {
+          alert('Vous ne pouvez supprimer que vos propres événements');
+        } else {
+          alert('Erreur lors de la suppression');
         }
-      });
+      }
+    });
   }
 
   onEventUpdated() {
     window.location.reload();
   }
+
+
+  get isAdmin(): boolean {
+    return this.userRole === 'ROLE_ADMIN';
+  }
+
+
 }

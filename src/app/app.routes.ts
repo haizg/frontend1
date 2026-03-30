@@ -9,12 +9,13 @@ import {EventsPage} from './events-page/events-page';
 import {Confirmation} from './confirmation/confirmation';
 import { ResetPassword } from './reset-password/reset-password';
 import { VerifyAccount } from './verify-account/verify-account';
-
+import { AdminGuard } from './guards/admin.guard';
+import { AdminDashboard } from './admin-dashboard/admin-dashboard';
 
 export const routes: Routes = [
   {path:'login', component:Login},
   {path:'home',component: Home},
-    { path: 'home', redirectTo: 'home', pathMatch: 'full' },
+  {path: 'home', redirectTo: 'home', pathMatch: 'full' },
   {path:'signuporg', component:SignUpOrg},
   {path:'joinevent', component:Popup},
   {path:'profile', component:Profile},
@@ -22,7 +23,8 @@ export const routes: Routes = [
   {path:'events/:id', component:EventDetail},
   {path:'confirm', component: Confirmation},
   { path: 'verify-account', component: VerifyAccount },
- { path: 'reset-password', component: ResetPassword },
+  { path: 'reset-password', component: ResetPassword },
+  { path: 'admin/dashboard', component: AdminDashboard, canActivate: [AdminGuard] },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' }
 

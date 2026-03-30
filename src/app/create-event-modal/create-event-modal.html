@@ -95,10 +95,10 @@
             <img [src]="imagePreview" alt="Preview" class="image-preview">
             <div class="image-actions">
               <button type="button" class="btn-change" (click)="fileInput.click()">
-                🔄 Changer
+                  Changer
               </button>
               <button type="button" class="btn-remove" (click)="removeImage()">
-                🗑️ Supprimer
+                 Supprimer
               </button>
             </div>
           </div>
@@ -118,11 +118,11 @@
       </div>
 
       <div class="error-message" *ngIf="errorMessage">
-        ❌ {{ errorMessage }}
+         {{ errorMessage }}
       </div>
 
       <div class="success-message" *ngIf="successMessage">
-        ✅ {{ successMessage }}
+         {{ successMessage }}
       </div>
 
       <div class="modal-footer">
@@ -133,8 +133,8 @@
           type="submit"
           class="btn-submit"
           [disabled]="isLoading || isUploadingImage || eventForm.invalid">
-          <span *ngIf="isUploadingImage">📤 Téléchargement...</span>
-          <span *ngIf="!isUploadingImage && isLoading">⏳ Création...</span>
+          <span *ngIf="isUploadingImage"> Téléchargement...</span>
+          <span *ngIf="!isUploadingImage && isLoading"> Création...</span>
           <span *ngIf="!isUploadingImage && !isLoading"> Créer l'événement</span>
         </button>
       </div>

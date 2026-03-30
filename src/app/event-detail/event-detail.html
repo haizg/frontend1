@@ -38,8 +38,8 @@
 
       <!-- ORGANISATEUR ACTIONS -->
       <div *ngIf="isOrganisateur && isMyEvent" class="org-actions">
-        <button (click)="openEditEventModal()" class="btn-edit">✏️ {{ lang.get('eventdetail.modifier') }}</button>
-        <button (click)="deleteEvent()" class="btn-delete">🗑️ {{ lang.get('eventdetail.supprimer') }}</button>
+        <button (click)="openEditEventModal()" class="btn-edit"> {{ lang.get('eventdetail.modifier') }}</button>
+        <button (click)="deleteEvent()" class="btn-delete"> {{ lang.get('eventdetail.supprimer') }}</button>
       </div>
 
       <!-- ORGANISATEUR STATS -->

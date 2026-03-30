@@ -46,9 +46,9 @@ export class EventDetail {
   ) {}
 
   ngOnInit() {
-    this.lang.lang$.subscribe(() => {
-      this.cdr.detectChanges();
-    });
+    //this.lang.lang$.subscribe(() => {
+    //  this.cdr.detectChanges();
+    //});
 
     if (isPlatformBrowser(this.platformId)) {
       const userStr = localStorage.getItem('user');

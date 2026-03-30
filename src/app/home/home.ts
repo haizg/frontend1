@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, PLATFORM_ID, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Navbar } from '../navbar/navbar';
@@ -19,11 +19,12 @@ import {LangService} from '../services/lang.service';
 @Component({
   selector: 'app-home',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, Navbar, RouterModule, JoinCta, Footer, SignUpOrg, Login, Popup, CreateEventModal,EditEventModal],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
-export class Home {
+export class Home implements AfterViewInit{
   @ViewChild(CreateEventModal) createEventModal!: CreateEventModal;
   @ViewChild(EditEventModal) editEventModal!: EditEventModal;
 
@@ -36,6 +37,8 @@ export class Home {
   isModalOpen = false;
   isSignupModalOpen = false;
   isJoinModalOpen = false;
+  availableEvents: EventModel[] = [];
+
 
   currentSlide=0;
   slides=[
@@ -60,12 +63,24 @@ export class Home {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
+  ngAfterViewInit() {
+      if (isPlatformBrowser(this.platformId)) {
+        setTimeout(() => {
+          this.cdr.detectChanges();
+        }, 100);
+      }
+    }
+
+
+
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
+
       this.modalService.loginModal$.subscribe(state => {
         this.isModalOpen = state;
         this.cdr.detectChanges();
       });
+
       this.modalService.signupModal$.subscribe(state => {
         this.isSignupModalOpen = state;
         this.cdr.detectChanges();
@@ -75,6 +90,7 @@ export class Home {
         this.isJoinModalOpen = state;
         this.cdr.detectChanges();
       });
+
 
       this.userService.currentUser$.subscribe(user => {
         if (user) {
@@ -96,6 +112,7 @@ export class Home {
       this.eventService.getEvents().subscribe({
         next:(data)=> {
           this.events = data;
+          this.availableEvents = data.filter(event => !event.isFull);
           this.cdr.detectChanges();
         },
         error:(err) => console.error('Failed to load events',err)
@@ -108,9 +125,10 @@ export class Home {
 
     }
   }
-  get availableEvents(): EventModel[] {
-      return this.events.filter(event => !event.isFull);
-    }
+  //get availableEvents(): EventModel[] {
+   //   return this.events.filter(event => !event.isFull);}
+
+
   canModifyEvent(event: EventModel): boolean {
     if (!this.isOrganisateur) {
       return false;
@@ -137,6 +155,7 @@ export class Home {
       next:(data)=> {
         console.log('Events reloaded:', data);
         this.events=data;
+        this.availableEvents = data.filter(event => !event.isFull);
         this.cdr.detectChanges();
       },
     error:(err) => console.error('Failed to load events',err)

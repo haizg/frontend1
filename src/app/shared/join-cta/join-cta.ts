@@ -13,8 +13,8 @@ export class JoinCta {
   constructor(public lang: LangService, private cdr: ChangeDetectorRef){}
 
   ngOnInit() {
-      this.lang.lang$.subscribe(() => {
-        this.cdr.detectChanges();
-      });
+      //this.lang.lang$.subscribe(() => {
+        //this.cdr.detectChanges();
+      //});
     }
 }

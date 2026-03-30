@@ -1,7 +1,6 @@
-// src/app/services/lang.service.ts
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject } from 'rxjs';
+
 
 const translations: any = {
   fr: {
@@ -172,28 +171,26 @@ const translations: any = {
 
 @Injectable({ providedIn: 'root' })
 export class LangService {
-  private lang = new BehaviorSubject<string>('fr');
-  lang$ = this.lang.asObservable();
+  private currentLang = 'fr';
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     if (isPlatformBrowser(this.platformId)) {
-      const saved = localStorage.getItem('lang') || 'fr';
-      this.lang.next(saved);
+      this.currentLang = localStorage.getItem('lang') || 'fr';
     }
   }
 
   switchTo(lang: 'fr' | 'en') {
-    this.lang.next(lang);
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('lang', lang);
+    this.currentLang = lang;
+     if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem('lang', lang);
     }
   }
 
   get(key: string): string {
-    return translations[this.lang.value]?.[key] || key;
+    return translations[this.currentLang]?.[key] || key;
   }
 
   getCurrentLang(): string {
-    return this.lang.value;
+    return this.currentLang;
   }
 }

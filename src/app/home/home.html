@@ -83,8 +83,8 @@
             👥 {{ event.participantCount }}/{{ event.maxParticipants }} participants
           </p>
           <div *ngIf="canModifyEvent(event)" class="event-actions">
-            <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">Modifier</button>
-            <button (click)="deleteEvent(event, $event)" class="btn btn-delete">Supprimer</button>
+            <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">{{ lang.get('events.modifier') }}</button>
+            <button (click)="deleteEvent(event, $event)" class="btn btn-delete">{{ lang.get('events.supprimer') }}</button>
           </div>
           <button *ngIf="!canModifyEvent(event)"
                   (click)="openJoinModal(event.id); $event.stopPropagation()"

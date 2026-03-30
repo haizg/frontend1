@@ -45,14 +45,14 @@
 
   <section class="quick-actions" *ngIf="isOrganisateur">
     <div class="action-container">
-      <h2>créer vos évènements</h2>
+      <h2>{{ lang.get('home.createevent') }}</h2>
 
       <div class="action-buttons">
         <button (click)="openCreateEventModal()" class="action-btn create-btn">
           <span class="btn-icon">+</span>
           <span class="btn-text">
-          <strong>Créer un événement</strong>
-          <small>Organisez votre prochain événement</small>
+          <strong>{{ lang.get('home.createeventbtn') }}</strong>
+          <small>{{ lang.get('home.createeventbtndsc') }}</small>
         </span>
         </button>
       </div>

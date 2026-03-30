@@ -82,6 +82,9 @@ const translations: any = {
     'eventdetail.pending_badge': 'En attente',
     'eventdetail.participate': 'Participer à cet événement',
     'eventdetail.loading': 'Chargement...',
+    'home.createevent':'Créer vos évènements',
+    'home.createeventbtn':'Créer un événement',
+    'home.createeventbtndsc':'Organisez votre prochain événement'
   },
   en: {
     'navbar.home': 'Home',
@@ -160,7 +163,10 @@ const translations: any = {
     'eventdetail.confirmed_badge': 'Confirmed',
     'eventdetail.pending_badge': 'Pending',
     'eventdetail.participate': 'Participate in this event',
-    'eventdetail.loading': 'Loading...'
+    'eventdetail.loading': 'Loading...',
+    'home.createevent':'Create your events',
+    'home.createeventbtn':'Create an event',
+    'home.createeventbtndsc':'Organize your next event'
     }
 };
 

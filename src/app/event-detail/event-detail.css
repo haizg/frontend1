@@ -294,3 +294,26 @@
   background: #f9f9f9;
   border-radius: 10px;
 }
+
+.organizer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #fff3e0;
+  border: 1px solid #ffe0b2;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+
+.organizer-info .info-label {
+  font-size: 13px;
+  color: #888;
+  font-weight: 600;
+}
+
+.organizer-info .info-value {
+  font-size: 16px;
+  color: #e65100;
+  font-weight: 500;
+}

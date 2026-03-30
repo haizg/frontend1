@@ -4,6 +4,7 @@ import {Router, RouterLink} from "@angular/router";
 import {ModalService} from '../services/modal.service';
 import {UserService} from '../services/user.service';
 import {LangService} from '../services/lang.service';
+
 @Component({
   selector: 'app-navbar',
     imports: [
@@ -18,7 +19,7 @@ export class Navbar {
   isLoggedIn=false;
   userName='';
   currentLang = 'fr';
-
+  userRole = '';
 
   constructor(private router:Router,
               private modalService: ModalService,
@@ -38,9 +39,11 @@ export class Navbar {
       if (user) {
         this.isLoggedIn=true;
         this.userName=user.prenom+' '+user.nom;
+        this.userRole = user.role;
       }else {
         this.isLoggedIn=false;
         this.userName='';
+        this.userRole = '';
       }
     });
   }
@@ -67,6 +70,10 @@ export class Navbar {
       this.router.navigate(['/api/home']);
   }
 
+
+  get isAdmin(): boolean {
+    return this.userRole === 'ROLE_ADMIN';
+  }
 
 
 

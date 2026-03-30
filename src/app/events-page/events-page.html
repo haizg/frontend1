@@ -41,11 +41,12 @@
 
 
 
-          <div *ngIf="canModifyEvent(event)" class="event-actions">
+          <div *ngIf="isAdmin || canModifyEvent(event)" class="event-actions">
             <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">{{ lang.get('events.modifier') }}</button>
             <button (click)="deleteEvent(event, $event)" class="btn btn-delete">{{ lang.get('events.supprimer') }}</button>
           </div>
-          <button *ngIf="!canModifyEvent(event)"
+
+          <button *ngIf="!isAdmin && !canModifyEvent(event)"
                   (click)="openJoinModal(event.id); $event.stopPropagation()"
                   class="btn-participate">
             {{ lang.get('events.participate') }}

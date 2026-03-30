@@ -5,11 +5,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserService } from '../services/user.service';
 import { EventModel } from '../models/event.model';
 import { LangService } from '../services/lang.service';
+import { EditEventModal } from '../edit-event-modal/edit-event-modal';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, EditEventModal],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css',
 })
@@ -19,6 +21,12 @@ export class AdminDashboard {
   events: EventModel[] = [];
   activeTab = 'overview';
   adminName = '';
+  organisateurs: any[] = [];
+  editingEvent: EventModel | null = null;
+  isEditModalOpen = false;
+
+  @ViewChild(EditEventModal) editEventModal!: EditEventModal;
+
 
   constructor(
     private http: HttpClient,
@@ -48,6 +56,8 @@ export class AdminDashboard {
       this.loadStats();
       this.loadUsers();
       this.loadEvents();
+      this.loadOrganisateurs();
+
     }
   }
 
@@ -80,6 +90,17 @@ export class AdminDashboard {
       });
   }
 
+
+  deleteOrganisateur(id: number) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cet organisateur ?')) return;
+    this.http.delete(`http://localhost:8081/api/admin/organisateurs/${id}`, { headers: this.getHeaders() })
+      .subscribe({
+        next: () => this.loadOrganisateurs(),
+        error: (err) => console.error('Failed to delete organisateur', err)
+      });
+  }
+
+
   deleteUser(userId: number) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) return;
     this.http.delete(`http://localhost:8081/api/admin/users/${userId}`, { headers: this.getHeaders() })
@@ -111,4 +132,29 @@ export class AdminDashboard {
     if (role === 'ROLE_ORGANISATEUR') return 'Organisateur';
     return 'Participant';
   }
+
+
+
+  loadOrganisateurs() {
+    this.http.get<any[]>(`http://localhost:8081/api/admin/organisateurs`, { headers: this.getHeaders() })
+      .subscribe({
+        next: (data) => {
+          this.organisateurs = data;
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error('Failed to load organisateurs', err)
+      });
+  }
+
+  openEditEvent(event: EventModel) {
+    this.editEventModal.open(event);
+  }
+
+  onEventUpdated() {
+    this.isEditModalOpen = false;
+    this.editingEvent = null;
+    this.loadEvents();
+  }
+
+
 }

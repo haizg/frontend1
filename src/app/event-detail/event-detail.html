@@ -37,13 +37,20 @@
       </div>
 
       <!-- ORGANISATEUR ACTIONS -->
-      <div *ngIf="isOrganisateur && isMyEvent" class="org-actions">
+      <div *ngIf="isMyEvent || isAdmin" class="org-actions">
         <button (click)="openEditEventModal()" class="btn-edit"> {{ lang.get('eventdetail.modifier') }}</button>
         <button (click)="deleteEvent()" class="btn-delete"> {{ lang.get('eventdetail.supprimer') }}</button>
       </div>
 
+
+      <div *ngIf="isAdmin" class="organizer-info">
+        <span class="info-label">👤 Organisateur</span>
+        <span class="info-value">{{ event!.organisateurEmail }}</span>
+      </div>
+
+
       <!-- ORGANISATEUR STATS -->
-      <div *ngIf="isOrganisateur && isMyEvent" class="stats-section">
+      <div *ngIf="isMyEvent || isAdmin" class="stats-section">
         <h2>{{ lang.get('eventdetail.stats') }}</h2>
         <div class="stats-grid">
           <div class="stat-card">
@@ -80,7 +87,7 @@
       </div>
 
       <!-- ORGANISATEUR PARTICIPANTS TABLE -->
-      <div *ngIf="isOrganisateur && isMyEvent" class="participants-section">
+      <div *ngIf="isMyEvent || isAdmin" class="participants-section">
         <h2>{{ lang.get('eventdetail.participants') }}</h2>
         <div *ngIf="participants.length === 0" class="no-participants">
           {{ lang.get('eventdetail.noparticipants') }}
@@ -108,7 +115,7 @@
       </div>
 
       <!-- PARTICIPANT BUTTON -->
-      <button *ngIf="!isMyEvent"
+      <button *ngIf="!isMyEvent && !isAdmin"
               class="btn-participer"
               (click)="openJoinModal(event!.id)">
         {{ lang.get('eventdetail.participate') }}

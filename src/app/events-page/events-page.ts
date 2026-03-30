@@ -120,6 +120,11 @@ export class EventsPage {
   }
 
 
+  get isAdmin(): boolean {
+    return this.userRole === 'ROLE_ADMIN';
+  }
+
+
 
   applyFilters() {
     this.filteredEvents = this.allEvents.filter(event => {
@@ -182,11 +187,16 @@ export class EventsPage {
 
       const token = localStorage.getItem('token');
 
+      const url = this.isAdmin
+        ? `http://localhost:8081/api/events/admin/${eventModel.id}`
+        : `http://localhost:8081/api/events/${eventModel.id}`;
+
+
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`
       });
 
-      this.http.delete(`http://localhost:8081/api/events/${eventModel.id}`, { headers })
+      this.http.delete(url, { headers })
         .subscribe({
           next: () => {
             console.log('Event deleted successfully');

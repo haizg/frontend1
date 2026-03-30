@@ -1,3 +1,5 @@
+
+
 <div class="admin-layout">
 
   <!-- SIDEBAR -->
@@ -8,14 +10,19 @@
     </div>
 
     <nav class="sidebar-nav">
+      <a routerLink="/home" class="sidebar-link">🏠 Accueil</a>
+      <a routerLink="/events" class="sidebar-link">📋 Voir les événements</a>
       <button [class.active]="activeTab === 'overview'" (click)="activeTab = 'overview'">
         📊 Vue d'ensemble
       </button>
       <button [class.active]="activeTab === 'events'" (click)="activeTab = 'events'">
-        📅 Événements
+        📅 Gestion événements
       </button>
       <button [class.active]="activeTab === 'users'" (click)="activeTab = 'users'">
         👥 Utilisateurs
+      </button>
+      <button [class.active]="activeTab === 'organisateurs'" (click)="activeTab = 'organisateurs'">
+        🎯 Organisateurs
       </button>
     </nav>
 
@@ -93,7 +100,9 @@
 
     <!-- EVENTS TAB -->
     <div *ngIf="activeTab === 'events'">
-      <h1 class="page-title">Gestion des événements</h1>
+      <div class="tab-header">
+        <h1 class="page-title">Gestion des événements</h1>
+      </div>
       <p class="tab-subtitle">{{ events.length }} événement(s) au total</p>
 
       <table class="admin-table" *ngIf="events.length > 0">
@@ -117,12 +126,13 @@
           <td>{{ event.date }}</td>
           <td>{{ event.location }}</td>
           <td>
-              <span [class.full]="event.isFull">
-                {{ event.participantCount }}/{{ event.maxParticipants }}
-              </span>
+          <span [class.full]="event.isFull">
+            {{ event.participantCount }}/{{ event.maxParticipants }}
+          </span>
           </td>
           <td class="email-cell">{{ event.organisateurEmail }}</td>
-          <td>
+          <td class="action-buttons-cell">
+            <button (click)="openEditEvent(event)" class="btn-edit-sm">✏️ Modifier</button>
             <button (click)="deleteEvent(event.id)" class="btn-delete-sm">🗑️ Supprimer</button>
           </td>
         </tr>
@@ -130,6 +140,8 @@
       </table>
       <div *ngIf="events.length === 0" class="empty-state">Aucun événement.</div>
     </div>
+
+
 
     <!-- USERS TAB -->
     <div *ngIf="activeTab === 'users'">
@@ -174,5 +186,46 @@
       <div *ngIf="users.length === 0" class="empty-state">Aucun utilisateur.</div>
     </div>
 
+
+
+    <!-- ORGANISATEURS TAB -->
+    <div *ngIf="activeTab === 'organisateurs'">
+      <h1 class="page-title">Gestion des organisateurs</h1>
+      <p class="tab-subtitle">{{ organisateurs.length }} organisateur(s) au total</p>
+
+      <table class="admin-table" *ngIf="organisateurs.length > 0">
+        <thead>
+        <tr>
+          <th>Prénom</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Organisation</th>
+          <th>Vérifié</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let org of organisateurs">
+          <td>{{ org.prenom }}</td>
+          <td>{{ org.nom }}</td>
+          <td class="email-cell">{{ org.email }}</td>
+          <td>{{ org.nomOrganisation || '—' }}</td>
+          <td>
+          <span [class.verified]="org.verified" [class.unverified]="!org.verified">
+            {{ org.verified ? '✅' : '❌' }}
+          </span>
+          </td>
+          <td>
+            <button (click)="deleteOrganisateur(org.id)" class="btn-delete-sm">🗑️ Supprimer</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div *ngIf="organisateurs.length === 0" class="empty-state">Aucun organisateur.</div>
+    </div>
+
   </main>
 </div>
+
+
+<app-edit-event-modal (eventUpdated)="onEventUpdated()"></app-edit-event-modal>

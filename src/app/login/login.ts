@@ -86,11 +86,7 @@ export class Login {
            }else{
              console.log('BEFORE closeLoginModal')
              this.modalService.closeLoginModal();
-             if (userData.role === 'ROLE_ADMIN') {
-               this.modalService.closeLoginModal();
-               this.router.navigate(['/admin/dashboard']);
-               return;
-             }
+
              this.modalService.closeLoginModal();
            }
 

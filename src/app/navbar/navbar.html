@@ -30,12 +30,11 @@
       </ng-container>
 
       <div *ngIf="isLoggedIn" class="user-info">
-        <a [routerLink]="['/profile']" class="user-name">{{ userName }}</a>
-        <button *ngIf="isLoggedIn" (click)="logOut()" class="btn btn-outline" >{{ lang.get('navbar.logout') }}</button>
-
-
-
+        <a [routerLink]="isAdmin ? '/admin/dashboard' : '/profile'" class="user-name">{{ userName }}</a>
+        <button (click)="logOut()" class="btn btn-outline">{{ lang.get('navbar.logout') }}</button>
       </div>
+
+
     </div>
   </div>
 

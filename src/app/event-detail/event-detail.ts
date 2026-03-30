@@ -73,7 +73,7 @@ export class EventDetail {
           next: (data) => {
             this.event = data;
             this.cdr.detectChanges();
-            if (this.isOrganisateur && this.isMyEvent) {
+            if (this.isMyEvent || this.isAdmin) {
               this.loadParticipants(Number(id));
             }
           },
@@ -132,6 +132,11 @@ export class EventDetail {
     return Math.min(100, Math.round((this.totalPeople / this.event.maxParticipants) * 100));
   }
 
+  get isAdmin(): boolean {
+    return this.userRole === 'ROLE_ADMIN';
+  }
+
+
   openJoinModal(eventId: number) {
     if (!this.userService.getUser()) {
       localStorage.setItem('redirectAfterLogin', this.router.url);
@@ -163,7 +168,11 @@ export class EventDetail {
     if (!confirm(`Êtes-vous sûr de vouloir supprimer "${this.event?.title}" ?`)) return;
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
-    this.http.delete(`http://localhost:8081/api/events/${this.event?.id}`, {headers})
+    const url = this.isAdmin
+        ? `http://localhost:8081/api/events/admin/${this.event?.id}`
+        : `http://localhost:8081/api/events/${this.event?.id}`;
+
+    this.http.delete(url, {headers})
       .subscribe({
         next: () => this.router.navigate(['/events']),
         error: (err) => console.error('Delete failed', err)

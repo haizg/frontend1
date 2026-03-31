@@ -43,9 +43,8 @@ export class EventsPage {
   userRole:string|null=null;
   userEmail:string='';
 
-  // Add these properties at the top of your class
-  allEvents: EventModel[] = [];        // Keep all events
-  filteredEvents: EventModel[] = [];   // Events displayed after filter
+  allEvents: EventModel[] = [];
+  filteredEvents: EventModel[] = [];
 
   categories: string[] = [];           // All categories for filter dropdown
   selectedCategory: string = 'all';    // Current category filter

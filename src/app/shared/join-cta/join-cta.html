@@ -1,16 +1,30 @@
 <section class="join-section">
-  <div class="join-box">
-    <h2> {{ lang.get('joincta.join') }}</h2>
+  <div class="envelope-container">
 
-    <div class="join-content">
-      <p class="join-description">
-        {{ lang.get('joincta.faitespartie') }}
-      </p>
 
-      <p class="join-subtitle">
-        {{ lang.get('joincta.joinsubtitle') }}
-      </p>
+    <div class="letter">
+      <div class="letter-content">
+        <h2>{{ lang.get('joincta.join') }}</h2>
+        <p class="invitation-text">
+          {{ lang.get('joincta.faitespartie') }}
+        </p>
+        <p class="invitation-subtitle">
+          {{ lang.get('joincta.joinsubtitle') }}
+        </p>
 
+        <button class="invitation-btn" (click)="openAuth()">
+          Rejoignez-nous
+        </button>
+      </div>
     </div>
+    <div class="stamp"></div>
+
+    <div class="envelope-back"></div>
+
+    <div class="envelope-front"></div>
+
+    <div class="envelope-flap"></div>
+
+    <div class="hover-hint">✉️ Passez la souris pour ouvrir</div>
   </div>
 </section>

@@ -1,8 +1,6 @@
 
 .footer {
-  background: linear-gradient(135deg, #1a4d3e 0%, #2d6b4f 100%);
-  color: white;
-  padding: 60px 20px 20px;
+background: linear-gradient(135deg, #2a6262 0%, #3f7d7d 50%, #5a9c8c 100%);  padding: 60px 20px 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 

@@ -29,7 +29,7 @@ export class Footer {
     { label: 'Contact', route: '/contact' }
   ];
 
-  supportEmail = 'support@vera.com';
+  supportEmail = 'support@Invitini.com';
 }
 
 

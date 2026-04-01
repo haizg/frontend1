@@ -268,3 +268,8 @@
     transform: translateY(-60px);
   }
 }
+
+.envelope-container:hover .stamp {
+  opacity: 0;
+  transform: scale(0.5);
+}

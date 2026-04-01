@@ -10,13 +10,14 @@ export class AdminGuard implements CanActivate {
   ) {}
 
   canActivate(): boolean {
-    if (isPlatformBrowser(this.platformId)) {
-      const user = localStorage.getItem('user');
-      if (user) {
-        const parsed = JSON.parse(user);
-        if (parsed.role === 'ROLE_ADMIN') {
-          return true;
-        }
+    if (!isPlatformBrowser(this.platformId)) {
+      return true; // ← let SSR pass, browser will re-check
+    }
+    const user = localStorage.getItem('user');
+    if (user) {
+      const parsed = JSON.parse(user);
+      if (parsed.role === 'ROLE_ADMIN') {
+        return true;
       }
     }
     this.router.navigate(['/home']);

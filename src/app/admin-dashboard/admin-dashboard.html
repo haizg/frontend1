@@ -55,6 +55,13 @@
             <span class="stat-label">Inscriptions confirmées</span>
           </div>
         </div>
+        <div class="stat-card pending-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-info">
+            <span class="stat-number" style="color:#e65100">{{ stats.pendingEvents }}</span>
+            <span class="stat-label">Événements en attente</span>
+          </div>
+        </div>
       </div>
       <div class="section-card">
         <h2>Derniers événements</h2>
@@ -86,16 +93,24 @@
         <tr><th>Titre</th><th>Catégorie</th><th>Date</th><th>Lieu</th><th>Capacité</th><th>Organisateur</th><th>Actions</th></tr>
         </thead>
         <tbody>
-        <tr *ngFor="let event of events">
+        <tr *ngFor="let event of events" [class.pending-row]="!event.approved">
           <td><a [routerLink]="['/events', event.id]" class="event-link">{{ event.title }}</a></td>
           <td><span class="category-badge">{{ event.category }}</span></td>
           <td>{{ event.date }}</td>
           <td>{{ event.location }}</td>
           <td><span [class.full]="event.isFull">{{ event.participantCount }}/{{ event.maxParticipants }}</span></td>
+          <td>
+            <button (click)="toggleApprove(event)"
+                    class="toggle-btn"
+                    [class.approved]="event.approved"
+                    [class.pending]="!event.approved">
+              {{ event.approved ? '✅ Approuvé' : '⏳ En attente' }}
+            </button>
+          </td>
           <td class="email-cell">{{ event.organisateurEmail }}</td>
           <td class="action-buttons-cell">
-            <button (click)="openEditEvent(event)" class="btn-edit-sm">️ Modifier</button>
-            <button (click)="deleteEvent(event.id)" class="btn-delete-sm"> Supprimer</button>
+            <button (click)="openEditEvent(event)" class="btn-edit-sm">✏️ Modifier</button>
+            <button (click)="deleteEvent(event.id)" class="btn-delete-sm">🗑️ Supprimer</button>
           </td>
         </tr>
         </tbody>
@@ -194,9 +209,17 @@
           <td>{{ org.nomOrganisation || '—' }}</td>
           <td><span [class.verified]="org.verified" [class.unverified]="!org.verified">{{ org.verified ? '✅' : '❌' }}</span></td>
           <td class="action-buttons-cell">
-            <button (click)="viewOrgDetails(org)" class="btn-view-sm">️ Détails</button>
+            <button (click)="viewOrgDetails(org)" class="btn-view-sm"> Détails</button>
             <button (click)="openEditOrg(org)" class="btn-edit-sm"> Modifier</button>
             <button (click)="deleteOrganisateur(org.id)" class="btn-delete-sm">Supprimer</button>
+          </td>
+          <td>
+            <button (click)="toggleVerifyOrg(org)"
+                    class="toggle-btn"
+                    [class.approved]="org.verified"
+                    [class.pending]="!org.verified">
+              {{ org.verified ? '✅ Vérifié' : '❌ Non vérifié' }}
+            </button>
           </td>
         </tr>
         </tbody>

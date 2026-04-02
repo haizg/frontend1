@@ -395,3 +395,23 @@
 .see-all:hover {
   text-decoration: underline;
 }
+
+.action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #888;
+}
+
+.verified-badge {
+  display: inline-block;
+  background: #2a6262;
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
+  text-align: center;
+  line-height: 16px;
+  margin-left: 4px;
+  font-weight: 700;
+}

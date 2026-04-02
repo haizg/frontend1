@@ -16,10 +16,22 @@
 
 
     <div class="lang-switcher">
+      <select
+        [(ngModel)]="currentLang"
+        (ngModelChange)="lang.switchTo($event)"
+        class="custom-select"
+      >
+        <option value="fr">FR</option>
+        <option value="en">EN</option>
+      </select>
+    </div>
+
+<!--
+    <div class="lang-switcher">
       <button (click)="lang.switchTo('fr')" [class.active]="lang.getCurrentLang() === 'fr'">FR</button>
       <button (click)="lang.switchTo('en')" [class.active]="lang.getCurrentLang() === 'en'">EN</button>
     </div>
-
+-->
 
     <div class="nav-buttons">
       <ng-container *ngIf="!isLoggedIn">

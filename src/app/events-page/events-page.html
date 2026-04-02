@@ -28,6 +28,13 @@
 
           <div *ngIf="event.isFull" class="full-badge">{{ lang.get('events.full') }}</div>        </div>
 
+        <!-- VERIFIED BADGE -->
+        <p class="event-meta">
+          👤 {{ event.organisateurEmail }}
+          <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
+        </p>
+
+
         <div class="event-body">
           <span class="event-category">{{ event.category }}</span>
           <h3 class="event-title">{{ event.title }}</h3>

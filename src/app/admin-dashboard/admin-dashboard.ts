@@ -97,7 +97,7 @@ export class AdminDashboard {
   }
 
   loadEvents() {
-    this.http.get<EventModel[]>(`http://localhost:8081/api/events`, { headers: this.getHeaders() })
+    this.http.get<EventModel[]>(`http://localhost:8081/api/admin/events/all`, { headers: this.getHeaders() })
       .subscribe({ next: (data) => { this.events = data; this.cdr.detectChanges(); } });
   }
 
@@ -235,4 +235,28 @@ export class AdminDashboard {
     if (role === 'ROLE_ORGANISATEUR') return 'Organisateur';
     return 'Participant';
   }
+
+
+  toggleApprove(event: any) {
+    this.http.put(`http://localhost:8081/api/admin/events/${event.id}/approve`, {}, { headers: this.getHeaders() })
+      .subscribe({
+        next: (res: any) => {
+          event.approved = res.approved;
+          this.loadStats();
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+  toggleVerifyOrg(org: any) {
+    this.http.put(`http://localhost:8081/api/admin/organisateurs/${org.id}/verify`, {}, { headers: this.getHeaders() })
+      .subscribe({
+        next: (res: any) => {
+          org.verified = res.verified;
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+
 }

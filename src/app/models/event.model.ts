@@ -8,8 +8,9 @@ export interface EventModel {
   imageUrl:string;
   capacity:number;
   category:string;
+  organisateurVerified?: boolean;
   organisateurEmail?: string;
-    participantCount?: number;
-    maxParticipants?: number;
-     isFull?: boolean;
+  participantCount?: number;
+  maxParticipants?: number;
+  isFull?: boolean;
 }

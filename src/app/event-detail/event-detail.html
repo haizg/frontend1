@@ -11,6 +11,12 @@
       </div>
     </div>
 
+    <p class="event-meta">
+      👤 {{ event.organisateurEmail }}
+      <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
+    </p>
+
+
     <div class="event-body">
       <div class="event-info">
         <div class="info-card">

@@ -317,3 +317,18 @@
   color: #e65100;
   font-weight: 500;
 }
+
+.verified-badge {
+  display: inline-flex;       /* better than inline-block inside flex */
+  align-items: center;
+  justify-content: center;
+  background: #2a6262;
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
+  font-weight: 700;
+  margin-left: 4px;
+  flex-shrink: 0;             /* prevents shrinking in flex container */
+}

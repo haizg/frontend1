@@ -46,20 +46,21 @@
   <section class="quick-actions" *ngIf="isOrganisateur">
     <div class="action-container">
       <h2>{{ lang.get('home.createevent') }}</h2>
-
       <div class="action-buttons">
-        <button (click)="openCreateEventModal()" class="action-btn create-btn">
+        <button (click)="openCreateEventModal()"
+                class="action-btn create-btn"
+                [disabled]="!isVerified"
+                [title]="!isVerified ? 'Votre compte doit être vérifié par un administrateur' : ''">
           <span class="btn-icon">+</span>
           <span class="btn-text">
           <strong>{{ lang.get('home.createeventbtn') }}</strong>
-          <small>{{ lang.get('home.createeventbtndsc') }}</small>
+          <small *ngIf="isVerified">{{ lang.get('home.createeventbtndsc') }}</small>
+          <small *ngIf="!isVerified" style="color:#e65100;">⚠️ Compte non vérifié — contactez l'administrateur</small>
         </span>
         </button>
       </div>
     </div>
-
   </section>
-
 
 
 
@@ -74,6 +75,11 @@
         <div class="event-image">
           <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
         </div>
+
+        <p class="event-meta">
+          👤 {{ event.organisateurEmail }}
+          <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
+        </p>
         <div class="event-body">
           <span class="event-category">{{event.category}}</span>
           <h3 class="event-title">{{event.title}}</h3>
@@ -101,7 +107,6 @@
     </div>
     <p *ngIf="events.length === 0" class="no-events">No events available yet.</p>
   </section>
-
 
 
 <app-join-cta></app-join-cta>

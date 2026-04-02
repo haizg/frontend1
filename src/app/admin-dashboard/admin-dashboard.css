@@ -575,3 +575,39 @@
   margin-bottom: 20px;
   font-family: 'Georgia', serif;
 }
+
+.toggle-btn {
+  border: none;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle-btn.approved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.toggle-btn.approved:hover {
+  background: #c3e6cb;
+}
+
+.toggle-btn.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.toggle-btn.pending:hover {
+  background: #ffeeba;
+}
+
+.pending-row {
+  background: #fffdf0;
+}
+
+.pending-card .stat-number {
+  color: #e65100 !important;
+}

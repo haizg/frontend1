@@ -163,8 +163,11 @@ export class CreateEventModal {
               }, 1500);
             },
             error: (error) => {
-              console.error('❌ Error creating event:', error);
-              this.errorMessage = 'Erreur lors de la création de l\'événement';
+              if (error.status === 403 && error.error?.error === 'ACCOUNT_NOT_VERIFIED') {
+                this.errorMessage = 'Votre compte doit être vérifié par un administrateur avant de créer des événements.';
+              } else {
+                this.errorMessage = 'Erreur lors de la création de l\'événement.';
+              }
               this.isLoading = false;
             }
           });

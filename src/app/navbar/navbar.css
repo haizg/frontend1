@@ -98,28 +98,62 @@
 
 .lang-switcher {
   display: flex;
-  gap: 4px;
-  align-items: center;
+  gap: 10px;
+  align-items: right;
 }
 
-.lang-switcher button {
+
+.lang-select {
+  border: none;
   background: transparent;
-  border: 1px solid #2a6262;
-  color: #2a6262;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  border-color:#2a6262;
 }
 
-.lang-switcher button.active {
-  background: #2a6262;
-  color: white;
+.custom-select {
+  position: relative;
+  display: inline-block;
 }
 
-.lang-switcher button:hover {
-  background: #2a6262;
-  color: white;
+.custom-select select {
+  appearance: none; /* remove default style */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  padding: 8px 36px 8px 14px;
+  border-radius: 20px;
+  border: 2px solid #2a6262; /* 👈 CHANGE THIS COLOR */
+  background: white;
+  font-weight: 600;
+  color: #2a6262;
+  cursor: pointer;
+  font-size: 14px;
+
+  transition: all 0.3s ease;
 }
+
+/* Hover effect */
+.custom-select select:hover {
+  border-color: #1a4d4d; /* darker */
+}
+
+/* Focus effect */
+.custom-select select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(42, 98, 98, 0.2);
+}
+
+/* Custom arrow */
+.custom-select::after {
+  content: "▾";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #2a6262;
+  font-size: 12px;
+}
+
+

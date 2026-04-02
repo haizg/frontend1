@@ -4,13 +4,13 @@ import {Router, RouterLink} from "@angular/router";
 import {ModalService} from '../services/modal.service';
 import {UserService} from '../services/user.service';
 import {LangService} from '../services/lang.service';
-
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-navbar',
     imports: [
         CommonModule,
         RouterLink,
-
+        FormsModule
     ],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css'],
@@ -28,6 +28,8 @@ export class Navbar {
               @Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit(){
+    this.currentLang = this.lang.getCurrentLang();
+
     if (isPlatformBrowser(this.platformId)){
       const userStr = localStorage.getItem('user');
       if (userStr){

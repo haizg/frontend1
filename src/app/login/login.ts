@@ -49,7 +49,7 @@ export class Login {
     this.errorMessage='';
     const body={
       email:this.email,
-      password:this.password
+      password:this.password,
     };
 
     this.http.post('http://localhost:8081/api/auth/login', body, { responseType: 'text' })
@@ -69,7 +69,8 @@ export class Login {
             email: payload.sub,
             nom: payload.nom || '',
             prenom: payload.prenom || '',
-            role: payload.role || ''
+            role: payload.role || '',
+            verified: payload.verified
           };
 
           console.log(" User data object:", userData);

@@ -241,9 +241,9 @@
           <td class="email-cell">{{ org.email }}</td>
           <td>{{ org.nomOrganisation || '—' }}</td>
           <td>
-              <span class="status-dot" [class.dot-green]="org.verified" [class.dot-red]="!org.verified">
-                {{ org.verified ? '✅ Vérifié' : '❌ Non vérifié' }}
-              </span>
+  <span class="status-dot" [class.dot-green]="org.adminVerified" [class.dot-red]="!org.adminVerified">
+    {{ org.adminVerified ? '✅ Vérifié par admin' : '❌ Non vérifié' }}
+  </span>
           </td>
           <td>
             <div class="action-buttons-cell">
@@ -254,7 +254,7 @@
                       class="toggle-btn"
                       [class.approved]="org.adminVerified"
                       [class.pending]="!org.adminVerified">
-                {{ org.adminVerified ? 'Retirer' : 'Verifier' }}
+                {{ org.adminVerified ? 'Retirer' : 'Vérifier' }}
               </button>
             </div>
           </td>

@@ -251,12 +251,23 @@ export class AdminDashboard {
   }
 
   toggleVerifyOrg(org: any) {
-    console.log('Button clicked for org:', org.id, 'Current verified:', org.verified);
+    console.log('Button clicked for org:', org.id, 'Current adminVerified:', org.adminVerified);
+    if (!org.id) {
+      console.error('Organizer ID is undefined', org);
+      return;
+    }
     this.http.put(`http://localhost:8081/api/admin/organisateurs/${org.id}/verify`, {}, { headers: this.getHeaders() })
       .subscribe({
         next: (res: any) => {
-          org.verified = res.adminVverified;
+          // Update the local object with the response
+          org.adminVerified = res.adminVerified;
+          // Force change detection
           this.cdr.detectChanges();
+          // DON'T call loadOrganisateurs() here - it causes race conditions
+          // this.loadOrganisateurs(); // <-- REMOVE THIS LINE
+        },
+        error: (err) => {
+          console.error('Error toggling verification:', err);
         }
       });
   }

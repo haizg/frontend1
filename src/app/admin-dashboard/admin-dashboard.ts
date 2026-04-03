@@ -7,16 +7,18 @@ import { TranslateModule } from '@ngx-translate/core';
 import { UserService } from '../services/user.service';
 import { EventModel } from '../models/event.model';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
+import { CreateEventModal } from '../create-event-modal/create-event-modal';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, EditEventModal, FormsModule, TranslateModule],
+  imports: [CommonModule, RouterModule, EditEventModal, FormsModule, TranslateModule, CreateEventModal],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css',
 })
 export class AdminDashboard {
   @ViewChild(EditEventModal) editEventModal!: EditEventModal;
+  @ViewChild(CreateEventModal) createEventModal!: CreateEventModal;
 
   stats: any = null;
   users: any[] = [];
@@ -24,6 +26,7 @@ export class AdminDashboard {
   organisateurs: any[] = [];
   activeTab = 'overview';
   adminName = '';
+
 
   // Detail panel
   selectedUser: any = null;
@@ -248,6 +251,7 @@ export class AdminDashboard {
   }
 
   toggleVerifyOrg(org: any) {
+    console.log('Button clicked for org:', org.id, 'Current verified:', org.verified);
     this.http.put(`http://localhost:8081/api/admin/organisateurs/${org.id}/verify`, {}, { headers: this.getHeaders() })
       .subscribe({
         next: (res: any) => {
@@ -256,4 +260,14 @@ export class AdminDashboard {
         }
       });
   }
+
+  openCreateEventModal() {
+    this.createEventModal.open();
+  }
+
+  onEventCreated() {
+    this.loadEvents();
+    this.loadStats();
+  }
+
 }

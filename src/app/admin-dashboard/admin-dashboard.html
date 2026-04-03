@@ -252,9 +252,9 @@
               <button (click)="deleteOrganisateur(org.id)" class="btn-delete-sm">🗑️</button>
               <button (click)="toggleVerifyOrg(org)"
                       class="toggle-btn"
-                      [class.approved]="org.verified"
-                      [class.pending]="!org.verified">
-                {{ org.verified ? 'Retirer' : 'Vérifier' }}
+                      [class.approved]="org.adminVerified"
+                      [class.pending]="!org.adminVerified">
+                {{ org.adminVerified ? 'Retirer' : 'Verifier' }}
               </button>
             </div>
           </td>

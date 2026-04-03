@@ -255,7 +255,7 @@ export class AdminDashboard {
     this.http.put(`http://localhost:8081/api/admin/organisateurs/${org.id}/verify`, {}, { headers: this.getHeaders() })
       .subscribe({
         next: (res: any) => {
-          org.verified = res.verified;
+          org.verified = res.adminVverified;
           this.cdr.detectChanges();
         }
       });

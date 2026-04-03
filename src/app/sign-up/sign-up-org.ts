@@ -5,12 +5,14 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ModalService } from '../services/modal.service';
 import { UserService } from '../services/user.service';
-import {LangService} from '../services/lang.service';
+import { TranslateModule } from '@ngx-translate/core'; // ADD THIS
+// REMOVE: import {LangService} from '../services/lang.service';
+import { TranslateLangService } from '../services/translate-lang.service'; // ADD THIS
 
 @Component({
   selector: 'app-sign-up-org',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, TranslateModule], // ADD TranslateModule
   templateUrl: './sign-up-org.html',
   styleUrl: './sign-up-org.css',
 })
@@ -30,7 +32,8 @@ export class SignUpOrg {
     private http: HttpClient,
     private modalService: ModalService,
     private userService: UserService,
-    public lang: LangService,
+    // REMOVE: public lang: LangService,
+    private translateLang: TranslateLangService, // ADD THIS
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 

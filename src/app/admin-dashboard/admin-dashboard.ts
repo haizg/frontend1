@@ -3,15 +3,15 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { UserService } from '../services/user.service';
 import { EventModel } from '../models/event.model';
-import { LangService } from '../services/lang.service';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, EditEventModal, FormsModule],
+  imports: [CommonModule, RouterModule, EditEventModal, FormsModule, TranslateModule],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css',
 })
@@ -55,7 +55,6 @@ export class AdminDashboard {
     private router: Router,
     private userService: UserService,
     private cdr: ChangeDetectorRef,
-    public lang: LangService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -257,6 +256,4 @@ export class AdminDashboard {
         }
       });
   }
-
-
 }

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, PLATFORM_ID, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';  // ADD THIS
 import { Navbar } from '../navbar/navbar';
 import { EventService } from '../services/event.service';
 import { EventModel } from '../models/event.model';
@@ -14,13 +15,14 @@ import { Popup } from '../joinevents/popup/popup';
 import { CreateEventModal } from '../create-event-modal/create-event-modal';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {LangService} from '../services/lang.service';
+// REMOVE THIS LINE: import {LangService} from '../services/lang.service';
+import { TranslateLangService } from '../services/translate-lang.service'; // ADD THIS
 
 @Component({
   selector: 'app-home',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, Navbar, RouterModule, JoinCta, Footer, SignUpOrg, Login, Popup, CreateEventModal,EditEventModal],
+  imports: [CommonModule, Navbar, RouterModule, JoinCta, Footer, SignUpOrg, Login, Popup, CreateEventModal, EditEventModal, TranslateModule], // ADD TranslateModule
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
@@ -59,7 +61,8 @@ export class Home implements AfterViewInit{
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private router: Router,
-    public lang: LangService,
+    // REMOVE: public lang: LangService,
+    private translateLang: TranslateLangService, // ADD THIS (optional, if you need programmatic access)
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 

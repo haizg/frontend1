@@ -7,7 +7,9 @@ import {Navbar} from '../navbar/navbar';
 import {Footer} from '../shared/footer/footer';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {LangService} from '../services/lang.service';
+import { TranslateModule } from '@ngx-translate/core'; // ADD THIS
+// REMOVE: import {LangService} from '../services/lang.service';
+import { TranslateLangService } from '../services/translate-lang.service'; // ADD THIS
 import {RouterModule} from '@angular/router';
 
 @Component({
@@ -17,7 +19,8 @@ import {RouterModule} from '@angular/router';
     Footer,
     CommonModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    TranslateModule // ADD THIS
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
@@ -52,7 +55,8 @@ export class Profile {
     private userService: UserService,
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
-    public lang: LangService,
+    // REMOVE: public lang: LangService,
+    private translateLang: TranslateLangService, // ADD THIS
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
   }
@@ -204,4 +208,3 @@ export class Profile {
     });
   }
 }
-

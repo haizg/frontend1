@@ -1,36 +1,36 @@
 <div class="modal-overlay" (click)="close()">
-<form (click)="$event.stopPropagation()">
-  <h1>{{ lang.get('navbar.login') }}</h1>
-  <div>
-    <label>
-      Email :
-    </label>
-    <input type="text"  [(ngModel)]="email" name="email" email #emailRef="ngModel">
-    <small *ngIf="emailRef.errors?.['email'] && emailRef.touched">Forme email incorrecte</small>
+  <form (click)="$event.stopPropagation()">
+    <h1>{{ 'navbar.login' | translate }}</h1>
+    <div>
+      <label>
+        Email :
+      </label>
+      <input type="text"  [(ngModel)]="email" name="email" email #emailRef="ngModel">
+      <small *ngIf="emailRef.errors?.['email'] && emailRef.touched">Forme email incorrecte</small>
 
-  </div>
-  <br>
-  <div>
-    <label>
-      {{ lang.get('login.mdp') }}
-    </label>
-    <input type="password" [(ngModel)]="password" name="password" email>
-  </div>
+    </div>
+    <br>
+    <div>
+      <label>
+        {{ 'login.mdp' | translate }}
+      </label>
+      <input type="password" [(ngModel)]="password" name="password" email>
+    </div>
 
-  <div class="forgot-password-link">
-    <a (click)="openForgotPassword(); $event.preventDefault()" href="#">
-      {{ lang.get('login.forgotpsw') }}
-    </a>
-  </div>
-
-
-<p *ngIf="errorMessage" class="error-message">{{errorMessage}}</p>
-  <br>
-
-  <button (click)="login()" type="button">{{ lang.get('navbar.login') }}</button>
+    <div class="forgot-password-link">
+      <a (click)="openForgotPassword(); $event.preventDefault()" href="#">
+        {{ 'login.forgotpsw' | translate }}
+      </a>
+    </div>
 
 
-</form>
+    <p *ngIf="errorMessage" class="error-message">{{errorMessage}}</p>
+    <br>
+
+    <button (click)="login()" type="button">{{ 'navbar.login' | translate }}</button>
+
+
+  </form>
   <app-forgot-password-modal></app-forgot-password-modal>
 
 </div>

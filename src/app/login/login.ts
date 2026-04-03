@@ -6,7 +6,9 @@ import {ModalService} from '../services/modal.service';
 import {UserService} from '../services/user.service';
 import {CommonModule} from '@angular/common';
 import { ForgotPasswordModal } from '../forgot-password-modal/forgot-password-modal';
-import {LangService} from '../services/lang.service';
+import { TranslateModule } from '@ngx-translate/core'; // ADD THIS
+// REMOVE: import {LangService} from '../services/lang.service';
+import { TranslateLangService } from '../services/translate-lang.service'; // ADD THIS
 
 @Component({
   selector: 'app-login',
@@ -14,7 +16,9 @@ import {LangService} from '../services/lang.service';
     imports: [
         FormsModule,
         ReactiveFormsModule,
-        CommonModule, ForgotPasswordModal
+        CommonModule,
+        ForgotPasswordModal,
+        TranslateModule // ADD THIS
     ],
   templateUrl: './login.html',
   styleUrl: './login.css',
@@ -29,7 +33,8 @@ export class Login {
   constructor(private http: HttpClient,
               private router :Router,
               private modalService: ModalService,
-              public lang: LangService,
+              // REMOVE: public lang: LangService,
+              private translateLang: TranslateLangService, // ADD THIS
               private userService: UserService) {}
 
 

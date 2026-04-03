@@ -1,19 +1,27 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LangService } from '../../services/lang.service';
+import { TranslateModule } from '@ngx-translate/core'; // ADD THIS
+// REMOVE: import { LangService } from '../../services/lang.service';
+import { TranslateLangService } from '../../services/translate-lang.service'; // ADD THIS
 import { ModalService } from '../../services/modal.service';
 import { UserService } from '../../services/user.service';
+
 @Component({
   selector: 'app-join-cta',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule], // ADD TranslateModule
   templateUrl: './join-cta.html',
   styleUrl: './join-cta.css',
 
 })
 export class JoinCta {
-  constructor(public lang: LangService, private cdr: ChangeDetectorRef, private modalService: ModalService,
-                                                                           private userService: UserService){}
+  constructor(
+    // REMOVE: public lang: LangService,
+    private translateLang: TranslateLangService, // ADD THIS
+    private cdr: ChangeDetectorRef,
+    private modalService: ModalService,
+    private userService: UserService
+  ){}
 
   ngOnInit() {
       //this.lang.lang$.subscribe(() => {

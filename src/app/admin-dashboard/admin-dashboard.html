@@ -7,8 +7,8 @@
       <span class="admin-badge">Admin</span>
     </div>
     <nav class="sidebar-nav">
-      <a routerLink="/home" class="sidebar-link">🏠 Accueil</a>
-      <a routerLink="/events" class="sidebar-link">📋 Voir les événements</a>
+      <a routerLink="/home" class="sidebar-link">🏠 {{ 'navbar.home' | translate }}</a>
+      <a routerLink="/events" class="sidebar-link">📋 {{ 'events.allevents' | translate }}</a>
       <button [class.active]="activeTab === 'overview'" (click)="activeTab = 'overview'">📊 Vue d'ensemble</button>
       <button [class.active]="activeTab === 'events'" (click)="activeTab = 'events'">📅 Gestion événements</button>
       <button [class.active]="activeTab === 'users'" (click)="activeTab = 'users'">👥 Utilisateurs</button>
@@ -16,7 +16,7 @@
     </nav>
     <div class="sidebar-footer">
       <p class="admin-name">{{ adminName }}</p>
-      <button (click)="logout()" class="btn-logout">Se déconnecter</button>
+      <button (click)="logout()" class="btn-logout">{{ 'navbar.logout' | translate }}</button>
     </div>
   </aside>
 
@@ -109,8 +109,8 @@
           </td>
           <td class="email-cell">{{ event.organisateurEmail }}</td>
           <td class="action-buttons-cell">
-            <button (click)="openEditEvent(event)" class="btn-edit-sm">✏️ Modifier</button>
-            <button (click)="deleteEvent(event.id)" class="btn-delete-sm">🗑️ Supprimer</button>
+            <button (click)="openEditEvent(event)" class="btn-edit-sm">✏️ {{ 'events.modifier' | translate }}</button>
+            <button (click)="deleteEvent(event.id)" class="btn-delete-sm">🗑️ {{ 'events.supprimer' | translate }}</button>
           </td>
         </tr>
         </tbody>

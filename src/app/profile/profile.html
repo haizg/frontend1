@@ -8,20 +8,20 @@
       <h1>{{ user.prenom }} {{ user.nom }}</h1>
       <p class="email">{{ user.email }}</p>
       <span class="role-badge" [class.organisateur]="isOrganisateur">
-        {{ isOrganisateur ? lang.get('profile.organisateur') : lang.get('profile.participant') }}
+        {{ isOrganisateur ? ('profile.organisateur' | translate) : ('profile.participant' | translate) }}
       </span>
     </div>
   </div>
 
   <div class="tabs">
     <button [class.active]="activeTab === 'events'" (click)="activeTab = 'events'">
-      {{ isOrganisateur ? lang.get('profile.myevents') : lang.get('profile.myparticipations') }}
+      {{ isOrganisateur ? ('profile.myevents' | translate) : ('profile.myparticipations' | translate) }}
     </button>
     <button [class.active]="activeTab === 'edit'" (click)="activeTab = 'edit'">
-      {{ lang.get('profile.editprofile') }}
+      {{ 'profile.editprofile' | translate }}
     </button>
     <button [class.active]="activeTab === 'password'" (click)="activeTab = 'password'">
-      {{ lang.get('profile.changepassword') }}
+      {{ 'profile.changepassword' | translate }}
     </button>
   </div>
 
@@ -32,10 +32,10 @@
 
     <!-- Organizer: Created events -->
     <div *ngIf="isOrganisateur">
-      <h2>{{ lang.get('profile.createdEvents') }}</h2>
+      <h2>{{ 'profile.createdEvents' | translate }}</h2>
       <div class="events-grid" *ngIf="createdEvents.length > 0; else noCreated">
         <div class="event-card" *ngFor="let event of createdEvents"
-          [routerLink]="['/events',event.id]" style="cursor:pointer">
+             [routerLink]="['/events',event.id]" style="cursor:pointer">
 
           <div class="event-image">
             <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
@@ -49,12 +49,12 @@
         </div>
       </div>
       <ng-template #noCreated>
-        <p class="no-events">{{ lang.get('profile.nocreated') }}</p>
+        <p class="no-events">{{ 'profile.nocreated' | translate }}</p>
       </ng-template>
     </div>
 
     <!-- Participated events -->
-    <h2>{{ isOrganisateur ? lang.get('profile.participatedEvents') : lang.get('profile.myparticipations') }}</h2>
+    <h2>{{ isOrganisateur ? ('profile.participatedEvents' | translate) : ('profile.myparticipations' | translate) }}</h2>
     <div class="events-grid" *ngIf="participatedEvents.length > 0; else noParticipated">
       <div class="event-card" *ngFor="let event of participatedEvents"
            [routerLink]="['/events', event.id]"
@@ -71,7 +71,7 @@
       </div>
     </div>
     <ng-template #noParticipated>
-      <p class="no-events">{{ lang.get('profile.noparticipated') }}</p>
+      <p class="no-events">{{ 'profile.noparticipated' | translate }}</p>
     </ng-template>
 
   </div>
@@ -83,54 +83,54 @@
 
 
   <div *ngIf="activeTab === 'edit'" class="form-section">
-    <h2>{{ lang.get('profile.editprofile') }}</h2>
+    <h2>{{ 'profile.editprofile' | translate }}</h2>
     <div class="form-group">
-      <label>{{ lang.get('profile.prenom') }}</label>
+      <label>{{ 'profile.prenom' | translate }}</label>
       <input type="text" [(ngModel)]="editPrenom" placeholder="Prénom">
     </div>
     <div class="form-group">
-      <label>{{ lang.get('profile.nom') }}</label>
+      <label>{{ 'profile.nom' | translate }}</label>
       <input type="text" [(ngModel)]="editNom" placeholder="Nom">
     </div>
     <div class="form-group">
-      <label>{{ lang.get('profile.email') }}</label>
+      <label>{{ 'profile.email' | translate }}</label>
       <input type="email" [(ngModel)]="editEmail" placeholder="Email">
     </div>
     <div class="form-group" *ngIf="isOrganisateur">
-      <label>{{ lang.get('profile.organisation') }}</label>
+      <label>{{ 'profile.organisation' | translate }}</label>
       <input type="text" [(ngModel)]="editNomOrganisation" placeholder="Nom de l'organisation">
     </div>
     <p class="success-msg" *ngIf="profileMessage">{{ profileMessage }}</p>
     <p class="error-msg" *ngIf="profileError">{{ profileError }}</p>
-    <button class="btn-save" (click)="updateProfile()">{{ lang.get('profile.save') }}</button>
+    <button class="btn-save" (click)="updateProfile()">{{ 'profile.save' | translate }}</button>
   </div>
 
 
 
   <div *ngIf="activeTab === 'password'" class="form-section">
-   <h2> {{ lang.get('profile.changepassword') }}</h2>
+    <h2> {{ 'profile.changepassword' | translate }}</h2>
     <div class="form-group">
-      <label>{{ lang.get('profile.oldpassword') }}</label>
+      <label>{{ 'profile.oldpassword' | translate }}</label>
       <input type="password" [(ngModel)]="oldPassword" placeholder="Ancien mot de passe">
     </div>
     <div class="form-group">
-      <label>{{ lang.get('profile.newpassword') }}</label>
+      <label>{{ 'profile.newpassword' | translate }}</label>
       <input type="password" [(ngModel)]="newPassword" placeholder="Nouveau mot de passe">
     </div>
     <div class="form-group">
-      <label>{{ lang.get('profile.confirmpassword') }}</label>
+      <label>{{ 'profile.confirmpassword' | translate }}</label>
       <input type="password" [(ngModel)]="confirmPassword" placeholder="Confirmer">
     </div>
     <p class="success-msg" *ngIf="passwordMessage">{{ passwordMessage }}</p>
     <p class="error-msg" *ngIf="passwordError">{{ passwordError }}</p>
-    <button class="btn-save" (click)="changePassword()">{{ lang.get('profile.modify') }}</button>
+    <button class="btn-save" (click)="changePassword()">{{ 'profile.modify' | translate }}</button>
   </div>
 
 
 </div>
 
 <div *ngIf="!user" class="not-logged-in">
-  <p>{{ lang.get('profile.loginrequired') }}</p>
+  <p>{{ 'profile.loginrequired' | translate }}</p>
 </div>
 
 <app-footer></app-footer>

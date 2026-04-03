@@ -1,0 +1,98 @@
+{
+  "navbar": {
+    "home": "Home",
+    "events": "Events",
+    "about": "About Us",
+    "contact": "Contact",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "logout": "Log Out"
+  },
+  "events": {
+    "allevents": "All events",
+    "upcomingevents": "Upcoming Events",
+    "participate": "Participate",
+    "full": "FULL",
+    "allcategories": "All categories",
+    "noevents": "No events available.",
+    "summary": "event",
+    "summaryplural": "events",
+    "total": "in total",
+    "complet": "full",
+    "complets": "full",
+    "ttcategories": "All categories",
+    "modifier": "Modify",
+    "supprimer": "Delete"
+  },
+  "home": {
+    "organisateur": "Create, manage, and promote your cultural events with ease. Your platform for organizing unforgettable experiences.",
+    "participant": "Discover and participate in exciting cultural events. Join an engaged community and enjoy unique experiences.",
+    "visiteur": "Organize, manage, and participate in your events with ease. A modern platform to create unforgettable experiences.",
+    "createevent": "Create your events",
+    "createeventbtn": "Create an event",
+    "createeventbtndsc": "Organize your next event"
+  },
+  "joincta": {
+    "join": "Join Invitini",
+    "faitespartie": "Be part of an engaged community.",
+    "joinsubtitle": "Discover, organize, and share cultural events with ease. Membership is completely free."
+  },
+  "login": {
+    "mdp": "Password:",
+    "forgotpsw": "Forgot password ?"
+  },
+  "signup": {
+    "nom": "Last Name",
+    "prenom": "First Name",
+    "confirmmdp": "Confirm password",
+    "org": "Organizer",
+    "nomorg": "Organization name"
+  },
+  "profile": {
+    "myevents": "My Events",
+    "myparticipations": "My Participations",
+    "editprofile": "Edit Profile",
+    "changepassword": "Change Password",
+    "createdEvents": "My Created Events",
+    "participatedEvents": "Events I Participated In",
+    "nocreated": "You haven't created any events yet.",
+    "noparticipated": "You haven't participated in any events.",
+    "organisateur": "Organizer",
+    "participant": "Participant",
+    "prenom": "First Name",
+    "nom": "Last Name",
+    "email": "Email",
+    "organisation": "Organization Name (optional)",
+    "save": "Save",
+    "oldpassword": "Old Password",
+    "newpassword": "New Password",
+    "confirmpassword": "Confirm Password",
+    "modify": "Update",
+    "loginrequired": "Please log in to view your profile."
+  },
+  "eventdetail": {
+    "date": "Date",
+    "heure": "Time",
+    "lieu": "Location",
+    "capacity": "Capacity",
+    "personnes": "people",
+    "about": "About this event",
+    "modifier": "Edit",
+    "supprimer": "Delete",
+    "stats": "Statistics",
+    "confirmed": "Confirmed registrations",
+    "expected": "Expected attendees",
+    "totalcapacity": "Total capacity",
+    "fillrate": "Fill rate",
+    "filling": "Filling",
+    "participants": "Participants list",
+    "noparticipants": "No participants yet.",
+    "email": "Email",
+    "people": "People",
+    "status": "Status",
+    "confirmed_badge": "Confirmed",
+    "pending_badge": "Pending",
+    "participate": "Participate in this event",
+    "loading": "Loading..."
+  }
+}

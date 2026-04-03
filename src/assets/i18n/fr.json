@@ -1,0 +1,98 @@
+{
+  "navbar": {
+    "home": "Accueil",
+    "events": "Événements",
+    "about": "À propos",
+    "contact": "Contact",
+    "login": "Se connecter",
+    "signup": "S'inscrire",
+    "logout": "Se déconnecter"
+  },
+  "events": {
+    "allevents": "Tous les événements",
+    "upcomingevents": "Événements à venir",
+    "participate": "Participer",
+    "full": "COMPLET",
+    "allcategories": "Toutes les catégories",
+    "noevents": "Aucun événement disponible.",
+    "summary": "événement",
+    "summaryplural": "événements",
+    "total": "au total",
+    "complet": "complet",
+    "complets": "complets",
+    "ttcategories": "Tous les catégories",
+    "modifier": "Modifier",
+    "supprimer": "Supprimer"
+  },
+  "home": {
+    "organisateur": "Créez, gérez et promouvez vos événements culturels en toute simplicité. Votre plateforme pour organiser des expériences inoubliables.",
+    "participant": "Découvrez et participez à des événements culturels passionnants. Rejoignez une communauté engagée et vivez des expériences uniques.",
+    "visiteur": "Organisez, gérez et participez à vos événements en toute simplicité. Une plateforme moderne pour créer des expériences inoubliables.",
+    "createevent": "Créer vos évènements",
+    "createeventbtn": "Créer un événement",
+    "createeventbtndsc": "Organisez votre prochain événement"
+  },
+  "joincta": {
+    "join": "Rejoignez Invitini",
+    "faitespartie": "Faites partie d'une communauté engagée.",
+    "joinsubtitle": "Découvrez, organisez et partagez des événements culturels en toute simplicité. L'adhésion est entièrement gratuite."
+  },
+  "login": {
+    "mdp": "Mot de passe:",
+    "forgotpsw": "Mot de passe oublié ?"
+  },
+  "signup": {
+    "nom": "Nom",
+    "prenom": "Prénom",
+    "confirmmdp": "Confirmer le mot de passe",
+    "org": "Organisateur",
+    "nomorg": "Nom de l'organisation"
+  },
+  "profile": {
+    "myevents": "Mes événements",
+    "myparticipations": "Mes participations",
+    "editprofile": "Modifier le profil",
+    "changepassword": "Changer le mot de passe",
+    "createdEvents": "Mes événements créés",
+    "participatedEvents": "Événements auxquels j'ai participé",
+    "nocreated": "Vous n'avez pas encore créé d'événements.",
+    "noparticipated": "Vous n'avez participé à aucun événement.",
+    "organisateur": "Organisateur",
+    "participant": "Participant",
+    "prenom": "Prénom",
+    "nom": "Nom",
+    "email": "Email",
+    "organisation": "Nom de l'organisation (optionnel)",
+    "save": "Enregistrer",
+    "oldpassword": "Ancien mot de passe",
+    "newpassword": "Nouveau mot de passe",
+    "confirmpassword": "Confirmer le mot de passe",
+    "modify": "Modifier",
+    "loginrequired": "Veuillez vous connecter pour voir votre profil."
+  },
+  "eventdetail": {
+    "date": "Date",
+    "heure": "Heure",
+    "lieu": "Lieu",
+    "capacity": "Capacité",
+    "personnes": "personnes",
+    "about": "À propos de cet événement",
+    "modifier": "Modifier",
+    "supprimer": "Supprimer",
+    "stats": "Statistiques",
+    "confirmed": "Inscriptions confirmées",
+    "expected": "Personnes attendues",
+    "totalcapacity": "Capacité totale",
+    "fillrate": "Taux de remplissage",
+    "filling": "Remplissage",
+    "participants": "Liste des participants",
+    "noparticipants": "Aucun participant pour le moment.",
+    "email": "Email",
+    "people": "Personnes",
+    "status": "Statut",
+    "confirmed_badge": "Confirmé",
+    "pending_badge": "En attente",
+    "participate": "Participer à cet événement",
+    "loading": "Chargement..."
+  }
+}

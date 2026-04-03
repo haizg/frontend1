@@ -13,7 +13,9 @@ import {RouterLink} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {LangService} from '../services/lang.service';
+import { TranslateModule } from '@ngx-translate/core'; // ADD THIS
+// REMOVE: import {LangService} from '../services/lang.service';
+import { TranslateLangService } from '../services/translate-lang.service'; // ADD THIS
 
 @Component({
   selector: 'app-events-page',
@@ -25,7 +27,8 @@ import {LangService} from '../services/lang.service';
     Navbar,
     RouterLink,
     CommonModule,
-    EditEventModal
+    EditEventModal,
+    TranslateModule // ADD THIS
   ],
   templateUrl: './events-page.html',
   styleUrl: './events-page.css',
@@ -57,7 +60,8 @@ export class EventsPage {
     private userService: UserService,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
-    public lang: LangService,
+    // REMOVE: public lang: LangService,
+    private translateLang: TranslateLangService, // ADD THIS (optional)
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 

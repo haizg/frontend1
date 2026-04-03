@@ -1,15 +1,15 @@
 <div [class.page-blur]="isModalOpen || isSignupModalOpen || isJoinModalOpen" xmlns="http://www.w3.org/1999/html">
-<app-navbar></app-navbar>
+  <app-navbar></app-navbar>
 
 
 
-<section class="hero">
-  <div class="carousel">
-    <div class="carousel-slide" *ngFor="let slide of slides; let i =index"
-        [class.active]="i===currentSlide">
-      <img [src]="slide.image" >
-      <div class="carousel-overlay"></div>
-    </div>
+  <section class="hero">
+    <div class="carousel">
+      <div class="carousel-slide" *ngFor="let slide of slides; let i =index"
+           [class.active]="i===currentSlide">
+        <img [src]="slide.image" >
+        <div class="carousel-overlay"></div>
+      </div>
 
 
 
@@ -20,32 +20,32 @@
         </span>
       </div>
 
-  </div>
-</section>
+    </div>
+  </section>
 
 
 
 
 
   <section class="tagline">
-  <p *ngIf="isOrganisateur">
-    {{ lang.get('home.organisateur') }}
-  </p>
+    <p *ngIf="isOrganisateur">
+      {{ 'home.organisateur' | translate }}
+    </p>
 
-  <p *ngIf="isParticipant">
-    {{ lang.get('home.participant') }}
-  </p>
+    <p *ngIf="isParticipant">
+      {{ 'home.participant' | translate }}
+    </p>
 
-  <p *ngIf="!isLoggedIn">
-    {{ lang.get('home.visiteur') }}
-  </p>
-</section>
+    <p *ngIf="!isLoggedIn">
+      {{ 'home.visiteur' | translate }}
+    </p>
+  </section>
 
 
 
   <section class="quick-actions" *ngIf="isOrganisateur">
     <div class="action-container">
-      <h2>{{ lang.get('home.createevent') }}</h2>
+      <h2>{{ 'home.createevent' | translate }}</h2>
       <div class="action-buttons">
         <button (click)="openCreateEventModal()"
                 class="action-btn create-btn"
@@ -53,8 +53,8 @@
                 [title]="!isVerified ? 'Votre compte doit être vérifié par un administrateur' : ''">
           <span class="btn-icon">+</span>
           <span class="btn-text">
-          <strong>{{ lang.get('home.createeventbtn') }}</strong>
-          <small *ngIf="isVerified">{{ lang.get('home.createeventbtndsc') }}</small>
+          <strong>{{ 'home.createeventbtn' | translate }}</strong>
+          <small *ngIf="isVerified">{{ 'home.createeventbtndsc' | translate }}</small>
           <small *ngIf="!isVerified" style="color:#e65100;">⚠️ Compte non vérifié — contactez l'administrateur</small>
         </span>
         </button>
@@ -66,8 +66,8 @@
 
   <section class="event-section">
     <div class="section-header">
-      <h2 class="section-title">{{ lang.get('events.upcomingevents') }}</h2>
-      <a routerLink="/events" class="see-all">{{ lang.get('events.allevents') }}</a>
+      <h2 class="section-title">{{ 'events.upcomingevents' | translate }}</h2>
+      <a routerLink="/events" class="see-all">{{ 'events.allevents' | translate }}</a>
     </div>
     <div class="event-row">
       <div class="event-card" *ngFor="let event of availableEvents.slice(0, 6)"
@@ -91,14 +91,14 @@
 
 
           <div *ngIf="isAdmin || canModifyEvent(event)" class="event-actions">
-            <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">{{ lang.get('events.modifier') }}</button>
-            <button (click)="deleteEvent(event, $event)" class="btn btn-delete">{{ lang.get('events.supprimer') }}</button>
+            <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">{{ 'events.modifier' | translate }}</button>
+            <button (click)="deleteEvent(event, $event)" class="btn btn-delete">{{ 'events.supprimer' | translate }}</button>
           </div>
-        <br>
+          <br>
           <button *ngIf="!isAdmin && !canModifyEvent(event)"
                   (click)="openJoinModal(event.id); $event.stopPropagation()"
                   class="btn btn-primary participate-btn">
-            {{ lang.get('events.participate') }}
+            {{ 'events.participate' | translate }}
           </button>
 
 
@@ -109,10 +109,10 @@
   </section>
 
 
-<app-join-cta></app-join-cta>
+  <app-join-cta></app-join-cta>
 
 
-<app-footer></app-footer>
+  <app-footer></app-footer>
 </div>
 <app-login *ngIf="isModalOpen"></app-login>
 <app-sign-up-org *ngIf="isSignupModalOpen"></app-sign-up-org>

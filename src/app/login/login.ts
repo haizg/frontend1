@@ -75,7 +75,8 @@ export class Login {
             nom: payload.nom || '',
             prenom: payload.prenom || '',
             role: payload.role || '',
-            verified: payload.verified
+            verified: payload.verified,
+            adminVerified:payload.adminVerified
           };
 
           console.log(" User data object:", userData);

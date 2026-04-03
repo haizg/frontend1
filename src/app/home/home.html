@@ -49,13 +49,13 @@
       <div class="action-buttons">
         <button (click)="openCreateEventModal()"
                 class="action-btn create-btn"
-                [disabled]="!isVerified"
-                [title]="!isVerified ? 'Votre compte doit être vérifié par un administrateur' : ''">
+                [disabled]="!isAdminVerified"
+                [title]="!isAdminVerified ? 'Votre compte doit être vérifié par un administrateur' : ''">
           <span class="btn-icon">+</span>
           <span class="btn-text">
           <strong>{{ 'home.createeventbtn' | translate }}</strong>
-          <small *ngIf="isVerified">{{ 'home.createeventbtndsc' | translate }}</small>
-          <small *ngIf="!isVerified" style="color:#e65100;">⚠️ Compte non vérifié — contactez l'administrateur</small>
+          <small *ngIf="isAdminVerified">{{ 'home.createeventbtndsc' | translate }}</small>
+          <small *ngIf="!isAdminVerified" style="color:red;">⚠️ Compte non vérifié — Attendre l'approbation de l'administrateur</small>
         </span>
         </button>
       </div>

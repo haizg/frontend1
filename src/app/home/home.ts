@@ -40,7 +40,7 @@ export class Home implements AfterViewInit{
   isSignupModalOpen = false;
   isJoinModalOpen = false;
   availableEvents: EventModel[] = [];
-  isVerified = false;
+  isAdminVerified = false;
 
   currentSlide=0;
   slides=[
@@ -102,13 +102,13 @@ export class Home implements AfterViewInit{
           this.userName = user.nom;
           this.userPrenom = user.prenom;
           this.userEmail = user.email;
-          this.isVerified = user.verified || false;
+          this.isAdminVerified = user.adminVerified || false;
         } else {
           this.isLoggedIn = false;
           this.userRole = null;
           this.userName = '';
           this.userPrenom = '';
-
+          this.isAdminVerified = false;
 
         }
         this.cdr.detectChanges();

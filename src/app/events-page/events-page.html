@@ -53,19 +53,25 @@
             <button (click)="deleteEvent(event, $event)" class="btn btn-delete">{{ 'events.supprimer' | translate }}</button>
           </div>
 
-          <button *ngIf="!isAdmin && !canModifyEvent(event)"
-                  (click)="openJoinModal(event.id); $event.stopPropagation()"
-                  class="btn-participate">
-            {{ 'events.participate' | translate }}
-          </button>
-
-
+          <ng-container *ngIf="!isAdmin && !canModifyEvent(event) && !event.isFull">
+            <button *ngIf="hasParticipated(event.id)"
+                    class="btn-already-participated"
+                    disabled
+                    (click)="$event.stopPropagation()">
+               {{ 'events.alreadyparticipated' | translate }}
+            </button>
+            <button *ngIf="!hasParticipated(event.id)"
+                    (click)="openJoinModal(event.id); $event.stopPropagation()"
+                    class="btn-participate">
+              {{ 'events.participate' | translate }}
+            </button>
+          </ng-container>
 
 
 
 
           <button *ngIf="!isOrganisateur && event.isFull" class="btn-full" disabled>
-            ✋ {{ 'events.full' | translate }}
+             {{ 'events.full' | translate }}
           </button>
         </div>
       </div>

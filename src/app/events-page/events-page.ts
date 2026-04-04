@@ -45,6 +45,7 @@ export class EventsPage {
   isLoggedIn=false;
   userRole:string|null=null;
   userEmail:string='';
+  participatedEventIds: Set<number> = new Set();
 
   allEvents: EventModel[] = [];
   filteredEvents: EventModel[] = [];
@@ -67,11 +68,7 @@ export class EventsPage {
 
 
   ngOnInit() {
-    //this.lang.lang$.subscribe(() => {
-      //this.cdr.detectChanges();
-    //});
-
-    if (isPlatformBrowser(this.platformId)) {
+     if (isPlatformBrowser(this.platformId)) {
       const userStr = localStorage.getItem('user');
       if (userStr) this.userService.setUser(JSON.parse(userStr));
 
@@ -80,9 +77,11 @@ export class EventsPage {
           this.isLoggedIn = true;
           this.userRole = user.role;
           this.userEmail = user.email;
+          this.loadMyParticipations();
         } else {
           this.isLoggedIn = false;
           this.userRole = null;
+          this.participatedEventIds = new Set();
         }
         this.cdr.detectChanges();
       });
@@ -220,5 +219,23 @@ export class EventsPage {
 
     onEventUpdated() {
       this.loadEvents();
+    }
+
+    loadMyParticipations() {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+      this.http.get<number[]>('http://localhost:8081/api/user/my-participations', { headers })
+        .subscribe({
+          next: (ids) => {
+            this.participatedEventIds = new Set(ids);
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Failed to load participations', err)
+        });
+    }
+
+    hasParticipated(eventId: number): boolean {
+      return this.participatedEventIds.has(eventId);
     }
 }

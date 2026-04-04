@@ -22,7 +22,8 @@
     "complets": "complets",
     "ttcategories": "Tous les catégories",
     "modifier": "Modifier",
-    "supprimer": "Supprimer"
+    "supprimer": "Supprimer",
+    "alreadyparticipated": "Déjà inscrit"
   },
   "home": {
     "organisateur": "Créez, gérez et promouvez vos événements culturels en toute simplicité. Votre plateforme pour organiser des expériences inoubliables.",

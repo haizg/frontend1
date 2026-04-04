@@ -121,11 +121,18 @@
       </div>
 
       <!-- PARTICIPANT BUTTON -->
-      <button *ngIf="!isMyEvent && !isAdmin"
-              class="btn-participer"
-              (click)="openJoinModal(event!.id)">
-        {{ 'eventdetail.participate' | translate }}
-      </button>
+      <ng-container *ngIf="!isMyEvent && !isAdmin">
+        <button *ngIf="hasAlreadyParticipated"
+                class="btn-already-participated"
+                disabled>
+          ✅ Vous participez déjà à cet événement
+        </button>
+        <button *ngIf="!hasAlreadyParticipated"
+                class="btn-participer"
+                (click)="openJoinModal(event!.id)">
+          {{ 'eventdetail.participate' | translate }}
+        </button>
+      </ng-container>
 
     </div>
   </div>

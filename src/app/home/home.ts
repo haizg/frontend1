@@ -41,6 +41,7 @@ export class Home implements AfterViewInit{
   isJoinModalOpen = false;
   availableEvents: EventModel[] = [];
   isAdminVerified = false;
+  participatedEventIds: Set<number> = new Set();
 
   currentSlide=0;
   slides=[
@@ -103,13 +104,14 @@ export class Home implements AfterViewInit{
           this.userPrenom = user.prenom;
           this.userEmail = user.email;
           this.isAdminVerified = user.adminVerified || false;
+          this.loadMyParticipations();
         } else {
           this.isLoggedIn = false;
           this.userRole = null;
           this.userName = '';
           this.userPrenom = '';
           this.isAdminVerified = false;
-
+          this.participatedEventIds = new Set();
         }
         this.cdr.detectChanges();
       });
@@ -232,5 +234,22 @@ export class Home implements AfterViewInit{
     return this.userRole === 'ROLE_ADMIN';
   }
 
+  loadMyParticipations() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    this.http.get<number[]>('http://localhost:8081/api/user/my-participations', { headers })
+      .subscribe({
+        next: (ids) => {
+          this.participatedEventIds = new Set(ids);
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error('Failed to load participations', err)
+      });
+  }
+
+  hasParticipated(eventId: number): boolean {
+    return this.participatedEventIds.has(eventId);
+  }
 
 }

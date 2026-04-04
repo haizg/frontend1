@@ -55,7 +55,7 @@
           <span class="btn-text">
           <strong>{{ 'home.createeventbtn' | translate }}</strong>
           <small *ngIf="isAdminVerified">{{ 'home.createeventbtndsc' | translate }}</small>
-          <small *ngIf="!isAdminVerified" style="color:red;">⚠️ Compte non vérifié — Attendre l'approbation de l'administrateur</small>
+          <small *ngIf="!isAdminVerified" style="color:red;">Compte non vérifié — Attendre l'approbation de l'administrateur</small>
         </span>
         </button>
       </div>
@@ -95,12 +95,19 @@
             <button (click)="deleteEvent(event, $event)" class="btn btn-delete">{{ 'events.supprimer' | translate }}</button>
           </div>
           <br>
-          <button *ngIf="!isAdmin && !canModifyEvent(event)"
-                  (click)="openJoinModal(event.id); $event.stopPropagation()"
-                  class="btn btn-primary participate-btn">
-            {{ 'events.participate' | translate }}
-          </button>
-
+          <ng-container *ngIf="!isAdmin && !canModifyEvent(event)">
+            <button *ngIf="hasParticipated(event.id)"
+                    class="btn btn-already-participated"
+                    disabled
+                    (click)="$event.stopPropagation()">
+               {{ 'events.alreadyparticipated' | translate }}
+            </button>
+            <button *ngIf="!hasParticipated(event.id)"
+                    (click)="openJoinModal(event.id); $event.stopPropagation()"
+                    class="btn btn-primary participate-btn">
+              {{ 'events.participate' | translate }}
+            </button>
+          </ng-container>
 
         </div>
       </div>

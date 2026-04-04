@@ -7,18 +7,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { UserService } from '../services/user.service';
 import { EventModel } from '../models/event.model';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
-import { CreateEventModal } from '../create-event-modal/create-event-modal';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, EditEventModal, FormsModule, TranslateModule, CreateEventModal],
+  imports: [CommonModule, RouterModule, EditEventModal, FormsModule, TranslateModule],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css',
 })
 export class AdminDashboard {
   @ViewChild(EditEventModal) editEventModal!: EditEventModal;
-  @ViewChild(CreateEventModal) createEventModal!: CreateEventModal;
 
   stats: any = null;
   users: any[] = [];
@@ -26,7 +24,7 @@ export class AdminDashboard {
   organisateurs: any[] = [];
   activeTab = 'overview';
   adminName = '';
-
+  isLoadingDetails = false;
 
   // Detail panel
   selectedUser: any = null;
@@ -34,16 +32,6 @@ export class AdminDashboard {
   userEvents: any[] = [];
   orgEvents: any[] = [];
   showDetailPanel = false;
-
-  // Add User form
-  showAddUser = false;
-  newUser = { prenom: '', nom: '', email: '', password: '', role: 'ROLE_USER' };
-  addUserMessage = '';
-
-  // Add Org form
-  showAddOrg = false;
-  newOrg = { prenom: '', nom: '', email: '', password: '', nomOrganisation: '' };
-  addOrgMessage = '';
 
   // Edit User
   showEditUser = false;
@@ -83,10 +71,24 @@ export class AdminDashboard {
     }
   }
 
+  // ─── Computed event lists ───────────────────────────────────────────────────
+
+  get pendingEvents(): EventModel[] {
+    return this.events.filter(e => !(e as any).approved);
+  }
+
+  get approvedEvents(): EventModel[] {
+    return this.events.filter(e => (e as any).approved);
+  }
+
+  // ─── HTTP helpers ───────────────────────────────────────────────────────────
+
   getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({ 'Authorization': `Bearer ${token}` });
   }
+
+  // ─── Loaders ────────────────────────────────────────────────────────────────
 
   loadStats() {
     this.http.get(`http://localhost:8081/api/admin/stats`, { headers: this.getHeaders() })
@@ -108,7 +110,8 @@ export class AdminDashboard {
       .subscribe({ next: (data) => { this.organisateurs = data; this.cdr.detectChanges(); } });
   }
 
-  // DELETE
+  // ─── Delete ─────────────────────────────────────────────────────────────────
+
   deleteUser(userId: number) {
     if (!confirm('Supprimer cet utilisateur ?')) return;
     this.http.delete(`http://localhost:8081/api/admin/users/${userId}`, { headers: this.getHeaders() })
@@ -127,7 +130,26 @@ export class AdminDashboard {
       .subscribe({ next: () => this.loadEvents() });
   }
 
-  // EDIT EVENT
+  // ─── Approve event (one-way only) ───────────────────────────────────────────
+
+  approveEvent(event: any) {
+    if (event.approved) return; // guard: never un-approve
+    this.http.put(
+      `http://localhost:8081/api/admin/events/${event.id}/approve`,
+      {},
+      { headers: this.getHeaders() }
+    ).subscribe({
+      next: (res: any) => {
+        event.approved = true; // always set to true, never toggle
+        this.loadStats();
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Failed to approve event', err)
+    });
+  }
+
+  // ─── Edit event ─────────────────────────────────────────────────────────────
+
   openEditEvent(event: EventModel) {
     this.editEventModal.open(event);
   }
@@ -136,7 +158,8 @@ export class AdminDashboard {
     this.loadEvents();
   }
 
-  // EDIT USER
+  // ─── Edit user ──────────────────────────────────────────────────────────────
+
   openEditUser(user: any) {
     this.editingUser = { ...user };
     this.showEditUser = true;
@@ -144,18 +167,18 @@ export class AdminDashboard {
   }
 
   saveEditUser() {
-    this.http.put(`http://localhost:8081/api/admin/users/${this.editingUser.id}`,
-      this.editingUser, { headers: this.getHeaders() })
-      .subscribe({
-        next: () => {
-          this.showEditUser = false;
-          this.loadUsers();
-        },
-        error: (err) => console.error('Failed to update user', err)
-      });
+    this.http.put(
+      `http://localhost:8081/api/admin/users/${this.editingUser.id}`,
+      this.editingUser,
+      { headers: this.getHeaders() }
+    ).subscribe({
+      next: () => { this.showEditUser = false; this.loadUsers(); },
+      error: (err) => console.error('Failed to update user', err)
+    });
   }
 
-  // EDIT ORG
+  // ─── Edit org ───────────────────────────────────────────────────────────────
+
   openEditOrg(org: any) {
     this.editingOrg = { ...org };
     this.showEditOrg = true;
@@ -163,57 +186,72 @@ export class AdminDashboard {
   }
 
   saveEditOrg() {
-    this.http.put(`http://localhost:8081/api/admin/organisateurs/${this.editingOrg.id}`,
-      this.editingOrg, { headers: this.getHeaders() })
-      .subscribe({
-        next: () => {
-          this.showEditOrg = false;
-          this.loadOrganisateurs();
-        },
-        error: (err) => console.error('Failed to update org', err)
-      });
+    this.http.put(
+      `http://localhost:8081/api/admin/organisateurs/${this.editingOrg.id}`,
+      this.editingOrg,
+      { headers: this.getHeaders() }
+    ).subscribe({
+      next: () => { this.showEditOrg = false; this.loadOrganisateurs(); },
+      error: (err) => console.error('Failed to update org', err)
+    });
   }
 
-  // ADD USER
-  submitAddUser() {
-    this.http.post(`http://localhost:8081/api/admin/users`, this.newUser, { headers: this.getHeaders(), responseType: 'text' })
-      .subscribe({
-        next: () => {
-          this.addUserMessage = 'Utilisateur ajouté avec succès.';
-          this.loadUsers();
-          setTimeout(() => { this.showAddUser = false; this.addUserMessage = ''; }, 1500);
-        },
-        error: () => this.addUserMessage = 'Erreur lors de l\'ajout.'
-      });
-  }
+  // ─── View details ───────────────────────────────────────────────────────────
 
-  // ADD ORG
-  submitAddOrg() {
-    this.http.post(`http://localhost:8081/api/admin/organisateurs`, this.newOrg, { headers: this.getHeaders(), responseType: 'text' })
-      .subscribe({
-        next: () => {
-          this.addOrgMessage = 'Organisateur ajouté avec succès.';
-          this.loadOrganisateurs();
-          setTimeout(() => { this.showAddOrg = false; this.addOrgMessage = ''; }, 1500);
-        },
-        error: () => this.addOrgMessage = 'Erreur lors de l\'ajout.'
-      });
-  }
-
-  // VIEW DETAILS
   viewUserDetails(user: any) {
-    this.selectedUser = user;
-    this.showDetailPanel = true;
-    this.http.get<any[]>(`http://localhost:8081/api/admin/user/${user.id}/participations`, { headers: this.getHeaders() })
-      .subscribe({ next: (data) => { this.userEvents = data; this.cdr.detectChanges(); } });
+    this.showDetailPanel = false;
+    this.selectedUser = null;
+    this.selectedOrg = null;
+    this.userEvents = [];
+    this.orgEvents = [];
+    this.isLoadingDetails = true;
+    this.cdr.detectChanges();
+
+    this.http.get<any[]>(
+      `http://localhost:8081/api/admin/user/${user.id}/participations`,
+      { headers: this.getHeaders() }
+    ).subscribe({
+      next: (data) => {
+        this.selectedUser = user;
+        this.userEvents = data;
+        this.showDetailPanel = true;
+        this.isLoadingDetails = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to load user participations', err);
+        this.isLoadingDetails = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   viewOrgDetails(org: any) {
-    this.selectedOrg = org;
+    this.showDetailPanel = false;
     this.selectedUser = null;
-    this.showDetailPanel = true;
-    this.http.get<any[]>(`http://localhost:8081/api/admin/organisateur/${org.id}/events`, { headers: this.getHeaders() })
-      .subscribe({ next: (data) => { this.orgEvents = data; this.cdr.detectChanges(); } });
+    this.selectedOrg = null;
+    this.userEvents = [];
+    this.orgEvents = [];
+    this.isLoadingDetails = true;   // ← was missing before
+    this.cdr.detectChanges();
+
+    this.http.get<any[]>(
+      `http://localhost:8081/api/admin/organisateur/${org.id}/events`,
+      { headers: this.getHeaders() }
+    ).subscribe({
+      next: (data) => {
+        this.selectedOrg = org;
+        this.orgEvents = data;
+        this.showDetailPanel = true;
+        this.isLoadingDetails = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to load org events', err);
+        this.isLoadingDetails = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   closeDetailPanel() {
@@ -223,6 +261,25 @@ export class AdminDashboard {
     this.userEvents = [];
     this.orgEvents = [];
   }
+
+  // ─── Verify org (toggle) ────────────────────────────────────────────────────
+
+  toggleVerifyOrg(org: any) {
+    if (!org.id) { console.error('Organizer ID is undefined', org); return; }
+    this.http.put(
+      `http://localhost:8081/api/admin/organisateurs/${org.id}/verify`,
+      {},
+      { headers: this.getHeaders() }
+    ).subscribe({
+      next: (res: any) => {
+        org.adminVerified = res.adminVerified;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error toggling verification:', err)
+    });
+  }
+
+  // ─── Misc ───────────────────────────────────────────────────────────────────
 
   logout() {
     localStorage.removeItem('token');
@@ -237,48 +294,4 @@ export class AdminDashboard {
     if (role === 'ROLE_ORGANISATEUR') return 'Organisateur';
     return 'Participant';
   }
-
-
-  toggleApprove(event: any) {
-    this.http.put(`http://localhost:8081/api/admin/events/${event.id}/approve`, {}, { headers: this.getHeaders() })
-      .subscribe({
-        next: (res: any) => {
-          event.approved = res.approved;
-          this.loadStats();
-          this.cdr.detectChanges();
-        }
-      });
-  }
-
-  toggleVerifyOrg(org: any) {
-    console.log('Button clicked for org:', org.id, 'Current adminVerified:', org.adminVerified);
-    if (!org.id) {
-      console.error('Organizer ID is undefined', org);
-      return;
-    }
-    this.http.put(`http://localhost:8081/api/admin/organisateurs/${org.id}/verify`, {}, { headers: this.getHeaders() })
-      .subscribe({
-        next: (res: any) => {
-          // Update the local object with the response
-          org.adminVerified = res.adminVerified;
-          // Force change detection
-          this.cdr.detectChanges();
-          // DON'T call loadOrganisateurs() here - it causes race conditions
-          // this.loadOrganisateurs(); // <-- REMOVE THIS LINE
-        },
-        error: (err) => {
-          console.error('Error toggling verification:', err);
-        }
-      });
-  }
-
-  openCreateEventModal() {
-    this.createEventModal.open();
-  }
-
-  onEventCreated() {
-    this.loadEvents();
-    this.loadStats();
-  }
-
 }

@@ -5,15 +5,14 @@
       <span class="admin-badge">Admin</span>
     </div>
     <nav class="sidebar-nav">
-      <a routerLink="/home" class="sidebar-link">🏠 Accueil</a>
-      <a routerLink="/events" class="sidebar-link">📋 Tous les événements</a>
-      <button [class.active]="activeTab === 'overview'" (click)="activeTab = 'overview'">📊 Vue d'ensemble</button>
-      <button [class.active]="activeTab === 'events'" (click)="activeTab = 'events'">📅 Gestion événements</button>
-      <button [class.active]="activeTab === 'users'" (click)="activeTab = 'users'">👥 Utilisateurs</button>
-      <button [class.active]="activeTab === 'organisateurs'" (click)="activeTab = 'organisateurs'">🎯 Organisateurs</button>
+      <a routerLink="/home" class="sidebar-link">Accueil</a>
+      <button [class.active]="activeTab === 'overview'" (click)="activeTab = 'overview'">Vue d'ensemble</button>
+      <button [class.active]="activeTab === 'events'" (click)="activeTab = 'events'">Evénements</button>
+      <button [class.active]="activeTab === 'users'" (click)="activeTab = 'users'">Participants</button>
+      <button [class.active]="activeTab === 'organisateurs'" (click)="activeTab = 'organisateurs'">Organisateurs</button>
     </nav>
     <div class="sidebar-footer">
-      <p class="admin-name">{{ adminName }}</p>
+      <p class="admin-name">ADMIN INVITINI</p>
       <button (click)="logout()" class="btn-logout">Se déconnecter</button>
     </div>
   </aside>
@@ -89,71 +88,98 @@
     <div *ngIf="activeTab === 'events'">
       <div class="tab-header">
         <h1 class="page-title">Gestion des événements</h1>
-        <button (click)="openCreateEventModal()" class="btn-add">+ Ajouter un événement</button>
       </div>
-      <p class="tab-subtitle">{{ events.length }} événement(s) au total</p>
-      <table class="admin-table events-table" *ngIf="events.length > 0">
-        <thead>
-        <tr>
-          <th>Titre</th>
-          <th>Catégorie</th>
-          <th>Date</th>
-          <th>Lieu</th>
-          <th>Capacité</th>
-          <th>Statut</th>
-          <th>Organisateur</th>
-          <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let event of events" [class.pending-row]="!event.approved">
-          <td><a [routerLink]="['/events', event.id]" class="event-link">{{ event.title }}</a></td>
-          <td><span class="category-badge">{{ event.category }}</span></td>
-          <td>{{ event.date }}</td>
-          <td>{{ event.location }}</td>
-          <td><span [class.full]="event.isFull">{{ event.participantCount }}/{{ event.maxParticipants }}</span></td>
-          <td>
-            <button (click)="toggleApprove(event)"
-                    class="toggle-btn"
-                    [class.approved]="event.approved"
-                    [class.pending]="!event.approved">
-              {{ event.approved ? '✅ Approuvé' : '⏳ En attente' }}
-            </button>
-          </td>
-          <td class="email-cell">{{ event.organisateurEmail }}</td>
-          <td>
-            <div class="action-buttons-cell">
-              <button (click)="openEditEvent(event)" class="btn-edit-sm">Modifier</button>
-              <button (click)="deleteEvent(event.id)" class="btn-delete-sm"> Supprimer</button>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <div *ngIf="events.length === 0" class="empty-state">Aucun événement.</div>
-    </div>
 
+      <!-- PENDING TABLE -->
+      <div class="section-block">
+        <h2 class="section-subtitle pending-title">En attente d'approbation
+          <span class="count-badge pending-badge">{{ pendingEvents.length }}</span>
+        </h2>
+        <table class="admin-table events-table" *ngIf="pendingEvents.length > 0">
+          <thead>
+          <tr>
+            <th>Titre</th>
+            <th>Catégorie</th>
+            <th>Date</th>
+            <th>Lieu</th>
+            <th>Capacité</th>
+            <th>Organisateur</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let event of pendingEvents" class="pending-row">
+            <td><a [routerLink]="['/events', event.id]" class="event-link">{{ event.title }}</a></td>
+            <td><span class="category-badge">{{ event.category }}</span></td>
+            <td>{{ event.date }}</td>
+            <td>{{ event.location }}</td>
+            <td><span [class.full]="event.isFull">{{ event.participantCount }}/{{ event.maxParticipants }}</span></td>
+            <td class="email-cell">{{ event.organisateurEmail }}</td>
+            <td>
+              <div class="action-buttons-cell">
+                <button (click)="openEditEvent(event)" class="btn-edit-sm">Modifier</button>
+                <button (click)="deleteEvent(event.id)" class="btn-delete-sm">Supprimer</button>
+                <button (click)="approveEvent(event)" class="toggle-btn pending">
+                  Approuver
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div *ngIf="pendingEvents.length === 0" class="empty-state">
+          Aucun événement en attente.
+        </div>
+      </div>
+
+      <!-- APPROVED TABLE -->
+      <div class="section-block" style="margin-top: 2rem;">
+        <h2 class="section-subtitle approved-title">Événements approuvés
+          <span class="count-badge approved-badge">{{ approvedEvents.length }}</span>
+        </h2>
+        <table class="admin-table events-table" *ngIf="approvedEvents.length > 0">
+          <thead>
+          <tr>
+            <th>Titre</th>
+            <th>Catégorie</th>
+            <th>Date</th>
+            <th>Lieu</th>
+            <th>Capacité</th>
+            <th>Organisateur</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let event of approvedEvents">
+            <td><a [routerLink]="['/events', event.id]" class="event-link">{{ event.title }}</a></td>
+            <td><span class="category-badge">{{ event.category }}</span></td>
+            <td>{{ event.date }}</td>
+            <td>{{ event.location }}</td>
+            <td><span [class.full]="event.isFull">{{ event.participantCount }}/{{ event.maxParticipants }}</span></td>
+            <td class="email-cell">{{ event.organisateurEmail }}</td>
+            <td>
+              <div class="action-buttons-cell">
+                <button (click)="openEditEvent(event)" class="btn-edit-sm">Modifier</button>
+                <button (click)="deleteEvent(event.id)" class="btn-delete-sm">Supprimer</button>
+                <span class="approved-label">Approuvé</span>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div *ngIf="approvedEvents.length === 0" class="empty-state">
+          Aucun événement approuvé.
+        </div>
+      </div>
+
+      <p class="tab-subtitle" style="margin-top:1rem">
+        {{ events.length }} événement(s) au total
+      </p>
+    </div>
     <!-- USERS -->
     <div *ngIf="activeTab === 'users'">
       <div class="tab-header">
         <h1 class="page-title">Gestion des utilisateurs</h1>
-        <button (click)="showAddUser = !showAddUser" class="btn-add">+ Ajouter un utilisateur</button>
-      </div>
-      <div *ngIf="showAddUser" class="add-form-card">
-        <h3>Nouvel utilisateur</h3>
-        <div class="form-row">
-          <input [(ngModel)]="newUser.prenom" placeholder="Prénom" class="form-input">
-          <input [(ngModel)]="newUser.nom" placeholder="Nom" class="form-input">
-        </div>
-        <div class="form-row">
-          <input [(ngModel)]="newUser.email" placeholder="Email" type="email" class="form-input">
-          <input [(ngModel)]="newUser.password" placeholder="Mot de passe" type="password" class="form-input">
-        </div>
-        <p *ngIf="addUserMessage" class="form-message">{{ addUserMessage }}</p>
-        <div class="form-actions">
-          <button (click)="submitAddUser()" class="btn-save">Enregistrer</button>
-          <button (click)="showAddUser = false" class="btn-cancel">Annuler</button>
-        </div>
       </div>
       <p class="tab-subtitle">{{ users.length }} utilisateur(s) au total</p>
       <table class="admin-table" *ngIf="users.length > 0">
@@ -181,12 +207,12 @@
           </td>
           <td>
               <span [class.verified]="user.verified" [class.unverified]="!user.verified">
-                {{ user.verified ? '✅' : '❌' }}
+                {{ user.verified ? 'Vérifié' : 'Non vérifié' }}
               </span>
           </td>
           <td>
             <div class="action-buttons-cell">
-              <button (click)="viewUserDetails(user)" class="btn-view-sm">Détails</button>
+              <button (click)="viewUserDetails(user)" class="btn-view-sm" [disabled]="isLoadingDetails">{{ isLoadingDetails ? '...' : 'Détails' }}</button>
               <button (click)="openEditUser(user)" class="btn-edit-sm">Modifier</button>
               <button *ngIf="user.role !== 'ROLE_ADMIN'"
                       (click)="deleteUser(user.id)"
@@ -203,24 +229,6 @@
     <div *ngIf="activeTab === 'organisateurs'">
       <div class="tab-header">
         <h1 class="page-title">Gestion des organisateurs</h1>
-        <button (click)="showAddOrg = !showAddOrg" class="btn-add">+ Ajouter un organisateur</button>
-      </div>
-      <div *ngIf="showAddOrg" class="add-form-card">
-        <h3>Nouvel organisateur</h3>
-        <div class="form-row">
-          <input [(ngModel)]="newOrg.prenom" placeholder="Prénom" class="form-input">
-          <input [(ngModel)]="newOrg.nom" placeholder="Nom" class="form-input">
-        </div>
-        <div class="form-row">
-          <input [(ngModel)]="newOrg.email" placeholder="Email" type="email" class="form-input">
-          <input [(ngModel)]="newOrg.password" placeholder="Mot de passe" type="password" class="form-input">
-        </div>
-        <input [(ngModel)]="newOrg.nomOrganisation" placeholder="Nom de l'organisation" class="form-input full-width">
-        <p *ngIf="addOrgMessage" class="form-message">{{ addOrgMessage }}</p>
-        <div class="form-actions">
-          <button (click)="submitAddOrg()" class="btn-save">Enregistrer</button>
-          <button (click)="showAddOrg = false" class="btn-cancel">Annuler</button>
-        </div>
       </div>
       <p class="tab-subtitle">{{ organisateurs.length }} organisateur(s) au total</p>
       <table class="admin-table orgs-table" *ngIf="organisateurs.length > 0">
@@ -241,15 +249,15 @@
           <td class="email-cell">{{ org.email }}</td>
           <td>{{ org.nomOrganisation || '—' }}</td>
           <td>
-  <span class="status-dot" [class.dot-green]="org.adminVerified" [class.dot-red]="!org.adminVerified">
-    {{ org.adminVerified ? '✅ Vérifié par admin' : '❌ Non vérifié' }}
-  </span>
+            <span class="status-dot" [class.dot-green]="org.adminVerified" [class.dot-red]="!org.adminVerified">
+              {{ org.adminVerified ? 'Vérifié par admin' : 'Non vérifié' }}
+            </span>
           </td>
           <td>
             <div class="action-buttons-cell">
-              <button (click)="viewOrgDetails(org)" class="btn-view-sm">Détails</button>
+              <button (click)="viewOrgDetails(org)" class="btn-view-sm" [disabled]="isLoadingDetails">{{ isLoadingDetails ? '...' : 'Détails' }}</button>
               <button (click)="openEditOrg(org)" class="btn-edit-sm">Modifier</button>
-              <button (click)="deleteOrganisateur(org.id)" class="btn-delete-sm">🗑️</button>
+              <button (click)="deleteOrganisateur(org.id)" class="btn-delete-sm">Supprimer</button>
               <button (click)="toggleVerifyOrg(org)"
                       class="toggle-btn"
                       [class.approved]="org.adminVerified"
@@ -331,4 +339,3 @@
 </div>
 
 <app-edit-event-modal (eventUpdated)="onEventUpdated()"></app-edit-event-modal>
-<app-create-event-modal (eventCreated)="onEventCreated()"></app-create-event-modal>

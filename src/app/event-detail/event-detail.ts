@@ -43,6 +43,7 @@ export class EventDetail {
   userRole: string | null = null;
   userEmail: string = '';
   participants: any[] = [];
+  hasAlreadyParticipated = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -66,10 +67,12 @@ export class EventDetail {
           this.isLoggedIn = true;
           this.userRole = user.role;
           this.userEmail = user.email;
+          this.checkIfParticipated();
         } else {
           this.isLoggedIn = false;
           this.userRole = null;
           this.userEmail = '';
+          this.hasAlreadyParticipated = false;
         }
         this.cdr.detectChanges();
       });
@@ -82,6 +85,9 @@ export class EventDetail {
             this.cdr.detectChanges();
             if (this.isMyEvent || this.isAdmin) {
               this.loadParticipants(Number(id));
+            }
+            if (this.isLoggedIn) {
+              this.checkIfParticipated();
             }
           },
           error: (err) => console.error('Failed to load event', err)
@@ -185,4 +191,20 @@ export class EventDetail {
         error: (err) => console.error('Delete failed', err)
       });
   }
+
+  checkIfParticipated() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    this.http.get<number[]>('http://localhost:8081/api/user/my-participations', { headers })
+      .subscribe({
+        next: (ids) => {
+          const eventId = this.event?.id;
+          this.hasAlreadyParticipated = eventId ? ids.includes(eventId) : false;
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error('Failed to check participation', err)
+      });
+  }
+
 }

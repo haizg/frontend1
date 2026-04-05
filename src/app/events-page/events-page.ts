@@ -13,9 +13,8 @@ import {RouterLink} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { TranslateModule } from '@ngx-translate/core'; // ADD THIS
-// REMOVE: import {LangService} from '../services/lang.service';
-import { TranslateLangService } from '../services/translate-lang.service'; // ADD THIS
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateLangService } from '../services/translate-lang.service';
 
 @Component({
   selector: 'app-events-page',
@@ -28,15 +27,14 @@ import { TranslateLangService } from '../services/translate-lang.service'; // AD
     RouterLink,
     CommonModule,
     EditEventModal,
-    TranslateModule // ADD THIS
+    TranslateModule
   ],
   templateUrl: './events-page.html',
   styleUrl: './events-page.css',
 })
 export class EventsPage {
 
-    @ViewChild(EditEventModal) editEventModal!: EditEventModal;
-
+  @ViewChild(EditEventModal) editEventModal!: EditEventModal;
 
   events: EventModel[]=[];
   isModalOpen = false;
@@ -47,13 +45,16 @@ export class EventsPage {
   userEmail:string='';
   participatedEventIds: Set<number> = new Set();
 
+  // Loading states
+  isLoadingEvents = false;
+  isDeleting = false;
+  isJoining = false;
+
   allEvents: EventModel[] = [];
   filteredEvents: EventModel[] = [];
-
-  categories: string[] = [];           // All categories for filter dropdown
-  selectedCategory: string = 'all';    // Current category filter
-  selectedDate: string = '';           // Current date filter
-
+  categories: string[] = [];
+  selectedCategory: string = 'all';
+  selectedDate: string = '';
 
   constructor(
     private eventService: EventService,
@@ -61,14 +62,12 @@ export class EventsPage {
     private userService: UserService,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
-    // REMOVE: public lang: LangService,
-    private translateLang: TranslateLangService, // ADD THIS (optional)
+    private translateLang: TranslateLangService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
-
   ngOnInit() {
-     if (isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId)) {
       const userStr = localStorage.getItem('user');
       if (userStr) this.userService.setUser(JSON.parse(userStr));
 
@@ -88,18 +87,20 @@ export class EventsPage {
 
       this.modalService.loginModal$.subscribe((state: boolean) => {
         this.isModalOpen = state;
-        this.cdr.detectChanges(); });
+        this.cdr.detectChanges();
+      });
 
       this.modalService.signupModal$.subscribe((state: boolean) => {
         this.isSignupModalOpen = state;
-        this.cdr.detectChanges(); });
+        this.cdr.detectChanges();
+      });
 
       this.modalService.joinModal$.subscribe((state: boolean) => {
         this.isJoinModalOpen = state;
-        this.cdr.detectChanges(); });
+        this.cdr.detectChanges();
+      });
 
       this.loadEvents();
-
 
       setTimeout(() => {
         this.cdr.detectChanges();
@@ -107,26 +108,30 @@ export class EventsPage {
     }
   }
 
-
-
   loadEvents() {
+    this.isLoadingEvents = true;
+    this.allEvents = [];
+    this.filteredEvents = [];
+
     this.eventService.getEvents().subscribe({
       next: (data) => {
         this.allEvents = data;
-        this.categories = Array.from(new Set(data.map(e => e.category))); // unique categories
-        this.applyFilters(); // initialize filteredEvents
-        this.cdr.detectChanges(); // 👈 KEEP THIS HERE
+        this.categories = Array.from(new Set(data.map(e => e.category)));
+        this.applyFilters();
+        this.isLoadingEvents = false;
+        this.cdr.detectChanges();
       },
-      error: (err) => console.error('Failed to load events', err)
+      error: (err) => {
+        console.error('Failed to load events', err);
+        this.isLoadingEvents = false;
+        this.cdr.detectChanges();
+      }
     });
   }
-
 
   get isAdmin(): boolean {
     return this.userRole === 'ROLE_ADMIN';
   }
-
-
 
   applyFilters() {
     this.filteredEvents = this.allEvents.filter(event => {
@@ -135,8 +140,6 @@ export class EventsPage {
       return matchesCategory && matchesDate;
     });
   }
-
-
 
   onCategoryChange(category: string) {
     this.selectedCategory = category;
@@ -148,15 +151,9 @@ export class EventsPage {
     this.applyFilters();
   }
 
-
-
-
-
-
- get fullEventsCount(): number {
+  get fullEventsCount(): number {
     return this.allEvents.filter(event => event.isFull).length;
   }
-
 
   openJoinModal(eventId: number) {
     this.modalService.openJoinModal(eventId);
@@ -166,76 +163,64 @@ export class EventsPage {
     return this.userRole === 'ROLE_ORGANISATEUR';
   }
 
-
   canModifyEvent(event: EventModel): boolean {
     if (!this.isOrganisateur) {
       return false;
     }
-
     return event.organisateurEmail === this.userEmail;
   }
 
   openEditEventModal(eventModel: EventModel, $event: MouseEvent) {
     $event.stopPropagation();
-    this.editEventModal.open(eventModel);  }
-
-
+    this.editEventModal.open(eventModel);
+  }
 
   deleteEvent(eventModel: EventModel, $event: MouseEvent) {
-      $event.stopPropagation();
-      if (!confirm(`Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`)) {
-        return;
+    $event.stopPropagation();
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`)) return;
+
+    this.isDeleting = true;
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    const url = this.isAdmin
+      ? `http://localhost:8081/api/events/admin/${eventModel.id}`
+      : `http://localhost:8081/api/events/${eventModel.id}`;
+
+    this.http.delete(url, { headers }).subscribe({
+      next: () => {
+        this.isDeleting = false;
+        this.loadEvents();
+      },
+      error: (error) => {
+        this.isDeleting = false;
+        if (error.status === 403) {
+          alert('Vous ne pouvez supprimer que vos propres événements');
+        } else {
+          alert('Erreur lors de la suppression de l\'événement');
+        }
       }
+    });
+  }
 
-      const token = localStorage.getItem('token');
+  onEventUpdated() {
+    this.loadEvents();
+  }
 
-      const url = this.isAdmin
-        ? `http://localhost:8081/api/events/admin/${eventModel.id}`
-        : `http://localhost:8081/api/events/${eventModel.id}`;
-
-
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`
+  loadMyParticipations() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    this.http.get<number[]>('http://localhost:8081/api/user/my-participations', { headers })
+      .subscribe({
+        next: (ids) => {
+          this.participatedEventIds = new Set(ids);
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error('Failed to load participations', err)
       });
+  }
 
-      this.http.delete(url, { headers })
-        .subscribe({
-          next: () => {
-            console.log('Event deleted successfully');
-
-            this.loadEvents();
-          },
-          error: (error) => {
-            console.error('Error deleting event:', error);
-
-            if (error.status === 403) {
-              alert('Vous ne pouvez supprimer que vos propres événements');
-            } else {
-              alert('Erreur lors de la suppression de l\'événement');
-            }
-          }
-        });
-    }
-
-    onEventUpdated() {
-      this.loadEvents();
-    }
-
-    loadMyParticipations() {
-      const token = localStorage.getItem('token');
-      if (!token) return;
-      const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-      this.http.get<number[]>('http://localhost:8081/api/user/my-participations', { headers })
-        .subscribe({
-          next: (ids) => {
-            this.participatedEventIds = new Set(ids);
-            this.cdr.detectChanges();
-          },
-          error: (err) => console.error('Failed to load participations', err)
-        });
-    }
-
-    hasParticipated(eventId: number): boolean {
-      return this.participatedEventIds.has(eventId);
-    }
+  hasParticipated(eventId: number): boolean {
+    return this.participatedEventIds.has(eventId);
+  }
 }

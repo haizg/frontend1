@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, PLATFORM_ID, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';  // ADD THIS
+import { TranslateModule } from '@ngx-translate/core';
 import { Navbar } from '../navbar/navbar';
 import { EventService } from '../services/event.service';
 import { EventModel } from '../models/event.model';
@@ -15,18 +15,17 @@ import { Popup } from '../joinevents/popup/popup';
 import { CreateEventModal } from '../create-event-modal/create-event-modal';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-// REMOVE THIS LINE: import {LangService} from '../services/lang.service';
-import { TranslateLangService } from '../services/translate-lang.service'; // ADD THIS
+import { TranslateLangService } from '../services/translate-lang.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, Navbar, RouterModule, JoinCta, Footer, SignUpOrg, Login, Popup, CreateEventModal, EditEventModal, TranslateModule], // ADD TranslateModule
+  imports: [CommonModule, Navbar, RouterModule, JoinCta, Footer, SignUpOrg, Login, Popup, CreateEventModal, EditEventModal, TranslateModule],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
-export class Home implements AfterViewInit{
+export class Home implements AfterViewInit {
   @ViewChild(CreateEventModal) createEventModal!: CreateEventModal;
   @ViewChild(EditEventModal) editEventModal!: EditEventModal;
 
@@ -39,21 +38,22 @@ export class Home implements AfterViewInit{
   isModalOpen = false;
   isSignupModalOpen = false;
   isJoinModalOpen = false;
+  isLoadingEvents = false;
+  isDeleting = false;
+  isJoining = false;
+
   availableEvents: EventModel[] = [];
   isAdminVerified = false;
   participatedEventIds: Set<number> = new Set();
 
-  currentSlide=0;
-  slides=[
-    { image : 'assets/slide1.jpg'},
-    { image : 'assets/slide2.jpg'},
-    { image : 'assets/slide3.jpg'},
-    { image : 'assets/slide4.jpg'},
-    { image : 'assets/slide5.jpg'},
-
-  ]
-
-
+  currentSlide = 0;
+  slides = [
+    { image: 'assets/slide1.jpg' },
+    { image: 'assets/slide2.jpg' },
+    { image: 'assets/slide3.jpg' },
+    { image: 'assets/slide4.jpg' },
+    { image: 'assets/slide5.jpg' },
+  ];
 
   constructor(
     private eventService: EventService,
@@ -62,24 +62,20 @@ export class Home implements AfterViewInit{
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private router: Router,
-    // REMOVE: public lang: LangService,
-    private translateLang: TranslateLangService, // ADD THIS (optional, if you need programmatic access)
+    private translateLang: TranslateLangService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngAfterViewInit() {
-      if (isPlatformBrowser(this.platformId)) {
-        setTimeout(() => {
-          this.cdr.detectChanges();
-        }, 100);
-      }
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.cdr.detectChanges();
+      }, 100);
     }
-
-
+  }
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-
       this.modalService.loginModal$.subscribe(state => {
         this.isModalOpen = state;
         this.cdr.detectChanges();
@@ -94,7 +90,6 @@ export class Home implements AfterViewInit{
         this.isJoinModalOpen = state;
         this.cdr.detectChanges();
       });
-
 
       this.userService.currentUser$.subscribe(user => {
         if (user) {
@@ -116,41 +111,55 @@ export class Home implements AfterViewInit{
         this.cdr.detectChanges();
       });
 
-      this.eventService.getEvents().subscribe({
-        next:(data)=> {
-          this.events = data;
-          this.availableEvents = data.filter(event => !event.isFull);
-          this.cdr.detectChanges();
-        },
-        error:(err) => console.error('Failed to load events',err)
-      });
+      this.loadEvents();
 
-      setInterval(()=>{
-        this.currentSlide=(this.currentSlide+1) % this.slides.length;
+      setInterval(() => {
+        this.currentSlide = (this.currentSlide + 1) % this.slides.length;
         this.cdr.detectChanges();
-      },3000)
-
+      }, 3000);
     }
   }
-  //get availableEvents(): EventModel[] {
-   //   return this.events.filter(event => !event.isFull);}
 
+  loadEvents() {
+    this.isLoadingEvents = true;
+    this.events = [];
+    this.availableEvents = [];
+
+    // Add a timeout to show if loading is taking too long
+    const slowConnectionTimeout = setTimeout(() => {
+      if (this.isLoadingEvents) {
+        console.log('Loading is taking longer than expected...');
+        this.cdr.detectChanges();
+      }
+    }, 2000);
+
+    this.eventService.getEvents().subscribe({
+      next: (data) => {
+        clearTimeout(slowConnectionTimeout);
+        this.events = data;
+        this.availableEvents = data.filter(event => !event.isFull);
+        this.isLoadingEvents = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        clearTimeout(slowConnectionTimeout);
+        console.error('Failed to load events', err);
+        this.isLoadingEvents = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
   canModifyEvent(event: EventModel): boolean {
     if (!this.isOrganisateur) {
       return false;
     }
-
     return event.organisateurEmail === this.userEmail;
   }
 
-
-
-
-  goToSlide(index:number){
-    this.currentSlide=index;
+  goToSlide(index: number) {
+    this.currentSlide = index;
   }
-
 
   openCreateEventModal() {
     this.createEventModal.open();
@@ -158,20 +167,8 @@ export class Home implements AfterViewInit{
 
   onEventCreated() {
     console.log('onEventCreated called');
-    this.eventService.getEvents().subscribe({
-      next:(data)=> {
-        console.log('Events reloaded:', data);
-        this.events=data;
-        this.availableEvents = data.filter(event => !event.isFull);
-        this.cdr.detectChanges();
-      },
-    error:(err) => console.error('Failed to load events',err)
-  });
+    this.loadEvents();
   }
-
-
-
-
 
   get isOrganisateur(): boolean {
     return this.userRole === 'ROLE_ORGANISATEUR';
@@ -185,27 +182,25 @@ export class Home implements AfterViewInit{
     return `${this.userPrenom} ${this.userName}`;
   }
 
-  openJoinModal(eventId:number) {
-    if (!this.userService.getUser()){
+  openJoinModal(eventId: number) {
+    if (!this.userService.getUser()) {
       localStorage.setItem('redirectAfterLogin', this.router.url);
       this.modalService.openLoginModal();
       return;
-      }
+    }
     this.modalService.openJoinModal(eventId);
   }
 
-
-
   openEditEventModal(eventModel: EventModel, $event: MouseEvent) {
     $event.stopPropagation();
-    this.editEventModal.open(eventModel);  }
-
-
+    this.editEventModal.open(eventModel);
+  }
 
   deleteEvent(eventModel: EventModel, $event: MouseEvent) {
     $event.stopPropagation();
     if (!confirm(`Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`)) return;
 
+    this.isDeleting = true;
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
@@ -214,8 +209,12 @@ export class Home implements AfterViewInit{
       : `http://localhost:8081/api/events/${eventModel.id}`;
 
     this.http.delete(url, { headers }).subscribe({
-      next: () => window.location.reload(),
+      next: () => {
+        this.isDeleting = false;
+        this.loadEvents();
+      },
       error: (error) => {
+        this.isDeleting = false;
         if (error.status === 403) {
           alert('Vous ne pouvez supprimer que vos propres événements');
         } else {
@@ -226,9 +225,8 @@ export class Home implements AfterViewInit{
   }
 
   onEventUpdated() {
-    window.location.reload();
+    this.loadEvents();
   }
-
 
   get isAdmin(): boolean {
     return this.userRole === 'ROLE_ADMIN';
@@ -251,5 +249,4 @@ export class Home implements AfterViewInit{
   hasParticipated(eventId: number): boolean {
     return this.participatedEventIds.has(eventId);
   }
-
 }

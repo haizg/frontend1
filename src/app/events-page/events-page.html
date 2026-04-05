@@ -4,104 +4,111 @@
   <div class="events-page-container">
     <h1 class="page-title">{{ 'events.allevents' | translate }}</h1>
 
-
-
+    <!-- Filters -->
     <div class="events-filters">
-      <select #categorySelect (change)="onCategoryChange(categorySelect.value)">
+      <select #categorySelect (change)="onCategoryChange(categorySelect.value)" [disabled]="isLoadingEvents">
         <option value="all">{{ 'events.ttcategories' | translate }}</option>
         <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
       </select>
-
-      <input type="date" #dateInput (change)="onDateChange(dateInput.value)">
+      <input type="date" #dateInput (change)="onDateChange(dateInput.value)" [disabled]="isLoadingEvents">
     </div>
 
-
-    <div class="events-grid" *ngIf="filteredEvents.length > 0">
-      <div class="event-card"
-           *ngFor="let event of filteredEvents"
-           [class.event-full]="event.isFull"
-           [routerLink]="event.isFull ? null : ['/events', event.id]"
-           [style.cursor]="event.isFull ? 'not-allowed' : 'pointer'">
-
-        <div class="event-image">
-          <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
-
-          <div *ngIf="event.isFull" class="full-badge">{{ 'events.full' | translate }}</div>        </div>
-
-        <!-- VERIFIED BADGE -->
-        <p class="event-meta">
-          <i class="fa-solid fa-circle-user"></i>
-          {{ event.organisateurEmail }}
-          <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
-        </p>
-
-
-        <div class="event-body">
-          <span class="event-category">{{ event.category }}</span>
-          <h3 class="event-title">{{ event.title }}</h3>
-          <p class="event-meta">
-            <i class="fa-regular fa-calendar-days"></i>
-            {{ event.date }} &nbsp; {{ event.time }}
-          </p>
-          <p class="event-meta">
-            <i class="fa-solid fa-location-dot"></i>
-            {{ event.location }}
-          </p>
-
-          <p class="event-capacity"
-             [class.capacity-full]="event.isFull">
-            <i class="fa-solid fa-users"></i>
-            {{ event.participantCount }}/{{ event.maxParticipants }} {{ 'profile.participant' | translate }}
-          </p>
-
-
-
-          <div *ngIf="isAdmin || canModifyEvent(event)" class="event-actions">
-            <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">{{ 'events.modifier' | translate }}</button>
-            <button (click)="deleteEvent(event, $event)" class="btn btn-delete">{{ 'events.supprimer' | translate }}</button>
-          </div>
-
-          <ng-container *ngIf="!isAdmin && !canModifyEvent(event) && !event.isFull">
-            <button *ngIf="hasParticipated(event.id)"
-                    class="btn-already-participated"
-                    disabled
-                    (click)="$event.stopPropagation()">
-               {{ 'events.alreadyparticipated' | translate }}
-            </button>
-            <button *ngIf="!hasParticipated(event.id)"
-                    (click)="openJoinModal(event.id); $event.stopPropagation()"
-                    class="btn-participate">
-              {{ 'events.participate' | translate }}
-            </button>
-          </ng-container>
-
-
-
-
-          <button *ngIf="!isOrganisateur && event.isFull" class="btn-full" disabled>
-             {{ 'events.full' | translate }}
-          </button>
+    <!-- LOADING STATE - Skeleton Cards -->
+    <div *ngIf="isLoadingEvents" class="skeleton-grid">
+      <div class="skeleton-card" *ngFor="let item of [1,2,3,4,5,6,7,8]">
+        <div class="skeleton-image"></div>
+        <div class="skeleton-content">
+          <div class="skeleton-line short"></div>
+          <div class="skeleton-line medium"></div>
+          <div class="skeleton-line long"></div>
+          <div class="skeleton-line short"></div>
         </div>
       </div>
     </div>
 
+    <!-- CONTENT - When not loading -->
+    <div *ngIf="!isLoadingEvents">
+      <div class="events-grid" *ngIf="filteredEvents.length > 0">
+        <div class="event-card"
+             *ngFor="let event of filteredEvents"
+             [class.event-full]="event.isFull"
+             [routerLink]="event.isFull ? null : ['/events', event.id]"
+             [style.cursor]="event.isFull ? 'not-allowed' : 'pointer'">
 
-    <p *ngIf="filteredEvents.length === 0" class="no-events">{{ 'events.noevents' | translate }}</p>
+          <div class="event-image">
+            <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
+            <div *ngIf="event.isFull" class="full-badge">{{ 'events.full' | translate }}</div>
+          </div>
+
+          <p class="event-meta">
+            <i class="fa-solid fa-circle-user"></i>
+            {{ event.organisateurEmail }}
+            <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
+          </p>
+
+          <div class="event-body">
+            <span class="event-category">{{ event.category }}</span>
+            <h3 class="event-title">{{ event.title }}</h3>
+            <p class="event-meta">
+              <i class="fa-regular fa-calendar-days"></i>
+              {{ event.date }} &nbsp; {{ event.time }}
+            </p>
+            <p class="event-meta">
+              <i class="fa-solid fa-location-dot"></i>
+              {{ event.location }}
+            </p>
+            <p class="event-capacity" [class.capacity-full]="event.isFull">
+              <i class="fa-solid fa-users"></i>
+              {{ event.participantCount }}/{{ event.maxParticipants }} {{ 'profile.participant' | translate }}
+            </p>
+
+            <div *ngIf="isAdmin || canModifyEvent(event)" class="event-actions">
+              <button (click)="openEditEventModal(event, $event)" class="btn btn-edit" [disabled]="isDeleting">
+                {{ 'events.modifier' | translate }}
+              </button>
+              <button (click)="deleteEvent(event, $event)" class="btn btn-delete" [disabled]="isDeleting">
+                {{ 'events.supprimer' | translate }}
+              </button>
+            </div>
+
+            <ng-container *ngIf="!isAdmin && !canModifyEvent(event) && !event.isFull">
+              <button *ngIf="hasParticipated(event.id)"
+                      class="btn-already-participated"
+                      disabled
+                      (click)="$event.stopPropagation()">
+                {{ 'events.alreadyparticipated' | translate }}
+              </button>
+              <button *ngIf="!hasParticipated(event.id)"
+                      (click)="openJoinModal(event.id); $event.stopPropagation()"
+                      class="btn-participate"
+                      [disabled]="isJoining">
+                <span *ngIf="isJoining">⏳</span>
+                <span *ngIf="!isJoining">{{ 'events.participate' | translate }}</span>
+              </button>
+            </ng-container>
+
+            <button *ngIf="!isOrganisateur && event.isFull" class="btn-full" disabled>
+              {{ 'events.full' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p *ngIf="filteredEvents.length === 0" class="no-events">{{ 'events.noevents' | translate }}</p>
+    </div>
   </div>
 
-
-  <div class="events-summary">
+  <div class="events-summary" *ngIf="!isLoadingEvents">
     <p class="summary-text">
       {{ filteredEvents.length }}
       {{ filteredEvents.length > 1 ? ('events.summaryplural' | translate) : ('events.summary' | translate) }}
       {{ 'events.total' | translate }}
       <span *ngIf="fullEventsCount > 0" class="full-count">
-      ({{ fullEventsCount }}
-      {{ fullEventsCount > 1 ? ('events.complets' | translate) : ('events.complet' | translate) }})
-    </span>
+        ({{ fullEventsCount }}
+        {{ fullEventsCount > 1 ? ('events.complets' | translate) : ('events.complet' | translate) }})
+      </span>
     </p>
   </div>
-
 
   <app-footer></app-footer>
 </div>

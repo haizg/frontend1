@@ -3,139 +3,150 @@
 <div class="modal-container" *ngIf="isVisible" (click)="$event.stopPropagation()">
   <div class="modal-content">
     <div class="modal-header">
-      <h2> Créer un Événement</h2>
+      <h2>{{ 'createevent.title' | translate }}</h2>
       <button class="close-btn" (click)="close()">✕</button>
     </div>
 
     <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
       <div class="form-grid">
         <div class="form-group full-width">
-          <label>Titre de l'événement *</label>
+          <label>{{ 'createevent.event_title' | translate }} *</label>
           <input
             type="text"
             formControlName="title"
-            placeholder="Ex: Marathon de Tunis"
-            class="form-input">
+            [placeholder]="'createevent.title_placeholder' | translate"
+            class="form-input"
+            [disabled]="isLoading">
           <small class="error" *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched">
-            Le titre doit contenir au moins 3 caractères
+            {{ 'createevent.error_title_min' | translate }}
           </small>
         </div>
 
         <div class="form-group full-width">
-          <label>Description *</label>
+          <label>{{ 'createevent.description' | translate }} *</label>
           <textarea
             formControlName="description"
-            placeholder="Décrivez votre événement..."
+            [placeholder]="'createevent.description_placeholder' | translate"
             rows="4"
-            class="form-input"></textarea>
+            class="form-input"
+            [disabled]="isLoading"></textarea>
           <small class="error" *ngIf="eventForm.get('description')?.invalid && eventForm.get('description')?.touched">
-            La description doit contenir au moins 10 caractères
+            {{ 'createevent.error_description_min' | translate }}
           </small>
         </div>
 
         <div class="form-group">
-          <label>Catégorie *</label>
-          <select formControlName="category" class="form-input">
-            <option value="">Sélectionner une catégorie</option>
-            <option value="SPORT">Sport</option>
-            <option value="ART">Art</option>
-            <option value="TECHNOLOGIE">Technologie</option>
-            <option value="MUSIQUE">Musique</option>
-            <option value="CULTURE">Culture</option>
-            <option value="AUTRE">Autre</option>
+          <label>{{ 'createevent.category' | translate }} *</label>
+          <select formControlName="category" class="form-input" [disabled]="isLoading">
+            <option value="">{{ 'createevent.select_category' | translate }}</option>
+            <option value="SPORT">{{ 'createevent.category_sport' | translate }}</option>
+            <option value="ART">{{ 'createevent.category_art' | translate }}</option>
+            <option value="TECHNOLOGIE">{{ 'createevent.category_tech' | translate }}</option>
+            <option value="MUSIQUE">{{ 'createevent.category_music' | translate }}</option>
+            <option value="CULTURE">{{ 'createevent.category_culture' | translate }}</option>
+            <option value="AUTRE">{{ 'createevent.category_other' | translate }}</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>Date *</label>
+          <label>{{ 'createevent.date' | translate }} *</label>
           <input
             type="date"
             formControlName="date"
             class="form-input"
-          [min]="today">
+            [min]="today"
+            [disabled]="isLoading">
         </div>
 
         <div class="form-group">
-          <label>Heure *</label>
+          <label>{{ 'createevent.time' | translate }} *</label>
           <input
             type="time"
             formControlName="time"
-            class="form-input">
+            class="form-input"
+            [disabled]="isLoading">
         </div>
 
         <div class="form-group">
-          <label>Lieu *</label>
+          <label>{{ 'createevent.location' | translate }} *</label>
           <input
             type="text"
             formControlName="location"
-            placeholder="Ex: Tunis, Tunisia"
-            class="form-input">
+            [placeholder]="'createevent.location_placeholder' | translate"
+            class="form-input"
+            [disabled]="isLoading">
         </div>
 
-
         <div class="form-group full-width">
-          <label>Image de l'événement</label>
+          <label>{{ 'createevent.event_image' | translate }}</label>
 
           <input
             type="file"
             #fileInput
             (change)="onFileSelected($event)"
             accept="image/*"
-            style="display: none;">
+            style="display: none;"
+            [disabled]="isLoading">
 
           <button
             type="button"
             class="btn-upload"
             (click)="fileInput.click()"
-            *ngIf="!imagePreview">
-            📷 Choisir une image
+            *ngIf="!imagePreview && !isLoading"
+            [disabled]="isLoading">
+            {{ 'createevent.choose_image' | translate }}
           </button>
 
-          <div class="image-preview-container" *ngIf="imagePreview">
+          <div class="image-preview-container" *ngIf="imagePreview && !isLoading">
             <img [src]="imagePreview" alt="Preview" class="image-preview">
             <div class="image-actions">
               <button type="button" class="btn-change" (click)="fileInput.click()">
-                  Changer
+                 {{ 'createevent.change_image' | translate }}
               </button>
               <button type="button" class="btn-remove" (click)="removeImage()">
-                 Supprimer
+                 {{ 'createevent.remove_image' | translate }}
               </button>
             </div>
           </div>
 
-          <small class="info-text">Formats acceptés: JPEG, PNG, GIF (max 10 MB)</small>
+          <small class="info-text">{{ 'createevent.image_info' | translate }}</small>
         </div>
 
         <div class="form-group">
-          <label>Nombre max de participants</label>
+          <label>{{ 'createevent.max_participants' | translate }}</label>
           <input
             type="number"
             formControlName="maxParticipants"
-            placeholder="Ex: 100"
+            [placeholder]="'createevent.max_participants_placeholder' | translate"
             min="1"
-            class="form-input">
+            class="form-input"
+            [disabled]="isLoading">
         </div>
       </div>
 
+      <!-- Error Message -->
       <div class="error-message" *ngIf="errorMessage">
-         {{ errorMessage }}
+        {{ errorMessage }}
       </div>
 
-      <div class="success-message" *ngIf="successMessage">
-         {{ successMessage }}
+      <!-- Approval Message -->
+      <div class="approval-message" *ngIf="approvalMessage">
+        <div class="approval-icon"></div>
+        <div class="approval-text">{{ approvalMessage }}</div>
+        <div class="approval-note">{{ 'createevent.close_window_note' | translate }}</div>
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn-cancel" (click)="close()" [disabled]="isLoading || isUploadingImage">
-          Annuler
+        <button type="button" class="btn-cancel" (click)="close()" [disabled]="isLoading">
+          {{ 'createevent.close' | translate }}
         </button>
         <button
           type="submit"
           class="btn-submit"
-          [disabled]="isLoading || isUploadingImage || eventForm.invalid">
-          <span *ngIf="isUploadingImage"> Téléchargement...</span>
-          <span *ngIf="!isUploadingImage && isLoading"> Création...</span>
-          <span *ngIf="!isUploadingImage && !isLoading"> Créer l'événement</span>
+          [disabled]="isLoading || eventForm.invalid"
+          *ngIf="!approvalMessage">
+          <span *ngIf="isLoading"> {{ 'createevent.creating' | translate }}</span>
+          <span *ngIf="!isLoading"> {{ 'createevent.create_button' | translate }}</span>
         </button>
       </div>
     </form>

@@ -1,8 +1,15 @@
 <div class="modal-overlay" (click)="close()">
-  <form #formRef="ngForm" (ngSubmit)="signed(formRef)"  (click)="$event.stopPropagation()" >
+  <form #formRef="ngForm" (ngSubmit)="signed(formRef)" (click)="$event.stopPropagation()">
     <h1>{{ 'navbar.signup' | translate }}</h1>
+
+    <!-- Error Message -->
     <div class="error-banner" *ngIf="errorMessage">
       {{ errorMessage }}
+    </div>
+
+    <!-- Success Message Box (Email Verification) -->
+    <div class="success-banner" *ngIf="successMessage">
+      {{ successMessage }}
     </div>
 
     <div>
@@ -19,9 +26,8 @@
     <small *ngIf="prenomRef.errors?.['required'] && prenomRef.touched">* Champs obligatoire</small>
     <br>
 
-
     <div>
-      <label>Email</label>
+      <label>Email :</label>
       <input type="text" name="email" placeholder="Email" [(ngModel)]="email" required email #emailRef="ngModel">
     </div>
     <small *ngIf="emailRef.errors?.['required'] && emailRef.touched">* Champs obligatoire</small>
@@ -34,6 +40,7 @@
     </div>
     <small *ngIf="mdpRef.errors?.['required'] && mdpRef.touched">* Champs obligatoire</small>
     <br>
+
     <div>
       <label>{{ 'signup.confirmmdp' | translate }}</label>
       <input
@@ -45,10 +52,8 @@
         #confirmMdpRef="ngModel">
     </div>
     <small *ngIf="confirmMdpRef.errors?.['required'] && confirmMdpRef.touched">* Champs obligatoire</small>
-    <small *ngIf="mdp !== confirmMdp && confirmMdpRef.touched" class="error-text">* Les mots de passe ne correspondent pas
-    </small>
+    <small *ngIf="mdp !== confirmMdp && confirmMdpRef.touched" class="error-text">* Les mots de passe ne correspondent pas</small>
     <br>
-
 
     <div class="role">
       <input type="radio" name="role" value="ROLE_ORGANISATEUR" [(ngModel)]="role" required>
@@ -58,6 +63,7 @@
       Participant
     </div>
     <br>
+
     <div *ngIf="role === 'ROLE_ORGANISATEUR'">
       <label>{{ 'signup.nomorg' | translate }}</label>
       <input
@@ -70,6 +76,7 @@
       <small *ngIf="nomOrgRef.errors?.['required'] && nomOrgRef.touched">* Champs obligatoire pour organisateurs</small>
     </div>
     <br *ngIf="role === 'ROLE_ORGANISATEUR'">
-    <button type="submit" >{{ 'navbar.signup' | translate }}</button>
+
+    <button type="submit">{{ 'navbar.signup' | translate }}</button>
   </form>
 </div>

@@ -2,11 +2,12 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-create-event-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './create-event-modal.html',
   styleUrls: ['./create-event-modal.css']
 })
@@ -17,15 +18,17 @@ export class CreateEventModal {
   isLoading = false;
   errorMessage = '';
   successMessage = '';
+  approvalMessage = '';
   today = new Date().toISOString().split('T')[0];
   selectedFile: File | null = null;
-    imagePreview: string | null = null;
-    isUploadingImage = false;
-    uploadedImageUrl: string | null = null;
+  imagePreview: string | null = null;
+  isUploadingImage = false;
+  uploadedImageUrl: string | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private translate: TranslateService
   ) {
     this.eventForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
@@ -44,145 +47,149 @@ export class CreateEventModal {
     this.eventForm.reset();
     this.errorMessage = '';
     this.successMessage = '';
-      this.selectedFile = null;
-        this.imagePreview = null;
-        this.uploadedImageUrl = null;
+    this.approvalMessage = '';
+    this.selectedFile = null;
+    this.imagePreview = null;
+    this.uploadedImageUrl = null;
   }
 
   close() {
     this.isVisible = false;
     this.eventForm.reset();
-      this.selectedFile = null;
-        this.imagePreview = null;
-        this.uploadedImageUrl = null;
+    this.selectedFile = null;
+    this.imagePreview = null;
+    this.uploadedImageUrl = null;
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.approvalMessage = '';
   }
-
 
   onFileSelected(event: any) {
-      const file = event.target.files[0];
+    const file = event.target.files[0];
 
-      if (!file) {
-        return;
-      }
-
-      if (!file.type.startsWith('image/')) {
-        this.errorMessage = 'Veuillez sélectionner une image (JPEG, PNG, GIF)';
-        return;
-      }
-
-      if (file.size > 10 * 1024 * 1024) {
-        this.errorMessage = 'L\'image ne doit pas dépasser 10 MB';
-        return;
-      }
-
-      this.selectedFile = file;
-      this.errorMessage = '';
-
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imagePreview = e.target.result;
-      };
-      reader.readAsDataURL(file);
-
-      console.log('✅ File selected:', file.name, file.size, 'bytes');
+    if (!file) {
+      return;
     }
 
-
-   async uploadImage(): Promise<string | null> {
-      if (!this.selectedFile) {
-        return null;
-      }
-
-      this.isUploadingImage = true;
-
-      try {
-        const formData = new FormData();
-        formData.append('file', this.selectedFile);
-
-        console.log('📤 Uploading image to MinIO...');
-
-        const response: any = await this.http.post(
-          'http://localhost:8081/api/upload',
-          formData
-        ).toPromise();
-
-        console.log('✅ Image uploaded:', response);
-
-        this.uploadedImageUrl = response.url;
-        this.isUploadingImage = false;
-
-        return response.url;
-
-      } catch (error) {
-        console.error('❌ Error uploading image:', error);
-        this.isUploadingImage = false;
-        this.errorMessage = 'Erreur lors du téléchargement de l\'image';
-        return null;
-      }
+    if (!file.type.startsWith('image/')) {
+      this.translate.get('createevent.error_image_format').subscribe(msg => {
+        this.errorMessage = msg;
+      });
+      return;
     }
 
-   async onSubmit() {
-      if (this.eventForm.invalid) {
-        this.errorMessage = 'Veuillez remplir tous les champs obligatoires';
-        return;
-      }
-
-      this.isLoading = true;
-      this.errorMessage = '';
-
-      try {
-        if (this.selectedFile && !this.uploadedImageUrl) {
-          console.log('📤 Uploading image first...');
-          const imageUrl = await this.uploadImage();
-
-          if (!imageUrl) {
-            this.isLoading = false;
-            return;
-          }
-
-          this.eventForm.patchValue({ imageUrl: imageUrl });
-        }
-
-        const token = localStorage.getItem('token');
-        const headers = new HttpHeaders({
-          'Authorization': `Bearer ${token}`
-        });
-
-        console.log('📝 Creating event with data:', this.eventForm.value);
-
-        this.http.post('http://localhost:8081/api/events', this.eventForm.value, { headers })
-          .subscribe({
-            next: (response: any) => {
-              console.log('✅ Event created:', response);
-              this.successMessage = 'Événement créé avec succès!';
-              this.isLoading = false;
-
-              setTimeout(() => {
-                this.close();
-                this.eventCreated.emit();
-              }, 1500);
-            },
-            error: (error) => {
-              if (error.status === 403 && error.error?.error === 'ACCOUNT_NOT_VERIFIED') {
-                this.errorMessage = 'Votre compte doit être vérifié par un administrateur avant de créer des événements.';
-              } else {
-                this.errorMessage = 'Erreur lors de la création de l\'événement.';
-              }
-              this.isLoading = false;
-            }
-          });
-
-      } catch (error) {
-        console.error('❌ Error in onSubmit:', error);
-        this.errorMessage = 'Une erreur est survenue';
-        this.isLoading = false;
-      }
+    if (file.size > 10 * 1024 * 1024) {
+      this.translate.get('createevent.error_image_size').subscribe(msg => {
+        this.errorMessage = msg;
+      });
+      return;
     }
 
-    removeImage() {
-      this.selectedFile = null;
-      this.imagePreview = null;
-      this.uploadedImageUrl = null;
-      this.eventForm.patchValue({ imageUrl: '' });
+    this.selectedFile = file;
+    this.errorMessage = '';
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async uploadImage(): Promise<string | null> {
+    if (!this.selectedFile) {
+      return null;
+    }
+
+    this.isUploadingImage = true;
+
+    try {
+      const formData = new FormData();
+      formData.append('file', this.selectedFile);
+
+      const response: any = await this.http.post(
+        'http://localhost:8081/api/upload',
+        formData
+      ).toPromise();
+
+      this.uploadedImageUrl = response.url;
+      this.isUploadingImage = false;
+      return response.url;
+
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      this.isUploadingImage = false;
+      this.translate.get('createevent.error_upload').subscribe(msg => {
+        this.errorMessage = msg;
+      });
+      return null;
     }
   }
+
+  async onSubmit() {
+    if (this.eventForm.invalid) {
+      this.translate.get('createevent.error_required_fields').subscribe(msg => {
+        this.errorMessage = msg;
+      });
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.approvalMessage = '';
+
+    try {
+      if (this.selectedFile && !this.uploadedImageUrl) {
+        const imageUrl = await this.uploadImage();
+        if (!imageUrl) {
+          this.isLoading = false;
+          return;
+        }
+        this.eventForm.patchValue({ imageUrl: imageUrl });
+      }
+
+      const token = localStorage.getItem('token');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+
+      this.http.post('http://localhost:8081/api/events', this.eventForm.value, { headers })
+        .subscribe({
+          next: (response: any) => {
+            console.log('Event created:', response);
+            this.isLoading = false;
+
+            // Show approval message in current language
+            this.translate.get('createevent.approval_message').subscribe(msg => {
+              this.approvalMessage = msg;
+            });
+          },
+          error: (error) => {
+            if (error.status === 403 && error.error?.error === 'ACCOUNT_NOT_VERIFIED') {
+              this.translate.get('createevent.error_account_not_verified').subscribe(msg => {
+                this.errorMessage = msg;
+              });
+            } else {
+              this.translate.get('createevent.error_create_failed').subscribe(msg => {
+                this.errorMessage = msg;
+              });
+            }
+            this.isLoading = false;
+          }
+        });
+
+    } catch (error) {
+      console.error('Error in onSubmit:', error);
+      this.translate.get('createevent.error_unexpected').subscribe(msg => {
+        this.errorMessage = msg;
+      });
+      this.isLoading = false;
+    }
+  }
+
+  removeImage() {
+    this.selectedFile = null;
+    this.imagePreview = null;
+    this.uploadedImageUrl = null;
+    this.eventForm.patchValue({ imageUrl: '' });
+  }
+}

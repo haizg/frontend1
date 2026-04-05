@@ -1,47 +1,31 @@
 <div [class.page-blur]="isModalOpen || isSignupModalOpen || isJoinModalOpen" xmlns="http://www.w3.org/1999/html">
   <app-navbar></app-navbar>
 
-
-
   <section class="hero">
     <div class="carousel">
-      <div class="carousel-slide" *ngFor="let slide of slides; let i =index"
-           [class.active]="i===currentSlide">
-        <img [src]="slide.image" >
+      <div class="carousel-slide" *ngFor="let slide of slides; let i = index" [class.active]="i === currentSlide">
+        <img [src]="slide.image">
         <div class="carousel-overlay"></div>
       </div>
 
-
-
       <div class="carousel-dots">
-        <span *ngFor="let Slide of slides; let i = index"
-              class="dot" [class.active]="i === currentSlide"
-              (click)="goToSlide(i)">
+        <span *ngFor="let Slide of slides; let i = index" class="dot" [class.active]="i === currentSlide" (click)="goToSlide(i)">
         </span>
       </div>
-
     </div>
   </section>
-
-
-
-
 
   <section class="tagline">
     <p *ngIf="isOrganisateur">
       {{ 'home.organisateur' | translate }}
     </p>
-
     <p *ngIf="isParticipant">
       {{ 'home.participant' | translate }}
     </p>
-
     <p *ngIf="!isLoggedIn">
       {{ 'home.visiteur' | translate }}
     </p>
   </section>
-
-
 
   <section class="quick-actions" *ngIf="isOrganisateur">
     <div class="action-container">
@@ -53,25 +37,36 @@
                 [title]="!isAdminVerified ? 'Votre compte doit être vérifié par un administrateur' : ''">
           <span class="btn-icon">+</span>
           <span class="btn-text">
-          <strong>{{ 'home.createeventbtn' | translate }}</strong>
-          <small *ngIf="isAdminVerified">{{ 'home.createeventbtndsc' | translate }}</small>
-          <small *ngIf="!isAdminVerified" style="color:red;">Compte non vérifié — Attendre l'approbation de l'administrateur</small>
-        </span>
+            <strong>{{ 'home.createeventbtn' | translate }}</strong>
+            <small *ngIf="isAdminVerified">{{ 'home.createeventbtndsc' | translate }}</small>
+            <small *ngIf="!isAdminVerified" style="color:red;">Compte non vérifié — Attendre l'approbation de l'administrateur</small>
+          </span>
         </button>
       </div>
     </div>
   </section>
-
-
 
   <section class="event-section">
     <div class="section-header">
       <h2 class="section-title">{{ 'events.upcomingevents' | translate }}</h2>
       <a routerLink="/events" class="see-all">{{ 'events.allevents' | translate }}</a>
     </div>
-    <div class="event-row">
-      <div class="event-card" *ngFor="let event of availableEvents.slice(0, 6)"
-           [routerLink]="['/events', event.id]" style="cursor:pointer;">
+
+    <!-- LOADING STATE - Skeleton Cards -->
+    <div *ngIf="isLoadingEvents" class="event-row">
+      <div class="skeleton-card" *ngFor="let item of [1,2,3,4,5,6]">
+        <div class="skeleton-image"></div>
+        <div class="skeleton-content">
+          <div class="skeleton-line short"></div>
+          <div class="skeleton-line medium"></div>
+          <div class="skeleton-line long"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT - Actual events -->
+    <div *ngIf="!isLoadingEvents" class="event-row">
+      <div class="event-card" *ngFor="let event of availableEvents.slice(0, 6)" [routerLink]="['/events', event.id]" style="cursor:pointer;">
         <div class="event-image">
           <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
         </div>
@@ -81,57 +76,61 @@
           {{ event.organisateurEmail }}
           <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
         </p>
+
         <div class="event-body">
-          <span class="event-category">{{event.category}}</span>
-          <h3 class="event-title">{{event.title}}</h3>
+          <span class="event-category">{{ event.category }}</span>
+          <h3 class="event-title">{{ event.title }}</h3>
 
           <p class="event-meta">
             <i class="fa-regular fa-calendar-days"></i>
-            {{event.date}} &nbsp; {{event.time}}
+            {{ event.date }} &nbsp; {{ event.time }}
           </p>
 
           <p class="event-meta">
             <i class="fa-solid fa-location-dot"></i>
-            {{event.location}}
+            {{ event.location }}
           </p>
 
           <p class="event-capacity" *ngIf="event.maxParticipants">
             <i class="fa-solid fa-users"></i>
-             {{ event.participantCount }}/{{ event.maxParticipants }} participants
+            {{ event.participantCount }}/{{ event.maxParticipants }} participants
           </p>
 
-
           <div *ngIf="isAdmin || canModifyEvent(event)" class="event-actions">
-            <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">{{ 'events.modifier' | translate }}</button>
-            <button (click)="deleteEvent(event, $event)" class="btn btn-delete">{{ 'events.supprimer' | translate }}</button>
+            <button (click)="openEditEventModal(event, $event)" class="btn btn-edit" [disabled]="isDeleting">
+              {{ 'events.modifier' | translate }}
+            </button>
+            <button (click)="deleteEvent(event, $event)" class="btn btn-delete" [disabled]="isDeleting">
+              {{ 'events.supprimer' | translate }}
+            </button>
           </div>
-          <br>
+
           <ng-container *ngIf="!isAdmin && !canModifyEvent(event)">
             <button *ngIf="hasParticipated(event.id)"
                     class="btn btn-already-participated"
                     disabled
                     (click)="$event.stopPropagation()">
-               {{ 'events.alreadyparticipated' | translate }}
+              {{ 'events.alreadyparticipated' | translate }}
             </button>
             <button *ngIf="!hasParticipated(event.id)"
                     (click)="openJoinModal(event.id); $event.stopPropagation()"
-                    class="btn btn-primary participate-btn">
-              {{ 'events.participate' | translate }}
+                    class="btn btn-primary participate-btn"
+                    [disabled]="isJoining">
+              <span *ngIf="isJoining">⏳</span>
+              <span *ngIf="!isJoining">{{ 'events.participate' | translate }}</span>
             </button>
           </ng-container>
-
         </div>
       </div>
     </div>
-    <p *ngIf="events.length === 0" class="no-events">No events available yet.</p>
+
+    <p *ngIf="!isLoadingEvents && events.length === 0" class="no-events">No events available yet.</p>
   </section>
 
-
   <app-join-cta></app-join-cta>
-
-
   <app-footer></app-footer>
 </div>
+
 <app-login *ngIf="isModalOpen"></app-login>
 <app-sign-up-org *ngIf="isSignupModalOpen"></app-sign-up-org>
 <app-popup *ngIf="isJoinModalOpen"></app-popup>

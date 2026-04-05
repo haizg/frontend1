@@ -2,97 +2,110 @@
 
 <div class="modal-container" *ngIf="isVisible" (click)="$event.stopPropagation()">
   <div class="modal-content">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" *ngIf="isLoading">
+      <div class="loading-spinner-modal">
+        <div class="spinner-modal"></div>
+        <p class="loading-text-modal">{{ 'editevent.updating' | translate }}</p>
+      </div>
+    </div>
 
     <div class="modal-header">
-      <h2>Modifier l'Événement</h2>
+      <h2>{{ 'editevent.title' | translate }}</h2>
       <button class="close-btn" (click)="close()">✕</button>
     </div>
 
     <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
       <div class="form-grid">
-
         <div class="form-group full-width">
-          <label>Titre de l'événement *</label>
+          <label>{{ 'editevent.event_title' | translate }} *</label>
           <input
             type="text"
             formControlName="title"
-            placeholder="Ex: Marathon de Tunis"
-            class="form-input">
+            [placeholder]="'editevent.title_placeholder' | translate"
+            class="form-input"
+            [disabled]="isLoading">
           <small class="error" *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched">
-            Le titre doit contenir au moins 3 caractères
+            {{ 'editevent.error_title_min' | translate }}
           </small>
         </div>
 
         <div class="form-group full-width">
-          <label>Description *</label>
+          <label>{{ 'editevent.description' | translate }} *</label>
           <textarea
             formControlName="description"
-            placeholder="Décrivez votre événement..."
+            [placeholder]="'editevent.description_placeholder' | translate"
             rows="4"
-            class="form-input"></textarea>
+            class="form-input"
+            [disabled]="isLoading"></textarea>
           <small class="error" *ngIf="eventForm.get('description')?.invalid && eventForm.get('description')?.touched">
-            La description doit contenir au moins 10 caractères
+            {{ 'editevent.error_description_min' | translate }}
           </small>
         </div>
 
         <div class="form-group">
-          <label>Catégorie *</label>
-          <select formControlName="category" class="form-input">
-            <option value="">Sélectionner une catégorie</option>
-            <option value="SPORT">Sport</option>
-            <option value="ART">Art</option>
-            <option value="TECHNOLOGIE">Technologie</option>
-            <option value="MUSIQUE">Musique</option>
-            <option value="CULTURE">Culture</option>
-            <option value="AUTRE">Autre</option>
+          <label>{{ 'editevent.category' | translate }} *</label>
+          <select formControlName="category" class="form-input" [disabled]="isLoading">
+            <option value="">{{ 'editevent.select_category' | translate }}</option>
+            <option value="SPORT">{{ 'editevent.category_sport' | translate }}</option>
+            <option value="ART">{{ 'editevent.category_art' | translate }}</option>
+            <option value="TECHNOLOGIE">{{ 'editevent.category_tech' | translate }}</option>
+            <option value="MUSIQUE">{{ 'editevent.category_music' | translate }}</option>
+            <option value="CULTURE">{{ 'editevent.category_culture' | translate }}</option>
+            <option value="AUTRE">{{ 'editevent.category_other' | translate }}</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>Date *</label>
+          <label>{{ 'editevent.date' | translate }} *</label>
           <input
             type="date"
             formControlName="date"
-            class="form-input">
+            class="form-input"
+            [disabled]="isLoading">
         </div>
 
         <div class="form-group">
-          <label>Heure *</label>
+          <label>{{ 'editevent.time' | translate }} *</label>
           <input
             type="time"
             formControlName="time"
-            class="form-input">
+            class="form-input"
+            [disabled]="isLoading">
         </div>
 
         <div class="form-group">
-          <label>Lieu *</label>
+          <label>{{ 'editevent.location' | translate }} *</label>
           <input
             type="text"
             formControlName="location"
-            placeholder="Ex: Tunis, Tunisia"
-            class="form-input">
+            [placeholder]="'editevent.location_placeholder' | translate"
+            class="form-input"
+            [disabled]="isLoading">
         </div>
 
         <div class="form-group full-width">
-          <label>URL de l'image (optionnel)</label>
+          <label>{{ 'editevent.event_image' | translate }}</label>
           <input
             type="url"
             formControlName="imageUrl"
-            placeholder="https://example.com/image.jpg"
-            class="form-input">
+            [placeholder]="'editevent.image_placeholder' | translate"
+            class="form-input"
+            [disabled]="isLoading">
+          <small class="info-text">{{ 'editevent.image_info' | translate }}</small>
         </div>
 
         <div class="form-group">
-          <label>Nombre max de participants</label>
+          <label>{{ 'editevent.max_participants' | translate }}</label>
           <input
             type="number"
             formControlName="maxParticipants"
-            placeholder="Ex: 100"
+            [placeholder]="'editevent.max_participants_placeholder' | translate"
             min="1"
-            class="form-input">
+            class="form-input"
+            [disabled]="isLoading">
         </div>
       </div>
-
 
       <div class="error-message" *ngIf="errorMessage">
          {{ errorMessage }}
@@ -103,11 +116,12 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn-cancel" (click)="close()">
-          Annuler
+        <button type="button" class="btn-cancel" (click)="close()" [disabled]="isLoading">
+          {{ 'editevent.cancel' | translate }}
         </button>
         <button type="submit" class="btn-submit" [disabled]="isLoading || eventForm.invalid">
-          {{ isLoading ? 'Mise à jour...' : 'Enregistrer' }}
+          <span *ngIf="isLoading"> {{ 'editevent.updating' | translate }}</span>
+          <span *ngIf="!isLoading">{{ 'editevent.save' | translate }}</span>
         </button>
       </div>
     </form>

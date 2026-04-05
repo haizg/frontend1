@@ -5,14 +5,13 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ModalService } from '../services/modal.service';
 import { UserService } from '../services/user.service';
-import { TranslateModule } from '@ngx-translate/core'; // ADD THIS
-// REMOVE: import {LangService} from '../services/lang.service';
-import { TranslateLangService } from '../services/translate-lang.service'; // ADD THIS
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateLangService } from '../services/translate-lang.service';
 
 @Component({
   selector: 'app-sign-up-org',
   standalone: true,
-  imports: [FormsModule, CommonModule, TranslateModule], // ADD TranslateModule
+  imports: [FormsModule, CommonModule, TranslateModule],
   templateUrl: './sign-up-org.html',
   styleUrl: './sign-up-org.css',
 })
@@ -26,19 +25,37 @@ export class SignUpOrg {
   role = 'ROLE_USER';
   nomOrganisation = '';
   errorMessage = '';
+  successMessage = '';
+  isLoading = false; // Add loading state
+  hideSuccessMessage = false;
 
   constructor(
     private router: Router,
     private http: HttpClient,
     private modalService: ModalService,
     private userService: UserService,
-    // REMOVE: public lang: LangService,
-    private translateLang: TranslateLangService, // ADD THIS
+    private translate: TranslateService,
+    private translateLang: TranslateLangService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   close() {
     this.modalService.closeSignupModal();
+    this.resetForm();
+  }
+
+  resetForm() {
+    this.nom = '';
+    this.prenom = '';
+    this.email = '';
+    this.mdp = '';
+    this.confirmMdp = '';
+    this.role = 'ROLE_USER';
+    this.nomOrganisation = '';
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.isLoading = false;
+    this.hideSuccessMessage = false;
   }
 
   signed(form: any) {
@@ -47,25 +64,33 @@ export class SignUpOrg {
     console.log("role value:", this.role);
 
     if (form.invalid) {
-      this.errorMessage = "Veuillez remplir tous les champs obligatoires";
+      this.translate.get('signup.error_required_fields').subscribe((msg: string) => {
+        this.errorMessage = msg;
+      });
       return;
     }
 
     if (this.mdp !== this.confirmMdp) {
-      this.errorMessage = "Les mots de passe ne correspondent pas";
+      this.translate.get('signup.error_password_mismatch').subscribe((msg: string) => {
+        this.errorMessage = msg;
+      });
       return;
     }
 
-    if (
-      this.role === 'ROLE_ORGANISATEUR' &&
-      !this.nomOrganisation.trim()
-    ) {
-      this.errorMessage =
-        "Le nom de l'organisation est obligatoire pour les organisateurs";
+    if (this.role === 'ROLE_ORGANISATEUR' && !this.nomOrganisation.trim()) {
+      this.translate.get('signup.error_org_name_required').subscribe((msg: string) => {
+        this.errorMessage = msg;
+      });
       return;
     }
 
     this.errorMessage = '';
+    this.isLoading = true;
+
+    // Show "processing" message immediately
+    this.translate.get('signup.processing').subscribe((msg: string) => {
+      this.successMessage = msg;
+    });
 
     const newUser = {
       nom: this.nom,
@@ -75,72 +100,82 @@ export class SignUpOrg {
       role: this.role,
       nomOrganisation: this.nomOrganisation
     };
-  const headers = new HttpHeaders({
-        'Content-Type': 'application/json'
-      });
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
 
     this.http.post(
       'http://localhost:8081/api/auth/signup',
       newUser,
       {
-           headers: headers,
-           responseType: 'text' as 'json'
-         }
-       )
-
-    .subscribe({
-
+        headers: headers,
+        responseType: 'text' as 'json'
+      }
+    ).subscribe({
       next: (response: any) => {
+        console.log('✅ Signup successful - Raw response:', response);
+        this.isLoading = false;
 
-             console.log('✅ Signup successful - Raw response:', response);
+        // Replace with success message
+        this.translate.get('signup.success_message', { email: this.email }).subscribe((msg: string) => {
+          this.successMessage = msg;
+        });
 
-             let message = '';
-             try {
-               const jsonResponse = JSON.parse(response);
-               message = jsonResponse.message || 'Inscription réussie!';
-               console.log('✅ Parsed JSON:', jsonResponse);
-             } catch (e) {
-               message = response || 'Inscription réussie!';
-               console.log('ℹ️ Response is text, not JSON:', response);
-             }
+        // Wait 5 seconds, then fade out, then close
+        setTimeout(() => {
+          this.hideSuccessMessage = true;
+          setTimeout(() => {
+            this.modalService.closeSignupModal();
+            this.router.navigate(['/home']);
+          }, 500);
+        }, 5000);
+      },
+      error: (err) => {
+        console.error('❌ Signup error:', err);
+        this.isLoading = false;
+        this.successMessage = ''; // Clear processing message
 
-             alert(
-               'Inscription réussie ! Un email de vérification a été envoyé à ' +
-               this.email +
-               '. Veuillez vérifier votre boîte de réception avant de vous connecter.'
-             );
+        if (err.status === 200) {
+          this.translate.get('signup.success_message', { email: this.email }).subscribe((msg: string) => {
+            this.successMessage = msg;
+          });
 
-             this.modalService.closeSignupModal();
+          setTimeout(() => {
+            this.hideSuccessMessage = true;
+            setTimeout(() => {
+              this.modalService.closeSignupModal();
+              this.router.navigate(['/home']);
+            }, 500);
+          }, 5000);
+          return;
+        }
 
-             this.router.navigate(['/home']);
-           },
+        const errorMsg = err.error?.toString() || '';
 
-           error: (err) => {
+        if (err.status === 500 && (errorMsg.includes('duplicate key') || errorMsg.includes('already exists'))) {
+          this.translate.get('signup.error_email_exists').subscribe((msg: string) => {
+            this.errorMessage = msg;
+          });
+        } else if (err.status === 409) {
+          this.translate.get('signup.error_email_exists').subscribe((msg: string) => {
+            this.errorMessage = msg;
+          });
+        } else if (err.status === 400) {
+          this.translate.get('signup.error_invalid_data').subscribe((msg: string) => {
+            this.errorMessage = msg;
+          });
+        } else {
+          this.translate.get('signup.error_server').subscribe((msg: string) => {
+            this.errorMessage = msg;
+          });
+        }
 
-             console.error('❌ Signup error:', err);
-
-             if (err.status === 200) {
-               console.log('ℹ️ Status 200 but Angular thinks it\'s an error - treating as success');
-
-               alert(
-                 'Inscription réussie ! Un email de vérification a été envoyé à ' +
-                 this.email +
-                 '. Veuillez vérifier votre boîte de réception avant de vous connecter.'
-               );
-
-               this.modalService.closeSignupModal();
-               this.router.navigate(['/home']);
-               return;
-             }
-
-             if (err.status === 409) {
-               this.errorMessage = "Cet email existe déjà.";
-             } else if (err.status === 400) {
-               this.errorMessage = "Données invalides.";
-             } else {
-               this.errorMessage = "Erreur serveur lors de l'inscription.";
-             }
-           }
-         });
-       }
-     }
+        // Auto hide error message after 5 seconds
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
+  }
+}

@@ -25,6 +25,7 @@ export class AdminDashboard {
   activeTab = 'overview';
   adminName = '';
   isLoadingDetails = false;
+  eventSearch: string = '';
 
   // Detail panel
   selectedUser: any = null;
@@ -71,7 +72,6 @@ export class AdminDashboard {
     }
   }
 
-  // ─── Computed event lists ───────────────────────────────────────────────────
 
   get pendingEvents(): EventModel[] {
     return this.events.filter(e => !(e as any).approved);
@@ -81,14 +81,12 @@ export class AdminDashboard {
     return this.events.filter(e => (e as any).approved);
   }
 
-  // ─── HTTP helpers ───────────────────────────────────────────────────────────
 
   getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({ 'Authorization': `Bearer ${token}` });
   }
 
-  // ─── Loaders ────────────────────────────────────────────────────────────────
 
   loadStats() {
     this.http.get(`http://localhost:8081/api/admin/stats`, { headers: this.getHeaders() })
@@ -110,7 +108,6 @@ export class AdminDashboard {
       .subscribe({ next: (data) => { this.organisateurs = data; this.cdr.detectChanges(); } });
   }
 
-  // ─── Delete ─────────────────────────────────────────────────────────────────
 
   deleteUser(userId: number) {
     if (!confirm('Supprimer cet utilisateur ?')) return;
@@ -130,7 +127,6 @@ export class AdminDashboard {
       .subscribe({ next: () => this.loadEvents() });
   }
 
-  // ─── Approve event (one-way only) ───────────────────────────────────────────
 
   approveEvent(event: any) {
     if (event.approved) return; // guard: never un-approve
@@ -148,7 +144,27 @@ export class AdminDashboard {
     });
   }
 
-  // ─── Edit event ─────────────────────────────────────────────────────────────
+
+  get filteredPendingEvents(): any[] {
+    return this.pendingEvents.filter(e => this.matchesSearch(e));
+  }
+
+  get filteredApprovedEvents(): any[] {
+    return this.approvedEvents.filter(e => this.matchesSearch(e));
+  }
+
+  private matchesSearch(event: any): boolean {
+    if (!this.eventSearch.trim()) return true;
+    const q = this.eventSearch.toLowerCase();
+    return (
+      event.title?.toLowerCase().includes(q) ||
+      event.category?.toLowerCase().includes(q) ||
+      event.location?.toLowerCase().includes(q) ||
+      event.organisateurEmail?.toLowerCase().includes(q)
+    );
+  }
+
+
 
   openEditEvent(event: EventModel) {
     this.editEventModal.open(event);
@@ -158,7 +174,6 @@ export class AdminDashboard {
     this.loadEvents();
   }
 
-  // ─── Edit user ──────────────────────────────────────────────────────────────
 
   openEditUser(user: any) {
     this.editingUser = { ...user };
@@ -177,7 +192,6 @@ export class AdminDashboard {
     });
   }
 
-  // ─── Edit org ───────────────────────────────────────────────────────────────
 
   openEditOrg(org: any) {
     this.editingOrg = { ...org };
@@ -196,7 +210,6 @@ export class AdminDashboard {
     });
   }
 
-  // ─── View details ───────────────────────────────────────────────────────────
 
   viewUserDetails(user: any) {
     this.showDetailPanel = false;
@@ -232,7 +245,7 @@ export class AdminDashboard {
     this.selectedOrg = null;
     this.userEvents = [];
     this.orgEvents = [];
-    this.isLoadingDetails = true;   // ← was missing before
+    this.isLoadingDetails = true;
     this.cdr.detectChanges();
 
     this.http.get<any[]>(
@@ -262,7 +275,6 @@ export class AdminDashboard {
     this.orgEvents = [];
   }
 
-  // ─── Verify org (toggle) ────────────────────────────────────────────────────
 
   toggleVerifyOrg(org: any) {
     if (!org.id) { console.error('Organizer ID is undefined', org); return; }
@@ -279,7 +291,6 @@ export class AdminDashboard {
     });
   }
 
-  // ─── Misc ───────────────────────────────────────────────────────────────────
 
   logout() {
     localStorage.removeItem('token');

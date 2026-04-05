@@ -77,16 +77,27 @@
         </div>
 
         <p class="event-meta">
-          👤 {{ event.organisateurEmail }}
+          <i class="fa-solid fa-circle-user"></i>
+          {{ event.organisateurEmail }}
           <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
         </p>
         <div class="event-body">
           <span class="event-category">{{event.category}}</span>
           <h3 class="event-title">{{event.title}}</h3>
-          <p class="event-meta">📅{{event.date}} &nbsp; {{event.time}}</p>
-          <p class="event-meta">📍{{event.location}}</p>
+
+          <p class="event-meta">
+            <i class="fa-regular fa-calendar-days"></i>
+            {{event.date}} &nbsp; {{event.time}}
+          </p>
+
+          <p class="event-meta">
+            <i class="fa-solid fa-location-dot"></i>
+            {{event.location}}
+          </p>
+
           <p class="event-capacity" *ngIf="event.maxParticipants">
-            👥 {{ event.participantCount }}/{{ event.maxParticipants }} participants
+            <i class="fa-solid fa-users"></i>
+             {{ event.participantCount }}/{{ event.maxParticipants }} participants
           </p>
 
 

@@ -12,7 +12,8 @@
     </div>
 
     <p class="event-meta">
-      👤 {{ event.organisateurEmail }}
+      <i class="fa-solid fa-circle-user"></i>
+      {{ event.organisateurEmail }}
       <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
     </p>
 
@@ -20,19 +21,31 @@
     <div class="event-body">
       <div class="event-info">
         <div class="info-card">
-          <span class="info-label">📅 {{ 'eventdetail.date' | translate }}</span>
+          <span class="info-label">
+            <i class="fa-regular fa-calendar-days"></i>
+            {{ 'eventdetail.date' | translate }}
+          </span>
           <span class="info-value">{{ event!.date }}</span>
         </div>
         <div class="info-card">
-          <span class="info-label">🕐 {{ 'eventdetail.heure' | translate }}</span>
+          <span class="info-label">
+            <i class="fa-regular fa-clock"></i>
+            {{ 'eventdetail.heure' | translate }}
+          </span>
           <span class="info-value">{{ event!.time }}</span>
         </div>
         <div class="info-card">
-          <span class="info-label">📍 {{ 'eventdetail.lieu' | translate }}</span>
+          <span class="info-label">
+            <i class="fa-solid fa-location-dot"></i>
+            {{ 'eventdetail.lieu' | translate }}
+          </span>
           <span class="info-value">{{ event!.location }}</span>
         </div>
         <div class="info-card">
-          <span class="info-label">👥 {{ 'eventdetail.capacity' | translate }}</span>
+          <span class="info-label">
+            <i class="fa-solid fa-users"></i>
+            {{ 'eventdetail.capacity' | translate }}
+          </span>
           <span class="info-value">{{ event!.maxParticipants }} {{ 'eventdetail.personnes' | translate }}</span>
         </div>
       </div>
@@ -50,7 +63,10 @@
 
 
       <div *ngIf="isAdmin" class="organizer-info">
-        <span class="info-label">👤 Organisateur</span>
+        <span class="info-label">
+          <i class="fa-solid fa-circle-user"></i>
+          Organisateur
+        </span>
         <span class="info-value">{{ event!.organisateurEmail }}</span>
       </div>
 

@@ -24,35 +24,46 @@
       <h1 class="page-title">Vue d'ensemble</h1>
       <div class="stats-grid" *ngIf="stats">
         <div class="stat-card">
-          <div class="stat-icon">👥</div>
+          <div class="stat-icon icon-users">
+            <i class="fa-solid fa-users"></i>
+          </div>
           <div class="stat-info">
             <span class="stat-number">{{ stats.totalUsers }}</span>
             <span class="stat-label">Utilisateurs</span>
           </div>
         </div>
+
         <div class="stat-card">
-          <div class="stat-icon">📅</div>
+          <div class="stat-icon icon-events">
+            <i class="fa-solid fa-calendar-days"></i>
+          </div>
           <div class="stat-info">
             <span class="stat-number">{{ stats.totalEvents }}</span>
             <span class="stat-label">Événements</span>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">🎟️</div>
+          <div class="stat-icon icon-tickets">
+            <i class="fa-solid fa-ticket"></i>
+          </div>
           <div class="stat-info">
             <span class="stat-number">{{ stats.totalParticipants }}</span>
             <span class="stat-label">Inscriptions totales</span>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">✅</div>
+          <div class="stat-icon icon-confirmed">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
           <div class="stat-info">
             <span class="stat-number">{{ stats.verifiedParticipants }}</span>
             <span class="stat-label">Inscriptions confirmées</span>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">⏳</div>
+          <div class="stat-icon icon-pending">
+            <i class="fa-solid fa-clock"></i>
+          </div>
           <div class="stat-info">
             <span class="stat-number" style="color:#e65100">{{ stats.pendingEvents }}</span>
             <span class="stat-label">Événements en attente</span>
@@ -88,14 +99,28 @@
     <div *ngIf="activeTab === 'events'">
       <div class="tab-header">
         <h1 class="page-title">Gestion des événements</h1>
+        <div class="search-bar-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input
+            [(ngModel)]="eventSearch"
+            type="text"
+            class="search-input"
+            placeholder="Titre, catégorie, lieu, organisateur…"
+          />
+          <button *ngIf="eventSearch" class="search-clear" (click)="eventSearch = ''">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
       </div>
 
       <!-- PENDING TABLE -->
       <div class="section-block">
-        <h2 class="section-subtitle pending-title">En attente d'approbation
-          <span class="count-badge pending-badge">{{ pendingEvents.length }}</span>
+        <h2 class="section-subtitle pending-title">
+          <i class="fa-solid fa-clock" style="color:#e65100; margin-right:8px"></i>
+          En attente d'approbation
+          <span class="count-badge pending-badge">{{ filteredPendingEvents.length }}</span>
         </h2>
-        <table class="admin-table events-table" *ngIf="pendingEvents.length > 0">
+        <table class="admin-table events-table" *ngIf="filteredPendingEvents.length > 0">
           <thead>
           <tr>
             <th>Titre</th>
@@ -108,7 +133,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let event of pendingEvents" class="pending-row">
+          <tr *ngFor="let event of filteredPendingEvents" class="pending-row">
             <td><a [routerLink]="['/events', event.id]" class="event-link">{{ event.title }}</a></td>
             <td><span class="category-badge">{{ event.category }}</span></td>
             <td>{{ event.date }}</td>
@@ -117,27 +142,34 @@
             <td class="email-cell">{{ event.organisateurEmail }}</td>
             <td>
               <div class="action-buttons-cell">
-                <button (click)="openEditEvent(event)" class="btn-edit-sm">Modifier</button>
-                <button (click)="deleteEvent(event.id)" class="btn-delete-sm">Supprimer</button>
+                <button (click)="openEditEvent(event)" class="btn-edit-sm">
+                  <i class="fa-solid fa-pen"></i> Modifier
+                </button>
+                <button (click)="deleteEvent(event.id)" class="btn-delete-sm">
+                  <i class="fa-solid fa-trash"></i> Supprimer
+                </button>
                 <button (click)="approveEvent(event)" class="toggle-btn pending">
-                  Approuver
+                  <i class="fa-solid fa-check"></i> Approuver
                 </button>
               </div>
             </td>
           </tr>
           </tbody>
         </table>
-        <div *ngIf="pendingEvents.length === 0" class="empty-state">
-          Aucun événement en attente.
+        <div *ngIf="filteredPendingEvents.length === 0" class="empty-state">
+          <i class="fa-solid fa-circle-check" style="font-size:24px; color:#ccc; display:block; margin-bottom:8px"></i>
+          {{ eventSearch ? 'Aucun résultat pour "' + eventSearch + '"' : 'Aucun événement en attente.' }}
         </div>
       </div>
 
       <!-- APPROVED TABLE -->
       <div class="section-block" style="margin-top: 2rem;">
-        <h2 class="section-subtitle approved-title">Événements approuvés
-          <span class="count-badge approved-badge">{{ approvedEvents.length }}</span>
+        <h2 class="section-subtitle approved-title">
+          <i class="fa-solid fa-circle-check" style="color:#2e7d32; margin-right:8px"></i>
+          Événements approuvés
+          <span class="count-badge approved-badge">{{ filteredApprovedEvents.length }}</span>
         </h2>
-        <table class="admin-table events-table" *ngIf="approvedEvents.length > 0">
+        <table class="admin-table events-table" *ngIf="filteredApprovedEvents.length > 0">
           <thead>
           <tr>
             <th>Titre</th>
@@ -150,7 +182,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let event of approvedEvents">
+          <tr *ngFor="let event of filteredApprovedEvents">
             <td><a [routerLink]="['/events', event.id]" class="event-link">{{ event.title }}</a></td>
             <td><span class="category-badge">{{ event.category }}</span></td>
             <td>{{ event.date }}</td>
@@ -159,23 +191,37 @@
             <td class="email-cell">{{ event.organisateurEmail }}</td>
             <td>
               <div class="action-buttons-cell">
-                <button (click)="openEditEvent(event)" class="btn-edit-sm">Modifier</button>
-                <button (click)="deleteEvent(event.id)" class="btn-delete-sm">Supprimer</button>
-                <span class="approved-label">Approuvé</span>
+                <button (click)="openEditEvent(event)" class="btn-edit-sm">
+                  Modifier
+                </button>
+                <button (click)="deleteEvent(event.id)" class="btn-delete-sm">
+                 Supprimer
+                </button>
+                <span class="approved-label">
+                 Approuvé
+              </span>
               </div>
             </td>
           </tr>
           </tbody>
         </table>
-        <div *ngIf="approvedEvents.length === 0" class="empty-state">
-          Aucun événement approuvé.
+        <div *ngIf="filteredApprovedEvents.length === 0" class="empty-state">
+          <i class="fa-solid fa-calendar-xmark" style="font-size:24px; color:#ccc; display:block; margin-bottom:8px"></i>
+          {{ eventSearch ? 'Aucun résultat pour "' + eventSearch + '"' : 'Aucun événement approuvé.' }}
         </div>
       </div>
 
       <p class="tab-subtitle" style="margin-top:1rem">
         {{ events.length }} événement(s) au total
+        <span *ngIf="eventSearch" style="color:#888; font-size:0.85rem">
+      — {{ filteredPendingEvents.length + filteredApprovedEvents.length }} résultat(s) pour "{{ eventSearch }}"
+    </span>
       </p>
     </div>
+
+
+
+
     <!-- USERS -->
     <div *ngIf="activeTab === 'users'">
       <div class="tab-header">

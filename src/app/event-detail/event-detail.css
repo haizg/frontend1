@@ -346,3 +346,12 @@
   text-align: center;
   opacity: 0.9;
 }
+
+.info-label i,
+.event-capacity i {
+  width: 16px;
+  text-align: center;
+  color: #2a6262;
+  margin-right: 6px;
+  font-size: 13px;
+}

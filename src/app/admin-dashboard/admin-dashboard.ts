@@ -167,7 +167,7 @@ export class AdminDashboard {
 
 
   openEditEvent(event: EventModel) {
-    this.editEventModal.open(event);
+    this.editEventModal.open(event, false, 0);
   }
 
   onEventUpdated() {

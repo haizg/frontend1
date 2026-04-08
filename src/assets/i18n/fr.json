@@ -127,7 +127,7 @@
     "location": "Lieu",
     "location_placeholder": "Ex: Tunis, Tunisie",
     "event_image": "Image de l'événement",
-    "choose_image": "Choisir une image",
+    "choose_image": "Ajouter l’affiche de l’événement",
     "change_image": "Changer",
     "remove_image": "Supprimer",
     "image_info": "Formats acceptés: JPEG, PNG, GIF (max 10 MB)",

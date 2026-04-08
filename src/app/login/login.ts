@@ -119,4 +119,10 @@ export class Login {
                 }
               });
           }
-        }
+
+
+      goToSignup() {
+        this.modalService.closeLoginModal();
+        this.modalService.openSignupModal();
+      }
+}

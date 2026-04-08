@@ -56,9 +56,13 @@
       </div>
 
       <!-- ORGANISATEUR ACTIONS -->
-      <div *ngIf="isMyEvent || isAdmin" class="org-actions">
+      <div *ngIf="isAdmin" class="org-actions">
         <button (click)="openEditEventModal()" class="btn-edit"> {{ 'eventdetail.modifier' | translate }}</button>
         <button (click)="deleteEvent()" class="btn-delete"> {{ 'eventdetail.supprimer' | translate }}</button>
+      </div>
+
+      <div *ngIf="isMyEvent" class="org-actions">
+        <button (click)="openEditEventModal()" class="btn-edit"> {{ 'eventdetail.modifier' | translate }}</button>
       </div>
 
 
@@ -79,9 +83,9 @@
             <span class="stat-number">{{ verifiedParticipants.length }}</span>
             <span class="stat-label">{{ 'eventdetail.confirmed' | translate }}</span>
           </div>
-          <div class="stat-card">
-            <span class="stat-number">{{ totalPeople }}</span>
-            <span class="stat-label">{{ 'eventdetail.expected' | translate }}</span>
+          <div class="stat-card stat-card-warning">
+            <span class="stat-number" >{{ unconfirmedParticipants.length }}</span>
+            <span class="stat-label">Non confirmées</span>
           </div>
           <div class="stat-card">
             <span class="stat-number">{{ event!.maxParticipants }}</span>
@@ -128,7 +132,7 @@
             <td>{{ p.numberOfPeople }}</td>
             <td>
                 <span class="status-badge" [class.verified]="p.verified" [class.pending]="!p.verified">
-                  {{ p.verified ? '✅ ' + ('eventdetail.confirmed_badge' | translate) : '⏳ ' + ('eventdetail.pending_badge' | translate) }}
+                  {{ p.verified ? '' + ('eventdetail.confirmed_badge' | translate) : '⏳ ' + ('eventdetail.pending_badge' | translate) }}
                 </span>
             </td>
           </tr>
@@ -141,7 +145,7 @@
         <button *ngIf="hasAlreadyParticipated"
                 class="btn-already-participated"
                 disabled>
-          ✅ Vous participez déjà à cet événement
+          Vous participez déjà à cet événement
         </button>
         <button *ngIf="!hasAlreadyParticipated"
                 class="btn-participer"

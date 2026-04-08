@@ -127,7 +127,7 @@
     "location": "Location",
     "location_placeholder": "Ex: Tunis, Tunisia",
     "event_image": "Event Image",
-    "choose_image": "Choose an image",
+    "choose_image": "Upload event poster",
     "change_image": "Change",
     "remove_image": "Remove",
     "image_info": "Formats accepted: JPEG, PNG, GIF (max 10 MB)",

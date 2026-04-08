@@ -21,6 +21,8 @@ export class EditEventModal {
   errorMessage = '';
   successMessage = '';
   currentEvent: EventModel | null = null;
+  isLocked = false;          // true when event is approved and user is organizer
+  minCapacity = 1;
 
   constructor(
     private fb: FormBuilder,
@@ -39,8 +41,10 @@ export class EditEventModal {
     });
   }
 
-  open(event: EventModel) {
+  open(event: EventModel, isApproved = false, confirmedCount = 0) {
     this.currentEvent = event;
+    this.isLocked = isApproved;
+    this.minCapacity = confirmedCount;
     this.isVisible = true;
     this.errorMessage = '';
     this.successMessage = '';
@@ -55,11 +59,31 @@ export class EditEventModal {
       imageUrl: event.imageUrl || '',
       maxParticipants: event.capacity || null
     });
+
+      const lockedFields = ['title', 'description', 'category', 'date', 'time', 'location', 'imageUrl'];
+      if (isApproved) {
+        lockedFields.forEach(f => this.eventForm.get(f)?.disable());
+        this.eventForm.get('maxParticipants')?.enable();
+        this.eventForm.get('maxParticipants')?.setValidators([
+          Validators.required,
+          Validators.min(confirmedCount || 1)
+        ]);
+      } else {
+        lockedFields.forEach(f => this.eventForm.get(f)?.enable());
+        this.eventForm.get('maxParticipants')?.setValidators([Validators.min(1)]);
+      }
+      this.eventForm.get('maxParticipants')?.updateValueAndValidity();
   }
+
+
+
+
 
   close() {
     this.isVisible = false;
     this.eventForm.reset();
+    Object.keys(this.eventForm.controls).forEach(k => this.eventForm.get(k)?.enable());
+    this.isLocked = false;
     this.currentEvent = null;
     this.errorMessage = '';
     this.successMessage = '';
@@ -89,6 +113,28 @@ export class EditEventModal {
       'Authorization': `Bearer ${token}`
     });
 
+    if (this.isLocked) {
+      this.http.put(
+        `http://localhost:8081/api/events/${this.currentEvent.id}/capacity`,
+        { maxParticipants: this.eventForm.get('maxParticipants')?.value },
+        { headers }
+      ).subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.successMessage = 'Capacité mise à jour avec succès.';
+          setTimeout(() => { this.close(); this.eventUpdated.emit(); }, 1500);
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.errorMessage = err.status === 403
+            ? 'Vous n\'êtes pas autorisé à modifier cet événement.'
+            : 'Erreur lors de la mise à jour.';
+        }
+      });
+      return;
+    }
+
+/*
     this.http.put(
       `http://localhost:8081/api/events/${this.currentEvent.id}`,
       this.eventForm.value,
@@ -121,6 +167,34 @@ export class EditEventModal {
           });
         }
       }
+    });*/
+
+    // Full edit for unapproved events
+    this.http.put(
+      `http://localhost:8081/api/events/${this.currentEvent.id}`,
+      this.eventForm.getRawValue(), // getRawValue includes disabled fields
+      { headers }
+    ).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.translate.get('editevent.success_message').subscribe(msg => {
+          this.successMessage = msg;
+        });
+        setTimeout(() => { this.close(); this.eventUpdated.emit(); }, 1500);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        if (error.status === 403) {
+          this.translate.get('editevent.error_permission').subscribe(msg => {
+            this.errorMessage = msg;
+          });
+        } else {
+          this.translate.get('editevent.error_update_failed').subscribe(msg => {
+            this.errorMessage = msg;
+          });
+        }
+      }
     });
+
   }
 }

@@ -15,6 +15,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {EditEventModal} from '../edit-event-modal/edit-event-modal';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslateLangService } from '../services/translate-lang.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-event-detail',
@@ -27,7 +28,8 @@ import { TranslateLangService } from '../services/translate-lang.service';
     SignUpOrg,
     RouterModule,
     EditEventModal,
-    TranslateModule
+    TranslateModule,
+    FormsModule
   ],
   templateUrl: './event-detail.html',
   styleUrl: './event-detail.css',
@@ -44,6 +46,7 @@ export class EventDetail {
   userEmail: string = '';
   participants: any[] = [];
   hasAlreadyParticipated = false;
+  newCapacity: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -111,6 +114,13 @@ export class EventDetail {
     }
   }
 
+
+  get unconfirmedParticipants(): any[] {
+    return this.participants.filter(p => !p.verified);
+  }
+
+
+
   loadParticipants(eventId: number) {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
@@ -142,7 +152,9 @@ export class EventDetail {
 
   get capacityPercentage(): number {
     if (!this.event?.maxParticipants) return 0;
-    return Math.min(100, Math.round((this.totalPeople / this.event.maxParticipants) * 100));
+    return Math.min(100, Math.round(
+      (this.verifiedParticipants.length / this.event.maxParticipants) * 100
+    ));
   }
 
   get isAdmin(): boolean {
@@ -161,9 +173,38 @@ export class EventDetail {
 
   openEditEventModal() {
     if (this.event) {
-      this.editEventModal.open(this.event);
+      const isApproved = !!(this.event as any).approved;
+      const confirmedCount = this.verifiedParticipants.length;
+      // isLocked only for organizers, admin always gets full form
+      const shouldLock = isApproved && this.isMyEvent && !this.isAdmin;
+      this.editEventModal.open(this.event, shouldLock, confirmedCount);
     }
   }
+
+
+  updateCapacity() {
+    if (!this.newCapacity || !this.event) return;
+    if (this.newCapacity < this.verifiedParticipants.length) {
+      alert(`La capacité ne peut pas être inférieure au nombre de participants confirmés (${this.verifiedParticipants.length})`);
+      return;
+    }
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    this.http.put(
+      `http://localhost:8081/api/events/${this.event.id}/capacity`,
+      { maxParticipants: this.newCapacity },
+      { headers }
+    ).subscribe({
+      next: () => {
+        this.event!.maxParticipants = this.newCapacity!;
+        this.newCapacity = null;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Failed to update capacity', err)
+    });
+  }
+
+
 
   onEventUpdated() {
     const id = this.route.snapshot.paramMap.get('id');

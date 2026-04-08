@@ -10,28 +10,48 @@
       </div>
     </div>
 
+
     <div class="modal-header">
       <h2>{{ 'editevent.title' | translate }}</h2>
       <button class="close-btn" (click)="close()">✕</button>
     </div>
 
+
+    <!-- LOCKED BANNER — only shown when event is approved -->
+    <div class="locked-banner" *ngIf="isLocked">
+      <i class="fa-solid fa-lock"></i>
+      <div class="locked-banner-text">
+        <strong>Événement publié — modifications limitées</strong>
+        <span>
+          Cet événement a été approuvé et des participants se sont inscrits.
+          Seule la <strong>capacité maximale</strong> peut être modifiée.
+          Minimum autorisé : {{ minCapacity }} (inscrits confirmés).
+        </span>
+      </div>
+    </div>
+
+
+
     <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
       <div class="form-grid">
-        <div class="form-group full-width">
-          <label>{{ 'editevent.event_title' | translate }} *</label>
+        <div class="form-group full-width" [class.field-locked]="isLocked">
+          <label>{{ 'editevent.event_title' | translate }}
+            <span *ngIf="isLocked" class="lock-icon"><i class="fa-solid fa-lock"></i></span>
+          </label>
           <input
             type="text"
             formControlName="title"
             [placeholder]="'editevent.title_placeholder' | translate"
-            class="form-input"
-            [disabled]="isLoading">
+            class="form-input">
           <small class="error" *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched">
             {{ 'editevent.error_title_min' | translate }}
           </small>
         </div>
 
-        <div class="form-group full-width">
-          <label>{{ 'editevent.description' | translate }} *</label>
+        <div class="form-group full-width" [class.field-locked]="isLocked">
+          <label>{{ 'editevent.description' | translate }}
+            <span *ngIf="isLocked" class="lock-icon"><i class="fa-solid fa-lock"></i></span>
+          </label>
           <textarea
             formControlName="description"
             [placeholder]="'editevent.description_placeholder' | translate"
@@ -43,8 +63,11 @@
           </small>
         </div>
 
-        <div class="form-group">
-          <label>{{ 'editevent.category' | translate }} *</label>
+        <div class="form-group" [class.field-locked]="isLocked">
+          <label>
+            {{ 'editevent.category' | translate }}
+            <span *ngIf="isLocked" class="lock-icon"><i class="fa-solid fa-lock"></i></span>
+          </label>
           <select formControlName="category" class="form-input" [disabled]="isLoading">
             <option value="">{{ 'editevent.select_category' | translate }}</option>
             <option value="SPORT">{{ 'editevent.category_sport' | translate }}</option>
@@ -56,7 +79,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group"  [class.field-locked]="isLocked">
           <label>{{ 'editevent.date' | translate }} *</label>
           <input
             type="date"
@@ -65,7 +88,7 @@
             [disabled]="isLoading">
         </div>
 
-        <div class="form-group">
+        <div class="form-group" [class.field-locked]="isLocked">
           <label>{{ 'editevent.time' | translate }} *</label>
           <input
             type="time"
@@ -74,8 +97,10 @@
             [disabled]="isLoading">
         </div>
 
-        <div class="form-group">
-          <label>{{ 'editevent.location' | translate }} *</label>
+        <div class="form-group" [class.field-locked]="isLocked">
+          <label>{{ 'editevent.location' | translate }}
+            <span *ngIf="isLocked" class="lock-icon"><i class="fa-solid fa-lock"></i></span>
+          </label>
           <input
             type="text"
             formControlName="location"
@@ -84,7 +109,7 @@
             [disabled]="isLoading">
         </div>
 
-        <div class="form-group full-width">
+        <div class="form-group full-width" [class.field-locked]="isLocked">
           <label>{{ 'editevent.event_image' | translate }}</label>
           <input
             type="url"
@@ -95,15 +120,21 @@
           <small class="info-text">{{ 'editevent.image_info' | translate }}</small>
         </div>
 
-        <div class="form-group">
-          <label>{{ 'editevent.max_participants' | translate }}</label>
-          <input
-            type="number"
-            formControlName="maxParticipants"
-            [placeholder]="'editevent.max_participants_placeholder' | translate"
-            min="1"
-            class="form-input"
-            [disabled]="isLoading">
+        <!-- CAPACITY — always editable, highlighted when locked -->
+        <div class="form-group" [class.field-highlighted]="isLocked">
+          <label>
+            {{ 'editevent.max_participants' | translate }}
+            <span *ngIf="isLocked" class="editable-tag">
+              <i class="fa-solid fa-pen"></i> Modifiable
+            </span>
+          </label>
+          <input type="number" formControlName="maxParticipants"
+                 [placeholder]="'editevent.max_participants_placeholder' | translate"
+                 [min]="minCapacity || 1"
+                 class="form-input">
+          <small *ngIf="isLocked" class="info-text">
+            Minimum : {{ minCapacity }} participant(s) confirmé(s)
+          </small>
         </div>
       </div>
 

@@ -61,13 +61,30 @@
               <i class="fa-solid fa-users"></i>
               {{ event.participantCount }}/{{ event.maxParticipants }} {{ 'profile.participant' | translate }}
             </p>
-
+            <!--
             <div *ngIf="isAdmin || canModifyEvent(event)" class="event-actions">
               <button (click)="openEditEventModal(event, $event)" class="btn btn-edit" [disabled]="isDeleting">
                 {{ 'events.modifier' | translate }}
               </button>
               <button (click)="deleteEvent(event, $event)" class="btn btn-delete" [disabled]="isDeleting">
                 {{ 'events.supprimer' | translate }}
+              </button>
+            </div>
+             -->
+
+            <div *ngIf="canModifyEvent(event)" class="event-actions">
+              <button [routerLink]="['/events', event.id]" style="cursor:pointer;" class="btn-participate" style="font-size: 16px; font-weight: bold;">
+                Consulter mon évènement
+              </button>
+            </div>
+
+
+            <div *ngIf="isAdmin" class="event-actions">
+              <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">
+                <i class="fa-solid fa-pen"></i> {{ 'events.modifier' | translate }}
+              </button>
+              <button (click)="deleteEvent(event, $event)" class="btn btn-delete">
+                <i class="fa-solid fa-trash"></i> {{ 'events.supprimer' | translate }}
               </button>
             </div>
 

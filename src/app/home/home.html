@@ -66,7 +66,8 @@
 
     <!-- CONTENT - Actual events -->
     <div *ngIf="!isLoadingEvents" class="event-row">
-      <div class="event-card" *ngFor="let event of availableEvents.slice(0, 6)" [routerLink]="['/events', event.id]" style="cursor:pointer;">
+      <div class="event-card" *ngFor="let event of availableEvents.slice(0, 6)"
+           [routerLink]="['/events', event.id]" style="cursor:pointer;">
         <div class="event-image">
           <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
         </div>
@@ -95,13 +96,27 @@
             <i class="fa-solid fa-users"></i>
             {{ event.participantCount }}/{{ event.maxParticipants }} participants
           </p>
-
+<!--
           <div *ngIf="isAdmin || canModifyEvent(event)" class="event-actions">
             <button (click)="openEditEventModal(event, $event)" class="btn btn-edit" [disabled]="isDeleting">
               {{ 'events.modifier' | translate }}
             </button>
             <button (click)="deleteEvent(event, $event)" class="btn btn-delete" [disabled]="isDeleting">
               {{ 'events.supprimer' | translate }}
+            </button>
+          </div>
+-->
+          <div *ngIf="canModifyEvent(event)" class="event-actions">
+            <button [routerLink]="['/events', event.id]" style="cursor:pointer;" class="btn btn-primary participate-btn" style="font-size: 16px; font-weight: bold;">
+              Consulter mon évènement
+            </button>
+          </div>
+          <div *ngIf="isAdmin" class="event-actions">
+            <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">
+              <i class="fa-solid fa-pen"></i> {{ 'events.modifier' | translate }}
+            </button>
+            <button (click)="deleteEvent(event, $event)" class="btn btn-delete">
+              <i class="fa-solid fa-trash"></i> {{ 'events.supprimer' | translate }}
             </button>
           </div>
 

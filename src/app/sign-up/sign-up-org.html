@@ -2,6 +2,10 @@
   <form #formRef="ngForm" (ngSubmit)="signed(formRef)" (click)="$event.stopPropagation()">
     <h1>{{ 'navbar.signup' | translate }}</h1>
 
+    <button class="close-btn" (click)="close(); $event.stopPropagation()" type="button">
+      &times;
+    </button>
+
     <!-- Error Message -->
     <div class="error-banner" *ngIf="errorMessage">
       {{ errorMessage }}
@@ -77,6 +81,6 @@
     </div>
     <br *ngIf="role === 'ROLE_ORGANISATEUR'">
 
-    <button type="submit">{{ 'navbar.signup' | translate }}</button>
+    <button class="signup-btn" type="submit">{{ 'navbar.signup' | translate }}</button>
   </form>
 </div>

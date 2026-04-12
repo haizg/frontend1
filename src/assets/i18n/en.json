@@ -126,7 +126,7 @@
     "time": "Time",
     "location": "Location",
     "location_placeholder": "Ex: Tunis, Tunisia",
-    "event_image": "Event Image",
+    "event_image": "Event poster",
     "choose_image": "Upload event poster",
     "change_image": "Change",
     "remove_image": "Remove",
@@ -181,5 +181,11 @@
     "cancel": "Cancel",
     "save": "Save",
     "updating": "Updating..."
+  },
+  "logout": {
+    "title": "Log Out",
+    "message": "Are you sure you want to log out?",
+    "cancel": "Cancel",
+    "confirm": "Log Out"
   }
 }

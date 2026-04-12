@@ -126,7 +126,7 @@
     "time": "Heure",
     "location": "Lieu",
     "location_placeholder": "Ex: Tunis, Tunisie",
-    "event_image": "Image de l'événement",
+    "event_image": "affiche  de l'événement",
     "choose_image": "Ajouter l’affiche de l’événement",
     "change_image": "Changer",
     "remove_image": "Supprimer",
@@ -181,5 +181,11 @@
     "cancel": "Annuler",
     "save": "Enregistrer",
     "updating": "Mise à jour..."
+  },
+  "logout": {
+    "title": "Se déconnecter",
+    "message": "Êtes-vous sûr de vouloir vous déconnecter ?",
+    "cancel": "Annuler",
+    "confirm": "Se déconnecter"
   }
 }

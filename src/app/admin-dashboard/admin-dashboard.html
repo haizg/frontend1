@@ -13,7 +13,7 @@
     </nav>
     <div class="sidebar-footer">
       <p class="admin-name">ADMIN INVITINI</p>
-      <button (click)="logout()" class="btn-logout">Se déconnecter</button>
+      <button (click)="modalService.openLogoutModal()"  class="btn-logout">Se déconnecter</button>
     </div>
   </aside>
 
@@ -382,6 +382,25 @@
     </div>
   </div>
 
+
+  <!-- DELETE CONFIRM MODAL -->
+  <div class="modal-overlay" *ngIf="showDeleteConfirm" (click)="showDeleteConfirm = false">
+    <div class="confirm-box" (click)="$event.stopPropagation()">
+      <div class="confirm-icon-wrap danger">
+        <i class="fa-solid fa-trash"></i>
+      </div>
+      <h3>{{ deleteConfirmTitle }}</h3>
+      <p>{{ deleteConfirmMessage }}</p>
+      <div class="confirm-btns">
+        <button class="btn-confirm-cancel" (click)="showDeleteConfirm = false">Annuler</button>
+        <button class="btn-confirm-delete" (click)="confirmDelete()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+
+
 </div>
 
 <app-edit-event-modal (eventUpdated)="onEventUpdated()"></app-edit-event-modal>
+<app-confirm-logout></app-confirm-logout>

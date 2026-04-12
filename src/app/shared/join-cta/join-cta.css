@@ -1,6 +1,6 @@
 .join-section {
- padding: 40px 10px;
-   display: flex;
+  padding: 40px 10px;
+  display: flex;
   justify-content: center;
   align-items: center;
   min-height: 800px;
@@ -37,7 +37,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background: #2a6262;
+  background: #8E2A5A;
   border-radius: 8px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
@@ -47,7 +47,7 @@
     bottom: 0;
     width: 100%;
     height: 50%;
-    background: #CC0066;
+    background: #8E2A5A;
     z-index: 3;
 
     clip-path: polygon(
@@ -67,7 +67,7 @@
   transform: translate(-50%, -50%);
   width: 80%;
   height: 1px;
-  background: #CC0066;
+  background:#8E2A5A;
   box-shadow: 0 10px 0 rgba(255, 255, 255, 0.2);
 }
 .stamp {
@@ -91,7 +91,7 @@
    width: 100%;
    height: 40%;
 
-   background: #CC0066;
+   background:#8E2A5A;
    transform-origin: top;
 
    transform: rotateX(-55deg);
@@ -130,7 +130,7 @@
      transition: transform 0.6s ease, box-shadow 0.6s ease;
 }
 .envelope-back {
-  background: #CC0066;
+  background: #8E2A5A;
 }
 .envelope-container:hover .letter {
     transform: translateY(-140px);
@@ -175,7 +175,7 @@
   font-family: 'Georgia', serif;
   font-size: 32px;
   font-weight: 600;
-  color: #CC0066;
+  color:#8E2A5A;
   margin: 0 0 15px 0;
   letter-spacing: 1px;
 }
@@ -219,7 +219,7 @@
 }
 
 .invitation-btn:hover {
-  background: #800040;
+  background: #8E2A5A;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(42, 98, 98, 0.4);
 }
@@ -271,4 +271,20 @@
 .envelope-container:hover .stamp {
   opacity: 0;
   transform: scale(0.5);
+}
+
+.cta-already-msg {
+  margin-top: 10px;
+  font-size: 14px;
+  color: beige;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

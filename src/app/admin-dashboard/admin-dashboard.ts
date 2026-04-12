@@ -7,11 +7,15 @@ import { TranslateModule } from '@ngx-translate/core';
 import { UserService } from '../services/user.service';
 import { EventModel } from '../models/event.model';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
+import { ConfirmLogout } from '../confirm-logout/confirm-logout';
+import { ModalService } from '../services/modal.service';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, EditEventModal, FormsModule, TranslateModule],
+  imports: [CommonModule, RouterModule,
+    EditEventModal, FormsModule,
+    TranslateModule, ConfirmLogout],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css',
 })
@@ -42,11 +46,19 @@ export class AdminDashboard {
   showEditOrg = false;
   editingOrg: any = null;
 
+  //Delete modal
+  showDeleteConfirm = false;
+  deleteConfirmTitle = '';
+  deleteConfirmMessage = '';
+  private pendingDeleteFn: (() => void) | null = null;
+
+
   constructor(
     private http: HttpClient,
     private router: Router,
     private userService: UserService,
     private cdr: ChangeDetectorRef,
+    public modalService: ModalService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -108,24 +120,48 @@ export class AdminDashboard {
       .subscribe({ next: (data) => { this.organisateurs = data; this.cdr.detectChanges(); } });
   }
 
+  // SHARED DELETE TRIGGER
+    private requestDelete(title: string, message: string, fn: () => void) {
+      this.deleteConfirmTitle = title;
+      this.deleteConfirmMessage = message;
+      this.pendingDeleteFn = fn;
+      this.showDeleteConfirm = true;
+    }
+
+    confirmDelete() {
+      this.showDeleteConfirm = false;
+      this.pendingDeleteFn?.();
+      this.pendingDeleteFn = null;
+    }
+
+
 
   deleteUser(userId: number) {
-    if (!confirm('Supprimer cet utilisateur ?')) return;
-    this.http.delete(`http://localhost:8081/api/admin/users/${userId}`, { headers: this.getHeaders() })
-      .subscribe({ next: () => this.loadUsers() });
+    this.requestDelete(
+      'Supprimer l\'utilisateur',
+      'Cet utilisateur sera définitivement supprimé.',
+      () => this.http.delete(`http://localhost:8081/api/admin/users/${userId}`, { headers: this.getHeaders() })
+        .subscribe({ next: () => this.loadUsers() })
+    );
   }
 
   deleteOrganisateur(id: number) {
-    if (!confirm('Supprimer cet organisateur ?')) return;
-    this.http.delete(`http://localhost:8081/api/admin/organisateurs/${id}`, { headers: this.getHeaders() })
-      .subscribe({ next: () => this.loadOrganisateurs() });
+    this.requestDelete(
+      'Supprimer l\'organisateur',
+      'Cet organisateur sera définitivement supprimé.',
+      () => this.http.delete(`http://localhost:8081/api/admin/organisateurs/${id}`, { headers: this.getHeaders() })
+        .subscribe({ next: () => this.loadOrganisateurs() })
+    );
   }
 
-  deleteEvent(eventId: number) {
-    if (!confirm('Supprimer cet événement ?')) return;
-    this.http.delete(`http://localhost:8081/api/events/admin/${eventId}`, { headers: this.getHeaders() })
-      .subscribe({ next: () => this.loadEvents() });
-  }
+deleteEvent(eventId: number) {
+  this.requestDelete(
+    'Supprimer l\'événement',
+    'Cet événement et toutes ses inscriptions seront définitivement supprimés.',
+    () => this.http.delete(`http://localhost:8081/api/events/admin/${eventId}`, { headers: this.getHeaders() })
+      .subscribe({ next: () => this.loadEvents() })
+  );
+}
 
 
   approveEvent(event: any) {
@@ -292,13 +328,8 @@ export class AdminDashboard {
   }
 
 
-  logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    localStorage.removeItem('user');
-    this.userService.clearUser();
-    this.router.navigate(['/home']);
-  }
+
+
 
   getRoleBadge(role: string): string {
     if (role === 'ROLE_ADMIN') return 'Admin';

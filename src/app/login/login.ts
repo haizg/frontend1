@@ -7,7 +7,6 @@ import {UserService} from '../services/user.service';
 import {CommonModule} from '@angular/common';
 import { ForgotPasswordModal } from '../forgot-password-modal/forgot-password-modal';
 import { TranslateModule } from '@ngx-translate/core'; // ADD THIS
-// REMOVE: import {LangService} from '../services/lang.service';
 import { TranslateLangService } from '../services/translate-lang.service'; // ADD THIS
 
 @Component({

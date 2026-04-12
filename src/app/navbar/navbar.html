@@ -30,8 +30,10 @@
 
       <div *ngIf="isLoggedIn" class="user-info">
         <a [routerLink]="isAdmin ? '/admin/dashboard' : '/profile'" class="user-name">{{ userName }}</a>
-        <button (click)="logOut()" class="btn btn-outline">{{ 'navbar.logout' | translate }}</button>
+        <button (click)="modalService.openLogoutModal()"  class="btn btn-outline">{{ 'navbar.logout' | translate }}</button>
       </div>
     </div>
   </div>
 </header>
+
+<app-confirm-logout></app-confirm-logout>

@@ -5,18 +5,12 @@ import {BehaviorSubject} from 'rxjs';
 export class ModalService {
   private loginModalOpen = new BehaviorSubject<boolean>(false);
   private signupModalOpen=new BehaviorSubject<boolean>(false);
+  private logoutModalOpen = new BehaviorSubject<boolean>(false);
+  private joinModalOpen = new BehaviorSubject<boolean>(false);
 
   loginModal$ = this.loginModalOpen.asObservable();
   signupModal$=this.signupModalOpen.asObservable();
-
-  openLoginModal(){ this.loginModalOpen.next(true);}
-  closeLoginModal(){ this.loginModalOpen.next(false);}
-
-  openSignupModal() {this.signupModalOpen.next(true);}
-  closeSignupModal(){this.signupModalOpen.next(false);}
-
-
-  private joinModalOpen = new BehaviorSubject<boolean>(false);
+  logoutModal$ = this.logoutModalOpen.asObservable();
   joinModal$=this.joinModalOpen.asObservable();
 
 
@@ -24,17 +18,22 @@ export class ModalService {
   currentEventId$ = this.currentEventID.asObservable();
 
 
+  openLoginModal(){ this.loginModalOpen.next(true);}
+  closeLoginModal(){ this.loginModalOpen.next(false);}
+
+  openSignupModal() {this.signupModalOpen.next(true);}
+  closeSignupModal(){this.signupModalOpen.next(false);}
+
+  openLogoutModal()  { this.logoutModalOpen.next(true); }
+  closeLogoutModal() { this.logoutModalOpen.next(false); }
+
   openJoinModal(eventId: number){
     this.currentEventID.next(eventId);
-    this.joinModalOpen.next(true);
+    this.joinModalOpen.next(true);}
 
-  }
   closeJoinModal(){
     this.joinModalOpen.next(false);
-    this.currentEventID.next(null);
-  }
-
-
+    this.currentEventID.next(null);}
 
 
 

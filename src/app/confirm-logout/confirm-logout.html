@@ -1,0 +1,19 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="close()">
+  <div class="confirm-box" (click)="$event.stopPropagation()">
+
+    <button class="close-btn" (click)="close()" type="button">&times;</button>
+
+    <div class="confirm-icon-wrap">
+      <i class="fa-solid fa-right-from-bracket"></i>
+    </div>
+
+    <h2>Se déconnecter</h2>
+    <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
+
+    <div class="confirm-btns">
+      <button class="btn-cancel" (click)="close()">Annuler</button>
+      <button class="btn-logout" (click)="confirm()">Se déconnecter</button>
+    </div>
+
+  </div>
+</div>

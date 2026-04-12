@@ -128,3 +128,41 @@ div[name="nomOrganisation"] {
   transform: scale(1.1);
 }
 
+.password-rules {
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.password-rules ul {
+  padding-left: 18px;
+  margin: 5px 0;
+}
+
+.password-rules li {
+  color: red;
+  transition: 0.2s;
+}
+
+.password-rules li.valid {
+  color: green;
+  font-weight: 500;
+}
+
+.rules-title {
+  font-weight: 500;
+  color: red;
+}
+
+.rules-title.invalid {
+  color: red;
+}
+
+.password-rules li.valid::marker {
+  content: "✔ ";
+  color: green;
+}
+
+.password-rules li:not(.valid)::marker {
+  content: "✖ ";
+  color: red;
+}

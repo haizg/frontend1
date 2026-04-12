@@ -6,15 +6,17 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ModalService } from '../services/modal.service';
 import { UserService } from '../services/user.service';
 import { TranslateLangService } from '../services/translate-lang.service';
+import { ConfirmLogout } from '../confirm-logout/confirm-logout';
 
 @Component({
   selector: 'app-navbar',
-  standalone: true,  // Make sure this is standalone
+  standalone: true,
   imports: [
     CommonModule,
     RouterLink,
     FormsModule,
-    TranslateModule  // IMPORTANT: Add this for translate pipe
+    TranslateModule,
+    ConfirmLogout
   ],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css'],
@@ -25,16 +27,16 @@ export class Navbar implements OnInit {
   currentLang = 'fr';
   userRole = '';
 
+
   constructor(
     private router: Router,
-    private modalService: ModalService,
+    public modalService: ModalService,
     private userService: UserService,
-public translateLangService: TranslateLangService,  // Change private to public    private translateService: TranslateService,  // For direct use if needed
+    public translateLangService: TranslateLangService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
-    // Subscribe to language changes
     this.translateLangService.currentLang$.subscribe(lang => {
       this.currentLang = lang;
     });
@@ -67,7 +69,19 @@ public translateLangService: TranslateLangService,  // Change private to public 
     this.modalService.openSignupModal();
   }
 
+/*
   logOut() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('user');
+    this.userService.clearUser();
+    this.router.navigate(['/home']);
+  }
+
+
+
+ // OLD LOGOUT BEFORE MODAL:
+ logOut() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('token');
       localStorage.removeItem('role');
@@ -77,7 +91,7 @@ public translateLangService: TranslateLangService,  // Change private to public 
     this.userService.clearUser();
     this.router.navigate(['/api/home']);
   }
-
+*/
   get isAdmin(): boolean {
     return this.userRole === 'ROLE_ADMIN';
   }

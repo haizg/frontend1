@@ -16,18 +16,18 @@ import { UserService } from '../../services/user.service';
 })
 export class JoinCta {
   constructor(
-    // REMOVE: public lang: LangService,
-    private translateLang: TranslateLangService, // ADD THIS
+    private translateLang: TranslateLangService,
     private cdr: ChangeDetectorRef,
     private modalService: ModalService,
     private userService: UserService
   ){}
-
+  showAlreadyMsg = false;
   ngOnInit() {
       //this.lang.lang$.subscribe(() => {
         //this.cdr.detectChanges();
       //});
     }
+  /*
  openAuth() {
     const user = this.userService.getUser();
 
@@ -36,5 +36,17 @@ export class JoinCta {
     } else {
       this.modalService.openSignupModal();
     }
+  }*/
+  onJoinClick() {
+    if (this.userService.getUser()) {
+      this.showAlreadyMsg = true;
+      setTimeout(() => {
+        this.showAlreadyMsg = false;
+        this.cdr.detectChanges();
+      }, 3000);
+      return;
+    }
+    this.modalService.openLoginModal();
   }
+
 }

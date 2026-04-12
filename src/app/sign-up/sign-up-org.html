@@ -40,9 +40,32 @@
 
     <div>
       <label>{{ 'login.mdp' | translate }}</label>
-      <input type="password" name="mdp" placeholder="Mot de passe" [(ngModel)]="mdp" required #mdpRef="ngModel">
+      <input type="password"
+             name="mdp"
+             placeholder="Mot de passe"
+             [(ngModel)]="mdp"
+             required
+             pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_-])[A-Za-z\d@$!%*?&.#_-]{8,}$"
+             #mdpRef="ngModel">
+      <br>
+
     </div>
     <small *ngIf="mdpRef.errors?.['required'] && mdpRef.touched">* Champs obligatoire</small>
+    <div class="password-rules" *ngIf="mdpRef.touched">
+
+      <p class="rules-title" [class.invalid]="mdpRef.invalid">
+        Le mot de passe doit contenir :
+      </p>
+
+      <ul>
+        <li [class.valid]="mdp.match('(?=.*[a-z])')">1 minuscule</li>
+        <li [class.valid]="mdp.match('(?=.*[A-Z])')">1 majuscule</li>
+        <li [class.valid]="mdp.match('(?=.*\\d)')">1 chiffre</li>
+        <li [class.valid]="mdp.match('(?=.*[@$!%*?&.#_-])')">1 caractère spécial</li>
+        <li [class.valid]="mdp.length >= 8">Au moins 8 caractères</li>
+      </ul>
+
+    </div>
     <br>
 
     <div>

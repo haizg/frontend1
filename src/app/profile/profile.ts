@@ -7,9 +7,8 @@ import {Navbar} from '../navbar/navbar';
 import {Footer} from '../shared/footer/footer';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core'; // ADD THIS
-// REMOVE: import {LangService} from '../services/lang.service';
-import { TranslateLangService } from '../services/translate-lang.service'; // ADD THIS
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateLangService } from '../services/translate-lang.service';
 import {RouterModule} from '@angular/router';
 
 @Component({

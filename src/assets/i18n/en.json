@@ -23,7 +23,9 @@
     "ttcategories": "All categories",
     "modifier": "Modify",
     "supprimer": "Delete",
-    "alreadyparticipated": "Already participated"
+    "alreadyparticipated": "Already participated",
+    "consulter": "View my event"
+
   },
   "home": {
     "organisateur": "Create, manage, and promote your cultural events with ease. Your platform for organizing unforgettable experiences.",
@@ -31,7 +33,9 @@
     "visiteur": "Organize, manage, and participate in your events with ease. A modern platform to create unforgettable experiences.",
     "createevent": "Create your events",
     "createeventbtn": "Create an event",
-    "createeventbtndsc": "Organize your next event"
+    "createeventbtndsc": "Organize your next event",
+    "consulter": "View my event"
+
   },
   "joincta": {
     "join": "Join Invitini",
@@ -91,10 +95,12 @@
     "personnes": "people",
     "about": "About this event",
     "modifier": "Edit",
+    "program": "Program",
     "supprimer": "Delete",
     "stats": "Statistics",
     "confirmed": "Confirmed registrations",
     "expected": "Expected attendees",
+    "notconfirmed": "Not confirmed",
     "totalcapacity": "Total capacity",
     "fillrate": "Fill rate",
     "filling": "Filling",
@@ -114,6 +120,9 @@
     "title_placeholder": "Ex: Tunis Marathon",
     "description": "Description",
     "description_placeholder": "Describe your event...",
+    "program": "Program",
+    "program_placeholder": "Describe the schedule: 09:00 - Welcome, 10:00 - Conference...",
+    "program_info": "Optional — describe the event schedule",
     "category": "Category",
     "select_category": "Select a category",
     "category_sport": "Sport",
@@ -154,6 +163,9 @@
     "title_placeholder": "Ex: Tunis Marathon",
     "description": "Description",
     "description_placeholder": "Describe your event...",
+    "program": "Program",
+    "program_placeholder": "Describe the schedule: 09:00 - Welcome, 10:00 - Conference...",
+    "program_info": "Optional — describe the event schedule",
     "category": "Category",
     "select_category": "Select a category",
     "category_sport": "Sport",

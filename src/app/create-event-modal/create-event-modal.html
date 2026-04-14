@@ -22,6 +22,7 @@
           </small>
         </div>
 
+        <!-- DESCRIPTION FIELD -->
         <div class="form-group full-width">
           <label>{{ 'createevent.description' | translate }} *</label>
           <textarea
@@ -33,6 +34,18 @@
           <small class="error" *ngIf="eventForm.get('description')?.invalid && eventForm.get('description')?.touched">
             {{ 'createevent.error_description_min' | translate }}
           </small>
+        </div>
+
+        <!-- PROGRAM FIELD -->
+        <div class="form-group full-width">
+          <label>{{ 'createevent.program' | translate }}</label>
+          <textarea
+            formControlName="program"
+            [placeholder]="'createevent.program_placeholder' | translate"
+            rows="5"
+            class="form-input"
+            [disabled]="isLoading"></textarea>
+          <small class="info-text">{{ 'createevent.program_info' | translate }}</small>
         </div>
 
         <div class="form-group">
@@ -101,10 +114,10 @@
             <img [src]="imagePreview" alt="Preview" class="image-preview">
             <div class="image-actions">
               <button type="button" class="btn-change" (click)="fileInput.click()">
-                 {{ 'createevent.change_image' | translate }}
+                {{ 'createevent.change_image' | translate }}
               </button>
               <button type="button" class="btn-remove" (click)="removeImage()">
-                 {{ 'createevent.remove_image' | translate }}
+                {{ 'createevent.remove_image' | translate }}
               </button>
             </div>
           </div>

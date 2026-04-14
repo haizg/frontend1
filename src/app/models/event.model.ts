@@ -14,4 +14,6 @@ export interface EventModel {
   maxParticipants?: number;
   isFull?: boolean;
   approved?: boolean;
+  program?: string;
+
 }

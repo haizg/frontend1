@@ -107,8 +107,9 @@
           </div>
 -->
           <div *ngIf="canModifyEvent(event)" class="event-actions">
-            <button [routerLink]="['/events', event.id]" style="cursor:pointer;" class="btn btn-primary participate-btn" style="font-size: 16px; font-weight: bold;">
-              Consulter mon évènement
+            <button [routerLink]="['/events', event.id]" class="btn-participate">
+              <i class="fa-solid fa-eye"></i>
+              {{ 'home.consulter' | translate }}
             </button>
           </div>
           <div *ngIf="isAdmin" class="event-actions">

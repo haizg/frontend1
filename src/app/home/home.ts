@@ -120,6 +120,24 @@ export class Home implements AfterViewInit {
     }
   }
 
+  // Method to sort events by closest to today's date first
+  private sortEventsByClosestToToday(events: EventModel[]): EventModel[] {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return [...events].sort((a, b) => {
+      const dateA = new Date(a.date);
+      dateA.setHours(0, 0, 0, 0);
+      const dateB = new Date(b.date);
+      dateB.setHours(0, 0, 0, 0);
+
+      const diffA = Math.abs(dateA.getTime() - today.getTime());
+      const diffB = Math.abs(dateB.getTime() - today.getTime());
+
+      return diffA - diffB; // Smaller difference first (closest to today)
+    });
+  }
+
   loadEvents() {
     this.isLoadingEvents = true;
     this.events = [];
@@ -136,8 +154,10 @@ export class Home implements AfterViewInit {
     this.eventService.getEvents().subscribe({
       next: (data) => {
         clearTimeout(slowConnectionTimeout);
-        this.events = data;
-        this.availableEvents = data.filter(event => !event.isFull);
+        // Sort events from closest to today's date to furthest
+        const sortedData = this.sortEventsByClosestToToday(data);
+        this.events = sortedData;
+        this.availableEvents = sortedData.filter(event => !event.isFull);
         this.isLoadingEvents = false;
         this.cdr.detectChanges();
       },

@@ -115,7 +115,7 @@ export class EventsPage {
 
     this.eventService.getEvents().subscribe({
       next: (data) => {
-        this.allEvents = data;
+        this.allEvents = data ;
         this.categories = Array.from(new Set(data.map(e => e.category)));
         this.applyFilters();
         this.isLoadingEvents = false;

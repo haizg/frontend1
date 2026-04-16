@@ -44,6 +44,7 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   background: white;
+  height: 100%;
 }
 
 .event-card:hover {
@@ -125,15 +126,15 @@
 
 .btn-full {
   width: 100%;
-  padding: 14px;
+  padding: 10px;
   background: #e0e0e0;
   color: #666;
   border: 2px solid #ccc;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   cursor: not-allowed;
-  margin-top: 15px;
+  margin-top: 12px;
 }
 
 .event-meta {
@@ -229,17 +230,28 @@
   pointer-events: none;
   user-select: none;
 }
-
-.btn-edit {
+.btn-edit,
+.btn-delete {
+  flex: 1;
+  display: flex;           /* Add this */
+  align-items: center;     /* Add this */
+  justify-content: center; /* Add this */
+  gap: 8px;               /* Add this - space between icon and text */
   background: #2a6262;
   color: white;
-  padding: 10px 20px;
+  padding: 10px ;
   border-radius: 8px;
   border: none;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s;
-  flex: 1;
+  min-width: 0;           /* Add this - prevents flex overflow */
+  font-size: 14px;
+  white-space: nowrap; /* Add this - prevents text wrapping */
+}
+
+.btn-edit {
+  background: #2a6262;
 }
 
 .btn-edit:hover {
@@ -249,14 +261,6 @@
 
 .btn-delete {
   background: #dc3545;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s;
-  flex: 1;
 }
 
 .btn-delete:hover {
@@ -264,10 +268,22 @@
   transform: translateY(-2px);
 }
 
+/* Make icons the same size */
+.btn-edit i,
+.btn-delete i {
+  width: 14px;
+  height: 14px;
+  font-size: 14px;
+  display: inline-block;
+}
+.btn-participate i {
+  font-size: 14px;
+  margin-right: 5px;
+}
 .event-actions {
   display: flex;
   gap: 10px;
-  margin-top: 15px;
+  margin-top: 12px;
 }
 
 .events-filters {
@@ -303,7 +319,7 @@
   background-color: #e8f5e9;
   color: #2e7d32;
   border: 1px solid #a5d6a7;
-  padding: 8px 16px;
+  padding: 10px;
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 500;
@@ -311,6 +327,7 @@
   width: 100%;
   text-align: center;
   opacity: 0.9;
+  margin-top: 12px;
 }
 
 .event-meta i,

@@ -259,6 +259,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  gap: 4px;
 }
 
 
@@ -293,7 +294,24 @@
   font-size: 13px;
   border-radius: 6px;
 }
-
+.btn-participate {
+ margin-top: auto;
+   width: 100%;
+   padding: 10px;
+   background: #2a6262;
+   color: white;
+   border: none;
+   border-radius: 8px;
+   font-size: 14px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: background 0.3s ease;
+   margin-top: 12px;
+}
+.btn-participate:hover {
+  background: #306e6e;
+  transform: translateY(-2px);
+}
 .no-events {
   text-align: center;
   color: lightgray;
@@ -382,13 +400,21 @@
   gap: 10px;
   margin-top: 15px;
 }
+
 .event-capacity {
   color: #666;
   font-size: 14px;
   margin: 10px 0;
   font-weight: 500;
 }
-.btn-edit {
+
+.btn-edit,
+.btn-delete {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   background: #2a6262;
   color: white;
   padding: 10px 20px;
@@ -397,7 +423,12 @@
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s;
-  flex: 1;
+  min-width: 0;          /* Prevents overflow issues */
+  white-space: nowrap;   /* Prevents text wrapping */
+}
+
+.btn-edit {
+  background: #2a6262;
 }
 
 .btn-edit:hover {
@@ -407,14 +438,6 @@
 
 .btn-delete {
   background: #dc3545;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s;
-  flex: 1;
 }
 
 .btn-delete:hover {
@@ -422,13 +445,13 @@
   transform: translateY(-2px);
 }
 
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+.btn-edit i,
+.btn-delete i {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
 }
-
 .see-all {
   font-size: 15px;
   color: #2a6262;
@@ -442,9 +465,9 @@
 }
 
 .action-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.9;
   cursor: not-allowed;
-  background: #888;
+  background: #ccc;
 }
 
 .verified-badge {
@@ -460,7 +483,10 @@
   margin-left: 4px;
   font-weight: 700;
 }
-
+.btn-participate i {
+  font-size: 14px;
+  margin-right: 5px;
+}
 .btn-already-participated {
   background-color: var(--color-background-success, #e8f5e9);
   color: var(--color-text-success, #2e7d32);

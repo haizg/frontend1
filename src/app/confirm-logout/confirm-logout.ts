@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { ModalService } from '../services/modal.service';
 import { Router, RouterLink } from "@angular/router";
 import { UserService } from '../services/user.service';
-
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-confirm-logout',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './confirm-logout.html',
   styleUrl: './confirm-logout.css',
 })

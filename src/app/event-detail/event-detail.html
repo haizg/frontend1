@@ -55,7 +55,11 @@
         <p>{{ event!.description }}</p>
       </div>
 
-      <!-- ORGANISATEUR ACTIONS -->
+      <div class="event-program" *ngIf="event!.program && event!.program.trim() !== ''">
+        <h2>{{ 'eventdetail.program' | translate }}</h2>
+        <div class="program-content">{{ event!.program }}</div>
+      </div>
+
       <div *ngIf="isAdmin" class="org-actions">
         <button (click)="openEditEventModal()" class="btn-edit"> {{ 'eventdetail.modifier' | translate }}</button>
         <button (click)="deleteEvent()" class="btn-delete"> {{ 'eventdetail.supprimer' | translate }}</button>
@@ -85,7 +89,7 @@
           </div>
           <div class="stat-card stat-card-warning">
             <span class="stat-number" >{{ unconfirmedParticipants.length }}</span>
-            <span class="stat-label">Non confirmées</span>
+            <span class="stat-label">{{ 'eventdetail.notconfirmed' | translate }}</span>
           </div>
           <div class="stat-card">
             <span class="stat-number">{{ event!.maxParticipants }}</span>

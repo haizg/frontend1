@@ -18,7 +18,27 @@
   height: 100%;
   object-fit: cover;
 }
+.event-program {
+  margin-bottom: 40px;
+}
 
+.event-program h2 {
+  font-size: 24px;
+  color: #2a6262;
+  margin-bottom: 16px;
+  font-family: 'Georgia', serif;
+}
+
+.program-content {
+  background: #f9f9f9;
+  border-left: 4px solid #2a6262;
+  padding: 20px 24px;
+  border-radius: 0 10px 10px 0;
+  font-size: 15px;
+  color: #444;
+  line-height: 2;
+  white-space: pre-line;
+}
 .event-hero-overlay {
   position: absolute;
   inset: 0;

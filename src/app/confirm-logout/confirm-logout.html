@@ -7,12 +7,12 @@
       <i class="fa-solid fa-right-from-bracket"></i>
     </div>
 
-    <h2>Se déconnecter</h2>
-    <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
+    <h2>{{ 'logout.title' | translate }}</h2>
+    <p>{{ 'logout.message' | translate }}</p>
 
     <div class="confirm-btns">
-      <button class="btn-cancel" (click)="close()">Annuler</button>
-      <button class="btn-logout" (click)="confirm()">Se déconnecter</button>
+      <button class="btn-cancel" (click)="close()">{{ 'logout.cancel' | translate }}</button>
+      <button class="btn-logout" (click)="confirm()">{{ 'logout.confirm' | translate }}</button>
     </div>
 
   </div>

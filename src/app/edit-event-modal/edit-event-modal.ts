@@ -37,7 +37,8 @@ export class EditEventModal {
       time: ['', Validators.required],
       location: ['', Validators.required],
       imageUrl: [''],
-      maxParticipants: [null, [Validators.min(1)]]
+      maxParticipants: [null, [Validators.min(1)]],
+      program: ['']  // ADD PROGRAM FIELD
     });
   }
 
@@ -57,27 +58,26 @@ export class EditEventModal {
       time: event.time,
       location: event.location,
       imageUrl: event.imageUrl || '',
-      maxParticipants: event.capacity || null
+      maxParticipants: event.maxParticipants || null,
+      program: event.program || ''  // ADD PROGRAM VALUE
     });
 
-      const lockedFields = ['title', 'description', 'category', 'date', 'time', 'location', 'imageUrl'];
-      if (isApproved) {
-        lockedFields.forEach(f => this.eventForm.get(f)?.disable());
-        this.eventForm.get('maxParticipants')?.enable();
-        this.eventForm.get('maxParticipants')?.setValidators([
-          Validators.required,
-          Validators.min(confirmedCount || 1)
-        ]);
-      } else {
-        lockedFields.forEach(f => this.eventForm.get(f)?.enable());
-        this.eventForm.get('maxParticipants')?.setValidators([Validators.min(1)]);
-      }
-      this.eventForm.get('maxParticipants')?.updateValueAndValidity();
+    const lockedFields = ['title', 'description', 'category', 'date', 'time', 'location', 'imageUrl'];
+    if (isApproved) {
+      lockedFields.forEach(f => this.eventForm.get(f)?.disable());
+      this.eventForm.get('maxParticipants')?.enable();
+      this.eventForm.get('program')?.enable();  // ENABLE PROGRAM FOR EDITING EVEN WHEN LOCKED
+      this.eventForm.get('maxParticipants')?.setValidators([
+        Validators.required,
+        Validators.min(confirmedCount || 1)
+      ]);
+    } else {
+      lockedFields.forEach(f => this.eventForm.get(f)?.enable());
+      this.eventForm.get('maxParticipants')?.setValidators([Validators.min(1)]);
+      this.eventForm.get('program')?.enable();  // ENABLE PROGRAM FOR EDITING
+    }
+    this.eventForm.get('maxParticipants')?.updateValueAndValidity();
   }
-
-
-
-
 
   close() {
     this.isVisible = false;
@@ -113,15 +113,22 @@ export class EditEventModal {
       'Authorization': `Bearer ${token}`
     });
 
+    // Prepare update data
+    const updateData = {
+      maxParticipants: this.eventForm.get('maxParticipants')?.value,
+      program: this.eventForm.get('program')?.value  // ADD PROGRAM TO UPDATE DATA
+    };
+
     if (this.isLocked) {
+      // When locked, only update capacity AND program
       this.http.put(
-        `http://localhost:8081/api/events/${this.currentEvent.id}/capacity`,
-        { maxParticipants: this.eventForm.get('maxParticipants')?.value },
+        `http://localhost:8081/api/events/${this.currentEvent.id}/capacity-and-program`,
+        updateData,
         { headers }
       ).subscribe({
         next: () => {
           this.isLoading = false;
-          this.successMessage = 'Capacité mise à jour avec succès.';
+          this.successMessage = 'Capacité et programme mis à jour avec succès.';
           setTimeout(() => { this.close(); this.eventUpdated.emit(); }, 1500);
         },
         error: (err) => {
@@ -134,45 +141,15 @@ export class EditEventModal {
       return;
     }
 
-/*
+    // Full edit for unapproved events - include program
+    const fullUpdateData = {
+      ...this.eventForm.getRawValue(),
+      program: this.eventForm.get('program')?.value  // ENSURE PROGRAM IS INCLUDED
+    };
+
     this.http.put(
       `http://localhost:8081/api/events/${this.currentEvent.id}`,
-      this.eventForm.value,
-      { headers }
-    ).subscribe({
-      next: (response: any) => {
-        console.log('Event updated:', response);
-        this.isLoading = false;
-
-        this.translate.get('editevent.success_message').subscribe(msg => {
-          this.successMessage = msg;
-        });
-
-        setTimeout(() => {
-          this.close();
-          this.eventUpdated.emit();
-        }, 1500);
-      },
-      error: (error) => {
-        console.error('Error updating event:', error);
-        this.isLoading = false;
-
-        if (error.status === 403) {
-          this.translate.get('editevent.error_permission').subscribe(msg => {
-            this.errorMessage = msg;
-          });
-        } else {
-          this.translate.get('editevent.error_update_failed').subscribe(msg => {
-            this.errorMessage = msg;
-          });
-        }
-      }
-    });*/
-
-    // Full edit for unapproved events
-    this.http.put(
-      `http://localhost:8081/api/events/${this.currentEvent.id}`,
-      this.eventForm.getRawValue(), // getRawValue includes disabled fields
+      fullUpdateData,
       { headers }
     ).subscribe({
       next: () => {
@@ -195,6 +172,5 @@ export class EditEventModal {
         }
       }
     });
-
   }
 }

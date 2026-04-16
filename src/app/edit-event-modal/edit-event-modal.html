@@ -10,12 +10,10 @@
       </div>
     </div>
 
-
     <div class="modal-header">
       <h2>{{ 'editevent.title' | translate }}</h2>
       <button class="close-btn" (click)="close()">✕</button>
     </div>
-
 
     <!-- LOCKED BANNER — only shown when event is approved -->
     <div class="locked-banner" *ngIf="isLocked">
@@ -24,13 +22,11 @@
         <strong>Événement publié — modifications limitées</strong>
         <span>
           Cet événement a été approuvé et des participants se sont inscrits.
-          Seule la <strong>capacité maximale</strong> peut être modifiée.
-          Minimum autorisé : {{ minCapacity }} (inscrits confirmés).
+          Seule la <strong>capacité maximale</strong> et le <strong>programme</strong> peuvent être modifiés.
+          Minimum autorisé pour la capacité : {{ minCapacity }} (inscrits confirmés).
         </span>
       </div>
     </div>
-
-
 
     <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
       <div class="form-grid">
@@ -63,6 +59,23 @@
           </small>
         </div>
 
+        <!-- PROGRAM FIELD - Always editable like maxParticipants -->
+        <div class="form-group full-width" [class.field-highlighted]="isLocked">
+          <label>
+            {{ 'editevent.program' | translate }}
+            <span *ngIf="isLocked" class="editable-tag">
+              <i class="fa-solid fa-pen"></i> Modifiable
+            </span>
+          </label>
+          <textarea
+            formControlName="program"
+            [placeholder]="'editevent.program_placeholder' | translate"
+            rows="5"
+            class="form-input"
+            [disabled]="isLoading"></textarea>
+          <small class="info-text">{{ 'editevent.program_info' | translate }}</small>
+        </div>
+
         <div class="form-group" [class.field-locked]="isLocked">
           <label>
             {{ 'editevent.category' | translate }}
@@ -79,7 +92,7 @@
           </select>
         </div>
 
-        <div class="form-group"  [class.field-locked]="isLocked">
+        <div class="form-group" [class.field-locked]="isLocked">
           <label>{{ 'editevent.date' | translate }} *</label>
           <input
             type="date"
@@ -139,11 +152,11 @@
       </div>
 
       <div class="error-message" *ngIf="errorMessage">
-         {{ errorMessage }}
+        {{ errorMessage }}
       </div>
 
       <div class="success-message" *ngIf="successMessage">
-         {{ successMessage }}
+        {{ successMessage }}
       </div>
 
       <div class="modal-footer">

@@ -73,8 +73,9 @@
              -->
 
             <div *ngIf="canModifyEvent(event)" class="event-actions">
-              <button [routerLink]="['/events', event.id]" style="cursor:pointer;" class="btn-participate" style="font-size: 16px; font-weight: bold;">
-                Consulter mon évènement
+              <button [routerLink]="['/events', event.id]" class="btn-participate">
+                <i class="fa-solid fa-eye"></i>
+                {{ 'events.consulter' | translate }}
               </button>
             </div>
 

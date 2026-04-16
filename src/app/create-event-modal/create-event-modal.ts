@@ -38,7 +38,9 @@ export class CreateEventModal {
       time: ['', Validators.required],
       location: ['', Validators.required],
       imageUrl: [''],
-      maxParticipants: [null, [Validators.min(1)]]
+
+      maxParticipants: [null, [Validators.min(1)]],
+       program: ['']
     });
   }
 

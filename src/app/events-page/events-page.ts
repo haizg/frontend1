@@ -202,11 +202,8 @@ export class EventsPage {
     this.isDeleting = true;
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    const url = this.isAdmin
-      ? `http://localhost:8081/api/events/admin/${eventModel.id}`
-      : `http://localhost:8081/api/events/${eventModel.id}`;
 
-    this.http.delete(url, { headers }).subscribe({
+    this.http.delete(`http://localhost:8081/api/admin/${eventModel.id}`, { headers }).subscribe({
       next: () => {
         this.isDeleting = false;
         this.loadEvents();

@@ -22,8 +22,8 @@
   width: 50px;
   height: 50px;
   border: 4px solid #e0e0e0;
-  border-top: 4px solid #2a6262;
-  border-right: 4px solid #2a6262;
+  border-top: 4px solid #A53A6B;
+  border-right: 4px solid #A53A6B;
   border-radius: 50%;
   animation: spin-modal 0.8s linear infinite;
   margin: 0 auto;
@@ -31,7 +31,7 @@
 
 .loading-text-modal {
   margin-top: 15px;
-  color: #2a6262;
+  color: #A53A6B;
   font-size: 16px;
   font-weight: 500;
 }
@@ -103,7 +103,7 @@ button:disabled {
 .modal-header h2 {
   font-family: 'Georgia', serif;
   font-size: 28px;
-  color: #2a6262;
+  color: #A53A6B;
   margin: 0;
 }
 
@@ -165,11 +165,11 @@ form {
 
 .form-input:focus {
   outline: none;
-  border-color: #2a6262;
+  border-color: #A53A6B;
 }
 
 .form-input.ng-invalid.ng-touched {
-  border-color: #dc3545;
+  border-color: #A53A6B;
 }
 
 textarea.form-input {
@@ -228,12 +228,12 @@ textarea.form-input {
 }
 
 .btn-submit {
-  background: #2a6262;
+  background: #A53A6B;
   color: white;
 }
 
 .btn-submit:hover:not(:disabled) {
-  background: #306e6e;
+  background: #8E2A5A;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(42, 98, 98, 0.3);
 }
@@ -340,12 +340,12 @@ textarea.form-input {
 
 /* Highlighted editable field */
 .field-highlighted .form-input {
-  border-color: #2a6262;
-  background: #f0faf9;
+  border-color: #A53A6B;
+  background: rgba(142, 42, 90, 0.07);
 }
 
 .field-highlighted label {
-  color: #2a6262;
+  color: #A53A6B;
   font-weight: 600;
 }
 
@@ -356,8 +356,8 @@ textarea.form-input {
   margin-left: 8px;
   font-size: 11px;
   font-weight: 600;
-  color: #2a6262;
-  background: #e0f2f1;
+  color: #A53A6B;
+  background: rgba(142, 42, 90, 0.07);
   padding: 2px 8px;
   border-radius: 10px;
 }

@@ -6,7 +6,7 @@
 
 .admin-sidebar {
   width: 260px;
-  background: #1a3a3a;
+  background: #A53A6B;
   color: white;
   display: flex;
   flex-direction: column;
@@ -33,10 +33,11 @@
 }
 
 .admin-badge {
-  background: #2a6262;
+  background: rgba(142, 42, 90, 0.07);
   color: white;
   padding: 3px 10px;
-  border-radius: 20px;
+  border-radius: 20px ;
+  border: 1px solid #8E2A5A;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -68,9 +69,9 @@
 }
 
 .sidebar-nav button.active {
-  background: rgba(42,98,98,0.4);
+  background: #8E2A5A;
   color: white;
-  border-left: 3px solid #4db8b8;
+  border-left: 3px solid #FCFAF7;
 }
 
 .sidebar-footer {
@@ -95,34 +96,17 @@
   color: white;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .btn-logout {
   width: 100%;
   padding: 10px;
-  background: rgba(220,53,69,0.2);
+  background: #8E2A5A;
   color: #ff8080;
   border: 1px solid rgba(220,53,69,0.3);
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s;
+  color: white;
 }
 
 .btn-logout:hover {
@@ -139,7 +123,7 @@
 .page-title {
   font-size: 28px;
   font-weight: 700;
-  color: #1a3a3a;
+  color: #A53A6B;
   margin-bottom: 8px;
   font-family: 'Georgia', serif;
 }
@@ -149,11 +133,6 @@
   margin-bottom: 24px;
   font-size: 14px;
 }
-
-
-
-
-/*STAT*/
 
 .stats-grid {
   display: grid;
@@ -205,7 +184,7 @@
 
 .section-card h2 {
   font-size: 18px;
-  color: #1a3a3a;
+  color: #A53A6B;
   margin-bottom: 20px;
   font-family: 'Georgia', serif;
 }
@@ -240,7 +219,7 @@
 
 
 .admin-table th {
-  background: #1a3a3a;
+  background: #A53A6B;
   color: white;
   font-size: 12px;
   font-weight: 700;
@@ -270,8 +249,8 @@
 
 
 .category-badge {
-  background: #e8f5f5;
-  color: #2a6262;
+  background: rgba(142, 42, 90, 0.07);
+  color: #8E2A5A;
   padding: 3px 10px;
   border-radius: 20px;
   font-size: 11px;
@@ -297,14 +276,6 @@
   background: #e8eaf6;
   color: #3949ab;
 }
-
-
-
-
-
-
-
-
 
 .event-link {
   color: #2a6262;
@@ -355,13 +326,6 @@
   align-items: center;
   margin-bottom: 8px;
 }
-
-
-
-
-
-/* ACTION BUTTONS */
-
 
 
 .btn-delete-sm {
@@ -426,10 +390,6 @@
 
 .btn-view-sm:hover { background: #e0e0e0; }
 
-
-
-
-
 .btn-add {
   background: #2a6262;
   color: white;
@@ -444,10 +404,8 @@
 
 .btn-add:hover { background: #306e6e; }
 
-
-
 .btn-save {
-  background: #2a6262;
+  background: #8E2A5A;
   color: white;
   border: none;
   padding: 10px 24px;
@@ -465,13 +423,6 @@
   cursor: pointer;
   font-weight: 600;
 }
-
-
-
-
-
-
-
 
 .form-row {
   display: flex;
@@ -493,7 +444,7 @@
   margin-bottom: 12px;
 }
 
-.form-input:focus { border-color: #2a6262; }
+.form-input:focus { border-color: #8E2A5A; }
 
 .form-actions {
   display: flex;
@@ -508,8 +459,6 @@
   font-size: 13px;
   margin-top: 8px;
 }
-
-
 
 
 /* DETAIL PANEL */
@@ -538,7 +487,7 @@
 
 .detail-panel-header h3 {
   font-size: 18px;
-  color: #1a3a3a;
+  color: #8E2A5A;
   margin: 0;
 }
 
@@ -557,7 +506,7 @@
 }
 
 .detail-org {
-  color: #2a6262;
+  color: #8E2A5A;
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 16px;

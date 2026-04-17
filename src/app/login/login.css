@@ -13,7 +13,7 @@ form{
 }
 h1{
   padding-bottom: 8px;
-  color: #2a6262;
+  color: #A53A6B;
 
 }
 form input {
@@ -36,7 +36,7 @@ form label {
 .login-btn{
   width: 85%;
   padding: 10px;
-  background: #2a6262;
+  background: #A53A6B;
   color: white;
   border: none;
   border-radius: 18px;
@@ -45,7 +45,7 @@ form label {
 .login-btn:hover{
   font-weight: bold;
   font-size: small;
-  background: #306e6e;
+  background: #B54A7A;
 }
 small{
   color: red;
@@ -76,16 +76,16 @@ small{
 }
 
 .forgot-password-link a {
-  color: #2a6262;
+  color: #B54A7A;
   text-decoration: none;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 550;
   cursor: pointer;
   transition: color 0.3s;
 }
 
 .forgot-password-link a:hover {
-  color: #1a4d4d;
+  color: #B54A7A;
   text-decoration: underline;
 }
 
@@ -116,7 +116,7 @@ small{
 
 .switch-auth span:hover {
   text-decoration: underline;
-  color: #B30059; /* your darker magenta */
+  color: #B30059;
 }
 
 

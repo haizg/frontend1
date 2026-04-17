@@ -24,14 +24,14 @@
 
 .event-program h2 {
   font-size: 24px;
-  color: #2a6262;
+  color: #A53A6B;
   margin-bottom: 16px;
   font-family: 'Georgia', serif;
 }
 
 .program-content {
   background: #f9f9f9;
-  border-left: 4px solid #2a6262;
+  border-left: 4px solid #A53A6B;
   padding: 20px 24px;
   border-radius: 0 10px 10px 0;
   font-size: 15px;
@@ -63,7 +63,7 @@
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 2px;
-  background: #2a6262;
+  background:  #A53A6B;
   color: white;
   padding: 4px 12px;
   border-radius: 20px;
@@ -93,8 +93,17 @@
 
 .info-label {
   font-size: 13px;
-  color: #888;
+  color: #8E2A5A;
   font-weight: 600;
+}
+
+.info-label i,
+.event-capacity i {
+  width: 16px;
+  text-align: center;
+  color: #A53A6B;
+  margin-right: 6px;
+  font-size: 13px;
 }
 
 .info-value {
@@ -109,7 +118,7 @@
 
 .event-description h2 {
   font-size: 24px;
-  color: #2a6262;
+  color: #A53A6B;
   margin-bottom: 16px;
   font-family: 'Georgia', serif;
 }
@@ -124,7 +133,7 @@
   display: block;
   width: 100%;
   padding: 16px;
-  background: #2a6262;
+  background:#B54A7A ;
   color: white;
   border: none;
   border-radius: 12px;
@@ -136,7 +145,7 @@
 }
 
 .btn-participer:hover {
-  background: #306e6e;
+  background: #A53A6B;
 }
 
 .loading {
@@ -162,7 +171,7 @@
 .btn-edit {
   flex: 1;
   padding: 14px;
-  background: #2a6262;
+  background: #A53A6B;
   color: white;
   border: none;
   border-radius: 10px;
@@ -174,7 +183,7 @@
   transition: background 0.3s;
 }
 
-.btn-edit:hover { background: #306e6e; }
+.btn-edit:hover { background: #B54A7A; }
 
 .btn-delete {
   flex: 1;
@@ -197,7 +206,7 @@
 
 .stats-section h2, .participants-section h2 {
   font-size: 22px;
-  color: #2a6262;
+  color: #A53A6B;
   margin-bottom: 20px;
   font-family: 'Georgia', serif;
 }
@@ -210,8 +219,8 @@
 }
 
 .stat-card {
-  background: #f0faf5;
-  border: 1px solid #a8d8bc;
+  background: rgba(142, 42, 90, 0.07);
+  border: 1px solid #A53A6B;
   border-radius: 12px;
   padding: 20px;
   text-align: center;
@@ -223,7 +232,7 @@
 .stat-number {
   font-size: 32px;
   font-weight: 800;
-  color: #2a6262;
+  color: #A53A6B;
 }
 
 .stat-label {
@@ -254,7 +263,7 @@
 
 .capacity-bar-fill {
   height: 100%;
-  background: #2a6262;
+  background: #A53A6B;
   border-radius: 6px;
   transition: width 0.5s ease;
 }
@@ -273,7 +282,7 @@
 }
 
 .participants-table th {
-  background: #2a6262;
+  background: #B54A7A;
   color: white;
   padding: 12px 16px;
   text-align: left;
@@ -319,8 +328,8 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  background: #fff3e0;
-  border: 1px solid #ffe0b2;
+  background: #FCFAF7;
+  border: 1px solid #A53A6B;
   border-radius: 10px;
   padding: 16px 20px;
   margin-bottom: 24px;
@@ -367,11 +376,4 @@
   opacity: 0.9;
 }
 
-.info-label i,
-.event-capacity i {
-  width: 16px;
-  text-align: center;
-  color: #2a6262;
-  margin-right: 6px;
-  font-size: 13px;
-}
+

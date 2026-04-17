@@ -7,7 +7,7 @@
 .page-title {
   font-size: 32px;
   font-weight: 700;
-  color: #2a6262;
+  color: #8E2A5A;
   margin-bottom: 32px;
   font-family: 'Georgia', serif;
 }
@@ -15,7 +15,7 @@
 .events-summary {
   text-align: center;
   margin-bottom: 30px;
-  color: #2a6262;
+  color: #8E2A5A;
 }
 
 .events-grid {
@@ -43,7 +43,7 @@
   border: 1px solid #e0e0e0;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  background: white;
+  background: #FCFAF7;
   height: 100%;
 }
 
@@ -95,7 +95,7 @@
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #2a6262;
+  color: #8E2A5A;
   font-weight: 600;
   display: block;
   margin-bottom: 6px;
@@ -109,12 +109,12 @@
 }
 
 .event-capacity {
-  color: #2a6262;
+  color: #8E2A5A;
   font-size: 15px;
   margin: 12px 0;
   font-weight: 600;
   padding: 8px 12px;
-  background: #e8f5f5;
+  background: rgba(142, 42, 90, 0.07);
   border-radius: 8px;
   display: inline-block;
 }
@@ -203,7 +203,7 @@
   margin-top: auto;
   width: 100%;
   padding: 10px;
-  background: #2a6262;
+  background: #A53A6B ;
   color: white;
   border: none;
   border-radius: 8px;
@@ -215,7 +215,8 @@
 }
 
 .btn-participate:hover {
-  background: #306e6e;
+  background: #8E2A5A;
+  transform: translateY(-2px);
 }
 
 .no-events {
@@ -303,7 +304,7 @@
 
 .verified-badge {
   display: inline-block;
-  background: #2a6262;
+  background: #8E2A5A;
   color: white;
   border-radius: 50%;
   width: 16px;
@@ -334,7 +335,7 @@
 .event-capacity i {
   width: 16px;
   text-align: center;
-  color: #2a6262;
+  color: #8E2A5A;
   margin-right: 6px;
   font-size: 13px;
 }
@@ -346,7 +347,7 @@ button:disabled {
 }
 
 .btn-participate:disabled {
-  background: #2a6262;
+  background: #8E2A5A;
   opacity: 0.7;
 }
 

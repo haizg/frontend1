@@ -19,7 +19,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: #2a6262;
+  background: #A53A6B;
   color: white;
   font-size: 28px;
   font-weight: 700;
@@ -44,7 +44,7 @@
 
 .org-name {
   font-size: 14px;
-  color: #2a6262;
+  color: #A53A6B;
   font-weight: 600;
   margin-bottom: 8px;
 }
@@ -53,15 +53,15 @@
   font-size: 12px;
   padding: 4px 12px;
   border-radius: 20px;
-  background: #e8f4f4;
-  color: #2a6262;
+  background: rgba(142, 42, 90, 0.07);
+  color: #A53A6B;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .role-badge.organisateur {
-  background: #2a6262;
+  background: #A53A6B;
   color: white;
 }
 
@@ -87,13 +87,13 @@
 }
 
 .tabs button.active {
-  color: #2a6262;
-  border-bottom: 3px solid #2a6262;
+  color: #A53A6B;
+  border-bottom: 3px solid #A53A6B;
   font-weight: 700;
 }
 
 .tabs button:hover {
-  color: #2a6262;
+  color: #A53A6B;
 }
 
 .events-grid {
@@ -130,7 +130,7 @@
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #2a6262;
+  color: #A53A6B;
   font-weight: 600;
   display: block;
   margin-bottom: 4px;
@@ -189,7 +189,7 @@
 
 .btn-save {
   padding: 12px 32px;
-  background: #2a6262;
+  background: #A53A6B;
   color: white;
   border: none;
   border-radius: 8px;

@@ -40,7 +40,7 @@
 .modal-header h2 {
   font-family: 'Georgia', serif;
   font-size: 28px;
-  color: #2a6262;
+  color: #A53A6B;
   margin: 0;
 }
 
@@ -176,7 +176,7 @@ form {
 
 .form-input:focus {
   outline: none;
-  border-color: #2a6262;
+  border-color: #A53A6B;
 }
 
 .form-input.ng-invalid.ng-touched {
@@ -240,12 +240,12 @@ textarea.form-input {
 }
 
 .btn-submit {
-  background: #2a6262;
+  background: #A53A6B;
   color: white;
 }
 
 .btn-submit:hover:not(:disabled) {
-  background: #306e6e;
+  background: #B54A7A;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(42, 98, 98, 0.3);
 }
@@ -277,9 +277,9 @@ textarea.form-input {
 .btn-upload {
     width: 100%;
     padding: 15px;
-    background: #e8f5f5;
-    color: #2a6262;
-    border: 2px dashed #2a6262;
+    background: rgba(142, 42, 90, 0.07);
+    color: #A53A6B;
+    border: 2px dashed #A53A6B;
     border-radius: 8px;
     font-size: 16px;
     font-weight: 600;
@@ -288,8 +288,8 @@ textarea.form-input {
   }
 
   .btn-upload:hover {
-    background: #d0e8e8;
-    border-color: #1a4d4d;
+    font-size: 17px;
+    border-color: #8E2A5A;
   }
 
   .image-preview-container {

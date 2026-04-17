@@ -154,13 +154,13 @@ export class AdminDashboard {
     );
   }
 
-deleteEvent(eventId: number) {
-  this.requestDelete(
-    'Supprimer l\'événement',
-    'Cet événement et toutes ses inscriptions seront définitivement supprimés.',
-    () => this.http.delete(`http://localhost:8081/api/events/admin/${eventId}`, { headers: this.getHeaders() })
-      .subscribe({ next: () => this.loadEvents() })
-  );
+  deleteEvent(eventId: number) {
+    this.requestDelete(
+      'Supprimer l\'événement',
+      'Cet événement et toutes ses inscriptions seront définitivement supprimés.',
+      () => this.http.delete(`http://localhost:8081/api/admin/${eventId}`, { headers: this.getHeaders() })
+        .subscribe({ next: () => this.loadEvents() })
+    );
 }
 
 
@@ -203,7 +203,7 @@ deleteEvent(eventId: number) {
 
 
   openEditEvent(event: EventModel) {
-    this.editEventModal.open(event, false, 0);
+    this.editEventModal.open(event, false, 0, true);
   }
 
   onEventUpdated() {

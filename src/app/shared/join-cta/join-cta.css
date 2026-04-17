@@ -70,20 +70,28 @@
   background:#8E2A5A;
   box-shadow: 0 10px 0 rgba(255, 255, 255, 0.2);
 }
+
 .stamp {
   position: absolute;
-  top: 198px;
-  right: 183px;
-  width: 30px;
-  height: 30px;
-  background: red;
+  top: 62%;     /* Percentage from top */
+  right: 43%;    /* Percentage from right */
+  width: 40px;
+  height: 40px;
+  background: white;
   border-radius: 50%;
-  border: 1px solid #fff;
+  border: 2px solid #8E2A5A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 5;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
+.stamp i {
+  color: #8E2A5A;
+  font-size: 18px;
+}
 .envelope-flap {
   position: absolute;
    top: -2px;

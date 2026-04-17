@@ -43,8 +43,14 @@
           <div class="event-body">
             <span class="event-category">{{ event.category }}</span>
             <h3>{{ event.title }}</h3>
-            <p class="event-meta">📅 {{ event.date }}</p>
-            <p class="event-meta">📍 {{ event.location }}</p>
+            <p class="event-meta">
+              <i class="fa-regular fa-calendar-days"></i>
+              {{ event.date }}
+            </p>
+            <p class="event-meta">
+              <i class="fa-solid fa-location-dot"></i>
+              {{ event.location }}
+            </p>
           </div>
         </div>
       </div>
@@ -65,8 +71,14 @@
         <div class="event-body">
           <span class="event-category">{{ event.category }}</span>
           <h3>{{ event.title }}</h3>
-          <p class="event-meta">📅 {{ event.date }}</p>
-          <p class="event-meta">📍 {{ event.location }}</p>
+          <p class="event-meta">
+            <i class="fa-regular fa-calendar-days"></i>
+            {{ event.date }}
+          </p>
+          <p class="event-meta">
+            <i class="fa-solid fa-location-dot"></i>
+            {{ event.location }}
+          </p>
         </div>
       </div>
     </div>

@@ -1,0 +1,139 @@
+<app-navbar></app-navbar>
+
+<div class="contact-page">
+
+  <!-- HERO -->
+  <section class="contact-hero">
+    <span class="contact-tag">Contactez-nous</span>
+    <h1>On est là pour vous</h1>
+    <p>Une question, une suggestion ou un problème ? Notre équipe vous répond dans les plus brefs délais.</p>
+  </section>
+
+  <section class="contact-body">
+    <div class="contact-inner">
+
+      <!-- INFO CARDS -->
+      <div class="contact-info">
+        <h2>Informations</h2>
+
+        <div class="info-block">
+          <div class="info-icon">
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+          <div>
+            <span class="info-label">Email</span>
+            <span class="info-value">support@invitini.tn</span>
+          </div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-icon">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+          <div>
+            <span class="info-label">Disponibilité</span>
+            <span class="info-value">Lun – Ven, 9h – 18h</span>
+          </div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-icon">
+            <i class="fa-solid fa-location-dot"></i>
+          </div>
+          <div>
+            <span class="info-label">Localisation</span>
+            <span class="info-value">Tunis, Tunisie</span>
+          </div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-icon">
+            <i class="fa-brands fa-instagram"></i>
+          </div>
+          <div>
+            <span class="info-label">Réseaux sociaux</span>
+            <span class="info-value">@invitini.tn</span>
+          </div>
+        </div>
+
+        <!-- FAQ MINI -->
+        <div class="contact-faq">
+          <h3>Questions fréquentes</h3>
+          <div class="faq-item" *ngFor="let faq of faqs" (click)="faq.open = !faq.open">
+            <div class="faq-question">
+              <span>{{ faq.q }}</span>
+              <i class="fa-solid" [class.fa-chevron-down]="!faq.open" [class.fa-chevron-up]="faq.open"></i>
+            </div>
+            <div class="faq-answer" *ngIf="faq.open">{{ faq.a }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT FORM -->
+      <div class="contact-form-wrap">
+        <h2>Envoyer un message</h2>
+
+        <!-- Success message - MOVED OUTSIDE the form -->
+        <div *ngIf="showSuccessMessage" class="success-banner">
+          <i class="fa-solid fa-circle-check"></i>
+          Message envoyé avec succès ! Nous vous répondrons sous 24h.
+        <br>
+        </div>
+
+        <!-- Error message -->
+        <div *ngIf="errorMessage" class="error-banner">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          {{ errorMessage }}
+        </div>
+
+        <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Prénom </label>
+              <input type="text" [(ngModel)]="form.prenom" name="prenom" required placeholder="Votre prénom" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Nom </label>
+              <input type="text" [(ngModel)]="form.nom" name="nom" required placeholder="Votre nom" class="form-input">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Email </label>
+            <input type="email" email [(ngModel)]="form.email" name="email" required placeholder="votre@email.com" class="form-input">
+          </div>
+
+          <div class="form-group">
+            <label>Sujet </label>
+            <select [(ngModel)]="form.sujet" name="sujet" required class="form-input">
+              <option value="">Choisir un sujet</option>
+              <option value="question">Question générale</option>
+              <option value="organisateur">Devenir organisateur</option>
+              <option value="bug">Signaler un problème</option>
+              <option value="partenariat">Partenariat</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Message </label>
+            <textarea [(ngModel)]="form.message" name="message" required rows="5"
+                      placeholder="Décrivez votre demande..." class="form-input"></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn" [disabled]="contactForm.invalid || sending">
+            <span *ngIf="!sending">
+              <i class="fa-solid fa-paper-plane"></i> Envoyer le message
+            </span>
+            <span *ngIf="sending">Envoi en cours...</span>
+          </button>
+
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<app-footer></app-footer>

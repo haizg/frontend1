@@ -114,17 +114,17 @@
 
 .tagline p {
   font-size: 25px;
-  color: #2a6262;
+  color: #8E2A5A;;
   line-height: 1.8;
 }
 
 .btn-primary {
-  background-color: #2a6262;
+  background-color: #A53A6B  ;
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: #306e6e;
+  background-color: #8E2A5A;
 }
 
 .btn {
@@ -145,7 +145,7 @@
   font-size: 28px;
   font-weight: 700;
   padding-left: 10px;
-  color: #2a6262;
+  color: #8E2A5A;
   margin-bottom: 24px;
 }
 /* Skeleton loading styles for home page */
@@ -202,7 +202,7 @@
   scroll-behavior: smooth;
   padding-bottom: 16px;
   scrollbar-width: thin;
-  scrollbar-color: #2a6262 #f0f0f0;
+  scrollbar-color: #A53A6B #f0f0f0;
 }
 
 .event-row::-webkit-scrollbar {
@@ -215,7 +215,7 @@
 }
 
 .event-row::-webkit-scrollbar-thumb {
-  background: #2a6262;
+  background: #A53A6B;
   border-radius: 10px;
 }
 
@@ -227,7 +227,7 @@
   border: 1px solid #e0e0e0;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  background: white;
+  background: #FCFAF7;
   min-width: 260px;
   max-width: 260px;
   flex-shrink: 0;
@@ -267,7 +267,7 @@
    font-size: 11px;
      text-transform: uppercase;
      letter-spacing: 1px;
-     color: #2a6262;
+     color:#8E2A5A;
      font-weight: 600;
      display: block;
 }
@@ -298,7 +298,7 @@
  margin-top: auto;
    width: 100%;
    padding: 10px;
-   background: #2a6262;
+   background: #A53A6B ;
    color: white;
    border: none;
    border-radius: 8px;
@@ -308,10 +308,7 @@
    transition: background 0.3s ease;
    margin-top: 12px;
 }
-.btn-participate:hover {
-  background: #306e6e;
-  transform: translateY(-2px);
-}
+
 .no-events {
   text-align: center;
   color: lightgray;
@@ -339,7 +336,7 @@
 
 .action-container h2 {
   font-size: 28px;
-  color: #2a6262;
+  color: #A53A6B;
   margin-bottom: 30px;
   font-weight: 700;
 }
@@ -353,7 +350,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  background: #2a6262;
+  background: #A53A6B;
   color: white;
   padding: 18px 28px;
   border-radius: 12px;
@@ -364,14 +361,14 @@
 }
 
 .action-btn:hover {
-  background: #306e6e;
+  background: #B54A7A;
   transform: translateY(-3px);
   box-shadow: 0 12px 30px rgba(0,0,0,0.15);
 }
 
 .btn-icon {
   font-size: 24px;
-  color: #2a6262;
+  color: #B54A7A;
   background: white;
   border-radius: 50%;
   width: 36px;
@@ -452,16 +449,22 @@
   height: 14px;
   display: inline-block;
 }
+.section-header {
+  display: flex;
+  align-items: center;
+}
 .see-all {
-  font-size: 15px;
-  color: #2a6262;
+  font-size: 17px;
+  color: #8E2A5A;
   font-weight: 600;
   text-decoration: none;
   padding-right: 10px;
+  margin-left: auto;
+  text-decoration: underline;
 }
 
 .see-all:hover {
-  text-decoration: underline;
+  font-size: 18px;
 }
 
 .action-btn:disabled {
@@ -472,7 +475,7 @@
 
 .verified-badge {
   display: inline-block;
-  background: #2a6262;
+  background: #8E2A5A;
   color: white;
   border-radius: 50%;
   width: 16px;
@@ -505,7 +508,7 @@
 .event-capacity i {
   width: 16px;
   text-align: center;
-  color: #2a6262;
+  color: #8E2A5A;
   margin-right: 6px;
   font-size: 13px;
 }

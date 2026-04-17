@@ -21,7 +21,8 @@ export class EditEventModal {
   errorMessage = '';
   successMessage = '';
   currentEvent: EventModel | null = null;
-  isLocked = false;          // true when event is approved and user is organizer
+  isLocked = false;
+  isAdmin = false;
   minCapacity = 1;
 
   constructor(
@@ -30,77 +31,79 @@ export class EditEventModal {
     private translate: TranslateService
   ) {
     this.eventForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', [Validators.required, Validators.minLength(10)]],
-      category: ['', Validators.required],
-      date: ['', Validators.required],
-      time: ['', Validators.required],
-      location: ['', Validators.required],
-      imageUrl: [''],
+      title:           ['', [Validators.required, Validators.minLength(3)]],
+      description:     ['', [Validators.required, Validators.minLength(10)]],
+      category:        ['', Validators.required],
+      date:            ['', Validators.required],
+      time:            ['', Validators.required],
+      location:        ['', Validators.required],
+      imageUrl:        [''],
       maxParticipants: [null, [Validators.min(1)]],
-      program: ['']  // ADD PROGRAM FIELD
+      program:         ['']
     });
   }
 
-  open(event: EventModel, isApproved = false, confirmedCount = 0) {
+  open(event: EventModel, isApproved = false, confirmedCount = 0, isAdmin = false) {
     this.currentEvent = event;
-    this.isLocked = isApproved;
+    this.isAdmin = isAdmin;
+    this.isLocked = isApproved && !isAdmin; // admin is never locked
     this.minCapacity = confirmedCount;
     this.isVisible = true;
     this.errorMessage = '';
     this.successMessage = '';
 
     this.eventForm.patchValue({
-      title: event.title,
-      description: event.description,
-      category: event.category,
-      date: event.date,
-      time: event.time,
-      location: event.location,
-      imageUrl: event.imageUrl || '',
+      title:           event.title,
+      description:     event.description,
+      category:        event.category,
+      date:            event.date,
+      time:            event.time,
+      location:        event.location,
+      imageUrl:        event.imageUrl || '',
       maxParticipants: event.maxParticipants || null,
-      program: event.program || ''  // ADD PROGRAM VALUE
+      program:         (event as any).program || ''
     });
 
-    const lockedFields = ['title', 'description', 'category', 'date', 'time', 'location', 'imageUrl'];
-    if (isApproved) {
-      lockedFields.forEach(f => this.eventForm.get(f)?.disable());
-      this.eventForm.get('maxParticipants')?.enable();
-      this.eventForm.get('program')?.enable();  // ENABLE PROGRAM FOR EDITING EVEN WHEN LOCKED
+    // Enable all first
+    Object.keys(this.eventForm.controls).forEach(k => this.eventForm.get(k)?.enable());
+
+    if (this.isLocked) {
+      // Organizer on approved event: lock most fields
+      ['title', 'description', 'category', 'date', 'time', 'location', 'imageUrl']
+        .forEach(f => this.eventForm.get(f)?.disable());
+
       this.eventForm.get('maxParticipants')?.setValidators([
         Validators.required,
         Validators.min(confirmedCount || 1)
       ]);
     } else {
-      lockedFields.forEach(f => this.eventForm.get(f)?.enable());
       this.eventForm.get('maxParticipants')?.setValidators([Validators.min(1)]);
-      this.eventForm.get('program')?.enable();  // ENABLE PROGRAM FOR EDITING
     }
+
     this.eventForm.get('maxParticipants')?.updateValueAndValidity();
   }
 
   close() {
     this.isVisible = false;
-    this.eventForm.reset();
-    Object.keys(this.eventForm.controls).forEach(k => this.eventForm.get(k)?.enable());
-    this.isLocked = false;
-    this.currentEvent = null;
     this.errorMessage = '';
     this.successMessage = '';
+    this.currentEvent = null;
+    this.isLocked = false;
+    this.isAdmin = false;
+    Object.keys(this.eventForm.controls).forEach(k => this.eventForm.get(k)?.enable());
+    this.eventForm.reset();
+  }
+
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({ 'Authorization': `Bearer ${token}` });
   }
 
   onSubmit() {
-    if (this.eventForm.invalid) {
-      this.translate.get('editevent.error_required_fields').subscribe(msg => {
-        this.errorMessage = msg;
-      });
-      return;
-    }
+    if (!this.currentEvent) return;
 
-    if (!this.currentEvent) {
-      this.translate.get('editevent.error_no_event').subscribe(msg => {
-        this.errorMessage = msg;
-      });
+    if (this.eventForm.invalid) {
+      this.errorMessage = 'Veuillez remplir tous les champs obligatoires.';
       return;
     }
 
@@ -108,69 +111,60 @@ export class EditEventModal {
     this.errorMessage = '';
     this.successMessage = '';
 
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
+    const id = this.currentEvent.id;
+    const raw = this.eventForm.getRawValue(); // includes disabled fields
 
-    // Prepare update data
-    const updateData = {
-      maxParticipants: this.eventForm.get('maxParticipants')?.value,
-      program: this.eventForm.get('program')?.value  // ADD PROGRAM TO UPDATE DATA
-    };
-
-    if (this.isLocked) {
-      // When locked, only update capacity AND program
+    // ADMIN: use admin endpoint, no role restriction
+    if (this.isAdmin) {
       this.http.put(
-        `http://localhost:8081/api/events/${this.currentEvent.id}/capacity-and-program`,
-        updateData,
-        { headers }
+        `http://localhost:8081/api/admin/update-event/${id}`,
+        raw,
+        { headers: this.getHeaders() }
       ).subscribe({
-        next: () => {
-          this.isLoading = false;
-          this.successMessage = 'Capacité et programme mis à jour avec succès.';
-          setTimeout(() => { this.close(); this.eventUpdated.emit(); }, 1500);
-        },
-        error: (err) => {
-          this.isLoading = false;
-          this.errorMessage = err.status === 403
-            ? 'Vous n\'êtes pas autorisé à modifier cet événement.'
-            : 'Erreur lors de la mise à jour.';
-        }
+        next: () => this.handleSuccess(),
+        error: (err) => this.handleError(err)
       });
       return;
     }
 
-    // Full edit for unapproved events - include program
-    const fullUpdateData = {
-      ...this.eventForm.getRawValue(),
-      program: this.eventForm.get('program')?.value  // ENSURE PROGRAM IS INCLUDED
-    };
-
+    // ORGANIZER LOCKED: only capacity + program
+    if (this.isLocked) {
+      this.http.put(
+        `http://localhost:8081/api/events/${id}/capacity-and-program`,
+        {
+          maxParticipants: raw.maxParticipants,
+          program: raw.program
+        },
+        { headers: this.getHeaders() }
+      ).subscribe({
+        next: () => this.handleSuccess('Capacité et programme mis à jour.'),
+        error: (err) => this.handleError(err)
+      });
+      return;
+    }
+/*
+    // ORGANIZER NOT LOCKED: full update
     this.http.put(
-      `http://localhost:8081/api/events/${this.currentEvent.id}`,
-      fullUpdateData,
-      { headers }
+      `http://localhost:8081/api/events/${id}`,
+      raw,
+      { headers: this.getHeaders() }
     ).subscribe({
-      next: () => {
-        this.isLoading = false;
-        this.translate.get('editevent.success_message').subscribe(msg => {
-          this.successMessage = msg;
-        });
-        setTimeout(() => { this.close(); this.eventUpdated.emit(); }, 1500);
-      },
-      error: (error) => {
-        this.isLoading = false;
-        if (error.status === 403) {
-          this.translate.get('editevent.error_permission').subscribe(msg => {
-            this.errorMessage = msg;
-          });
-        } else {
-          this.translate.get('editevent.error_update_failed').subscribe(msg => {
-            this.errorMessage = msg;
-          });
-        }
-      }
+      next: () => this.handleSuccess(),
+      error: (err) => this.handleError(err)
     });
+  */
+  }
+
+  private handleSuccess(msg?: string) {
+    this.isLoading = false;
+    this.successMessage = msg || 'Événement mis à jour avec succès.';
+    setTimeout(() => { this.close(); this.eventUpdated.emit(); }, 1500);
+  }
+
+  private handleError(err: any) {
+    this.isLoading = false;
+    this.errorMessage = err.status === 403
+      ? 'Vous n\'êtes pas autorisé à modifier cet événement.'
+      : 'Erreur lors de la mise à jour. Réessayez.';
   }
 }

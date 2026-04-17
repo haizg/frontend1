@@ -223,7 +223,7 @@ export class EventDetail {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
     const url = this.isAdmin
-        ? `http://localhost:8081/api/events/admin/${this.event?.id}`
+        ? `http://localhost:8081/api/admin/${this.event?.id}`
         : `http://localhost:8081/api/events/${this.event?.id}`;
 
     this.http.delete(url, {headers})

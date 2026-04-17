@@ -41,7 +41,7 @@
           </div>
 
           <p class="event-meta">
-            <i class="fa-solid fa-circle-user"></i>
+            <!--<i class="fa-solid fa-circle-user"></i>-->
             {{ event.organisateurEmail }}
             <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
           </p>
@@ -61,20 +61,10 @@
               <i class="fa-solid fa-users"></i>
               {{ event.participantCount }}/{{ event.maxParticipants }} {{ 'profile.participant' | translate }}
             </p>
-            <!--
-            <div *ngIf="isAdmin || canModifyEvent(event)" class="event-actions">
-              <button (click)="openEditEventModal(event, $event)" class="btn btn-edit" [disabled]="isDeleting">
-                {{ 'events.modifier' | translate }}
-              </button>
-              <button (click)="deleteEvent(event, $event)" class="btn btn-delete" [disabled]="isDeleting">
-                {{ 'events.supprimer' | translate }}
-              </button>
-            </div>
-             -->
+
 
             <div *ngIf="canModifyEvent(event)" class="event-actions">
               <button [routerLink]="['/events', event.id]" class="btn-participate">
-                <i class="fa-solid fa-eye"></i>
                 {{ 'events.consulter' | translate }}
               </button>
             </div>
@@ -82,10 +72,10 @@
 
             <div *ngIf="isAdmin" class="event-actions">
               <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">
-                <i class="fa-solid fa-pen"></i> {{ 'events.modifier' | translate }}
+                {{ 'events.modifier' | translate }}
               </button>
               <button (click)="deleteEvent(event, $event)" class="btn btn-delete">
-                <i class="fa-solid fa-trash"></i> {{ 'events.supprimer' | translate }}
+                {{ 'events.supprimer' | translate }}
               </button>
             </div>
 

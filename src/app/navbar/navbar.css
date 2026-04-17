@@ -30,7 +30,7 @@
   font-family:  'Abhaya Libre ExtraBold',  serif;
   font-size: 30px;
   font-weight: 700;
-  color:#2a6262;
+  color:#8E2A5A;
   cursor: pointer;
   line-height: 1;
 }
@@ -47,7 +47,7 @@
 }
 
 .nav-links a:hover{
-  color:#306e6e;
+  color:#A53A6B ;
 }
 
 .nav-buttons{
@@ -66,21 +66,21 @@
 .btn-outline{
   border: 1px solid grey;
   background: transparent;
-  color:#2a6262;
+  color:#8E2A5A;
 }
 
 .btn-outline:hover{
-  background-color: #2a6262;
+  background-color: #8E2A5A;
   color: white;
 }
 
 .btn-primary{
-  background-color: #2a6262;
+  background-color: #8E2A5A;
   color: white;
 }
 
 .btn-primary:hover{
-  background-color: #306e6e;
+  background-color: #A53A6B;
 }
 
 
@@ -92,7 +92,7 @@
 
 .user-name{
   font-size: 14px;
-  color: #2a6262;
+  color: #8E2A5A;;
   font-weight: 600;
 }
 
@@ -109,11 +109,11 @@
 
   padding: 8px 36px 8px 14px;
   border-radius: 20px;
-  border: 2px solid #2a6262;
+  border: 2px solid #8E2A5A;;
   background: white;
 
   font-weight: 600;
-  color: #2a6262;
+  color: #8E2A5A;;
   cursor: pointer;
   font-size: 14px;
 }
@@ -126,6 +126,6 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  color: #2a6262;
+  color: #8E2A5A;;
 }
 

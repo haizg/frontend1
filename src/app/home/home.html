@@ -52,7 +52,6 @@
       <a routerLink="/events" class="see-all">{{ 'events.allevents' | translate }}</a>
     </div>
 
-    <!-- LOADING STATE - Skeleton Cards -->
     <div *ngIf="isLoadingEvents" class="event-row">
       <div class="skeleton-card" *ngFor="let item of [1,2,3,4,5,6]">
         <div class="skeleton-image"></div>
@@ -73,8 +72,8 @@
         </div>
 
         <p class="event-meta">
-          <i class="fa-solid fa-circle-user"></i>
-          {{ event.organisateurEmail }}
+        <!--<i class="fa-solid fa-circle-user"></i>-->
+            {{ event.organisateurEmail }}
           <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
         </p>
 
@@ -96,28 +95,18 @@
             <i class="fa-solid fa-users"></i>
             {{ event.participantCount }}/{{ event.maxParticipants }} participants
           </p>
-<!--
-          <div *ngIf="isAdmin || canModifyEvent(event)" class="event-actions">
-            <button (click)="openEditEventModal(event, $event)" class="btn btn-edit" [disabled]="isDeleting">
-              {{ 'events.modifier' | translate }}
-            </button>
-            <button (click)="deleteEvent(event, $event)" class="btn btn-delete" [disabled]="isDeleting">
-              {{ 'events.supprimer' | translate }}
-            </button>
-          </div>
--->
+
           <div *ngIf="canModifyEvent(event)" class="event-actions">
             <button [routerLink]="['/events', event.id]" class="btn-participate">
-              <i class="fa-solid fa-eye"></i>
               {{ 'home.consulter' | translate }}
             </button>
           </div>
           <div *ngIf="isAdmin" class="event-actions">
             <button (click)="openEditEventModal(event, $event)" class="btn btn-edit">
-              <i class="fa-solid fa-pen"></i> {{ 'events.modifier' | translate }}
+              {{ 'events.modifier' | translate }}
             </button>
             <button (click)="deleteEvent(event, $event)" class="btn btn-delete">
-              <i class="fa-solid fa-trash"></i> {{ 'events.supprimer' | translate }}
+             {{ 'events.supprimer' | translate }}
             </button>
           </div>
 

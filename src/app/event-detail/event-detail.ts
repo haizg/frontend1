@@ -177,7 +177,7 @@ export class EventDetail {
       const confirmedCount = this.verifiedParticipants.length;
       // isLocked only for organizers, admin always gets full form
       const shouldLock = isApproved && this.isMyEvent && !this.isAdmin;
-      this.editEventModal.open(this.event, shouldLock, confirmedCount);
+      this.editEventModal.open(this.event, shouldLock, confirmedCount,this.isAdmin);
     }
   }
 

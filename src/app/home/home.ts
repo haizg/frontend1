@@ -213,7 +213,7 @@ export class Home implements AfterViewInit {
 
   openEditEventModal(eventModel: EventModel, $event: MouseEvent) {
     $event.stopPropagation();
-    this.editEventModal.open(eventModel);
+    this.editEventModal.open(eventModel, false, 0, this.isAdmin);
   }
 
   deleteEvent(eventModel: EventModel, $event: MouseEvent) {

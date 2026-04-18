@@ -114,24 +114,10 @@ export class EventDetail {
     }
   }
 
+  // ── Getters ─────────────────────────────────────────────────────────────────
 
   get unconfirmedParticipants(): any[] {
     return this.participants.filter(p => !p.verified);
-  }
-
-
-
-  loadParticipants(eventId: number) {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
-    this.http.get<any[]>(`http://localhost:8081/api/events/${eventId}/participants`, {headers})
-      .subscribe({
-        next: (data) => {
-          this.participants = data;
-          this.cdr.detectChanges();
-        },
-        error: (err) => console.error('Failed to load participants', err)
-      });
   }
 
   get isOrganisateur(): boolean {
@@ -161,6 +147,27 @@ export class EventDetail {
     return this.userRole === 'ROLE_ADMIN';
   }
 
+  // Detects whether the program field contains a MinIO image URL
+  get isProgramImage(): boolean {
+    const p = this.event?.program;
+    if (!p) return false;
+    return p.startsWith('http') && /\.(png|jpg|jpeg|webp|gif)(\?.*)?$/i.test(p);
+  }
+
+  // ── Methods ──────────────────────────────────────────────────────────────────
+
+  loadParticipants(eventId: number) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
+    this.http.get<any[]>(`http://localhost:8081/api/events/${eventId}/participants`, {headers})
+      .subscribe({
+        next: (data) => {
+          this.participants = data;
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error('Failed to load participants', err)
+      });
+  }
 
   openJoinModal(eventId: number) {
     if (!this.userService.getUser()) {
@@ -175,12 +182,10 @@ export class EventDetail {
     if (this.event) {
       const isApproved = !!(this.event as any).approved;
       const confirmedCount = this.verifiedParticipants.length;
-      // isLocked only for organizers, admin always gets full form
       const shouldLock = isApproved && this.isMyEvent && !this.isAdmin;
-      this.editEventModal.open(this.event, shouldLock, confirmedCount,this.isAdmin);
+      this.editEventModal.open(this.event, shouldLock, confirmedCount, this.isAdmin);
     }
   }
-
 
   updateCapacity() {
     if (!this.newCapacity || !this.event) return;
@@ -204,8 +209,6 @@ export class EventDetail {
     });
   }
 
-
-
   onEventUpdated() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -223,8 +226,8 @@ export class EventDetail {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
     const url = this.isAdmin
-        ? `http://localhost:8081/api/admin/${this.event?.id}`
-        : `http://localhost:8081/api/events/${this.event?.id}`;
+      ? `http://localhost:8081/api/admin/${this.event?.id}`
+      : `http://localhost:8081/api/events/${this.event?.id}`;
 
     this.http.delete(url, {headers})
       .subscribe({
@@ -247,5 +250,4 @@ export class EventDetail {
         error: (err) => console.error('Failed to check participation', err)
       });
   }
-
 }

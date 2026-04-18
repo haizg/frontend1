@@ -17,8 +17,9 @@
       <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
     </p>
 
-
     <div class="event-body">
+
+      <!-- INFO CARDS -->
       <div class="event-info">
         <div class="info-card">
           <span class="info-label">
@@ -50,26 +51,37 @@
         </div>
       </div>
 
+      <!-- DESCRIPTION -->
       <div class="event-description">
         <h2>{{ 'eventdetail.about' | translate }}</h2>
         <p>{{ event!.description }}</p>
       </div>
 
+      <!-- PROGRAMME -->
       <div class="event-program" *ngIf="event!.program && event!.program.trim() !== ''">
         <h2>{{ 'eventdetail.program' | translate }}</h2>
-        <div class="program-content">{{ event!.program }}</div>
+
+        <!-- Image mode: program is a MinIO image URL -->
+        <div class="program-image-wrapper" *ngIf="isProgramImage">
+          <img [src]="event!.program" alt="Programme" class="program-image">
+        </div>
+
+        <!-- Text mode: plain text / multiline -->
+        <div class="program-content" *ngIf="!isProgramImage">{{ event!.program }}</div>
       </div>
 
+      <!-- ADMIN ACTIONS -->
       <div *ngIf="isAdmin" class="org-actions">
-        <button (click)="openEditEventModal()" class="btn-edit"> {{ 'eventdetail.modifier' | translate }}</button>
-        <button (click)="deleteEvent()" class="btn-delete"> {{ 'eventdetail.supprimer' | translate }}</button>
+        <button (click)="openEditEventModal()" class="btn-edit">{{ 'eventdetail.modifier' | translate }}</button>
+        <button (click)="deleteEvent()" class="btn-delete">{{ 'eventdetail.supprimer' | translate }}</button>
       </div>
 
+      <!-- ORGANIZER ACTIONS -->
       <div *ngIf="isMyEvent" class="org-actions">
-        <button (click)="openEditEventModal()" class="btn-edit"> {{ 'eventdetail.modifier' | translate }}</button>
+        <button (click)="openEditEventModal()" class="btn-edit">{{ 'eventdetail.modifier' | translate }}</button>
       </div>
 
-
+      <!-- ADMIN: ORGANIZER INFO -->
       <div *ngIf="isAdmin" class="organizer-info">
         <span class="info-label">
           <i class="fa-solid fa-circle-user"></i>
@@ -78,8 +90,7 @@
         <span class="info-value">{{ event!.organisateurEmail }}</span>
       </div>
 
-
-      <!-- ORGANISATEUR STATS -->
+      <!-- ORGANIZER / ADMIN STATS -->
       <div *ngIf="isMyEvent || isAdmin" class="stats-section">
         <h2>{{ 'eventdetail.stats' | translate }}</h2>
         <div class="stats-grid">
@@ -88,7 +99,7 @@
             <span class="stat-label">{{ 'eventdetail.confirmed' | translate }}</span>
           </div>
           <div class="stat-card stat-card-warning">
-            <span class="stat-number" >{{ unconfirmedParticipants.length }}</span>
+            <span class="stat-number">{{ unconfirmedParticipants.length }}</span>
             <span class="stat-label">{{ 'eventdetail.notconfirmed' | translate }}</span>
           </div>
           <div class="stat-card">
@@ -116,7 +127,7 @@
         </div>
       </div>
 
-      <!-- ORGANISATEUR PARTICIPANTS TABLE -->
+      <!-- ORGANIZER / ADMIN PARTICIPANTS TABLE -->
       <div *ngIf="isMyEvent || isAdmin" class="participants-section">
         <h2>{{ 'eventdetail.participants' | translate }}</h2>
         <div *ngIf="participants.length === 0" class="no-participants">

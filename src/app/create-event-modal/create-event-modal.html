@@ -9,6 +9,7 @@
 
     <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
       <div class="form-grid">
+
         <div class="form-group full-width">
           <label>{{ 'createevent.event_title' | translate }} *</label>
           <input
@@ -22,7 +23,6 @@
           </small>
         </div>
 
-        <!-- DESCRIPTION FIELD -->
         <div class="form-group full-width">
           <label>{{ 'createevent.description' | translate }} *</label>
           <textarea
@@ -36,15 +36,82 @@
           </small>
         </div>
 
-        <!-- PROGRAM FIELD -->
         <div class="form-group full-width">
           <label>{{ 'createevent.program' | translate }}</label>
+
+          <div class="program-type-toggle">
+            <button
+              type="button"
+              class="toggle-btn"
+              [class.active]="programType === 'text'"
+              (click)="onProgramTypeChange('text')"
+              [disabled]="isLoading">
+              <i class="fa-solid fa-align-left"></i> Texte
+            </button>
+            <button
+              type="button"
+              class="toggle-btn"
+              [class.active]="programType === 'image'"
+              (click)="onProgramTypeChange('image')"
+              [disabled]="isLoading">
+              <i class="fa-solid fa-image"></i> Image
+            </button>
+          </div>
+
           <textarea
+            *ngIf="programType === 'text'"
             formControlName="program"
             [placeholder]="'createevent.program_placeholder' | translate"
             rows="5"
             class="form-input"
             [disabled]="isLoading"></textarea>
+
+          <ng-container *ngIf="programType === 'image'">
+
+            <input
+              type="file"
+              #programFileInput
+              (change)="onProgramFileSelected($event)"
+              accept="image/*"
+              style="display: none;"
+              [disabled]="isLoading">
+
+            <button
+              type="button"
+              class="btn-upload"
+              (click)="programFileInput.click()"
+              *ngIf="!programImagePreview && !isUploadingProgramImage"
+              [disabled]="isLoading">
+              <i class="fa-solid fa-upload"></i>
+              Choisir une image de programme
+            </button>
+
+            <div class="image-preview-container" *ngIf="programImagePreview">
+              <img [src]="programImagePreview" alt="Aperçu du programme" class="image-preview">
+              <div class="image-actions">
+                <button
+                  type="button"
+                  class="btn-change"
+                  (click)="programFileInput.click()"
+                  [disabled]="isLoading">
+                  Changer
+                </button>
+                <button
+                  type="button"
+                  class="btn-remove"
+                  (click)="removeProgramImage()"
+                  [disabled]="isLoading">
+                  Supprimer
+                </button>
+              </div>
+            </div>
+
+            <div class="program-upload-loading" *ngIf="isUploadingProgramImage">
+              <span>Téléchargement en cours…</span>
+            </div>
+
+          </ng-container>
+
           <small class="info-text">{{ 'createevent.program_info' | translate }}</small>
         </div>
 
@@ -135,14 +202,11 @@
             class="form-input"
             [disabled]="isLoading">
         </div>
+
       </div>
 
-      <!-- Error Message -->
-      <div class="error-message" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
+      <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
 
-      <!-- Approval Message -->
       <div class="approval-message" *ngIf="approvalMessage">
         <div class="approval-icon"></div>
         <div class="approval-text">{{ approvalMessage }}</div>
@@ -158,8 +222,8 @@
           class="btn-submit"
           [disabled]="isLoading || eventForm.invalid"
           *ngIf="!approvalMessage">
-          <span *ngIf="isLoading"> {{ 'createevent.creating' | translate }}</span>
-          <span *ngIf="!isLoading"> {{ 'createevent.create_button' | translate }}</span>
+          <span *ngIf="isLoading">{{ 'createevent.creating' | translate }}</span>
+          <span *ngIf="!isLoading">{{ 'createevent.create_button' | translate }}</span>
         </button>
       </div>
     </form>

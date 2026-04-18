@@ -197,7 +197,15 @@
     "success_message": "Événement mis à jour avec succès !",
     "cancel": "Annuler",
     "save": "Enregistrer",
-    "updating": "Mise à jour..."
+    "updating": "Mise à jour...",
+
+      "error_image_format": "Unsupported format. Use JPEG, PNG, WebP or GIF.",
+      "error_image_size": "Image too large (max 5 MB).",
+      "error_upload_failed": "Upload failed. Please check your connection.",
+      "error_form_invalid": "Please fill all required fields correctly.",
+      "error_update": "Failed to update event.",
+      "success": "Event updated successfully!"
+
   },
   "logout": {
     "title": "Se déconnecter",

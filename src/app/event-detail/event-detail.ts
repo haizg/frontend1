@@ -114,7 +114,6 @@ export class EventDetail {
     }
   }
 
-  // ── Getters ─────────────────────────────────────────────────────────────────
 
   get unconfirmedParticipants(): any[] {
     return this.participants.filter(p => !p.verified);
@@ -154,7 +153,6 @@ export class EventDetail {
     return p.startsWith('http') && /\.(png|jpg|jpeg|webp|gif)(\?.*)?$/i.test(p);
   }
 
-  // ── Methods ──────────────────────────────────────────────────────────────────
 
   loadParticipants(eventId: number) {
     const token = localStorage.getItem('token');

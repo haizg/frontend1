@@ -54,7 +54,6 @@
   padding: 0 10px;
 }
 
-/* ── Info cards ──────────────────────────────────────────────────────────────── */
 .event-info {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -93,7 +92,6 @@
   font-weight: 500;
 }
 
-/* ── Description ─────────────────────────────────────────────────────────────── */
 .event-description {
   margin-bottom: 40px;
 }
@@ -111,7 +109,6 @@
   line-height: 1.8;
 }
 
-/* ── Programme ───────────────────────────────────────────────────────────────── */
 .event-program {
   margin-bottom: 40px;
 }
@@ -123,7 +120,6 @@
   font-family: 'Georgia', serif;
 }
 
-/* Text mode */
 .program-content {
   background: #f9f9f9;
   border-left: 4px solid #A53A6B;
@@ -135,7 +131,6 @@
   white-space: pre-line;
 }
 
-/* Image mode */
 .program-image-wrapper {
   border-left: 4px solid #A53A6B;
   border-radius: 0 10px 10px 0;
@@ -151,7 +146,6 @@
   border-radius: 0 10px 10px 0;
 }
 
-/* ── Participate button ───────────────────────────────────────────────────────── */
 .btn-participer {
   display: block;
   width: 100%;
@@ -185,7 +179,6 @@
   opacity: 0.9;
 }
 
-/* ── Loading ─────────────────────────────────────────────────────────────────── */
 .loading {
   text-align: center;
   padding: 100px;
@@ -199,7 +192,6 @@
   user-select: none;
 }
 
-/* ── Organizer / Admin actions ───────────────────────────────────────────────── */
 .org-actions {
   display: flex;
   gap: 12px;
@@ -236,7 +228,6 @@
 }
 .btn-delete:hover { background: #c82333; }
 
-/* ── Stats ───────────────────────────────────────────────────────────────────── */
 .stats-section {
   margin-bottom: 40px;
 }
@@ -309,7 +300,6 @@
 .bar-warning { background: #f0a500; }
 .bar-full    { background: #dc3545; }
 
-/* ── Participants table ───────────────────────────────────────────────────────── */
 .participants-section {
   margin-bottom: 40px;
 }
@@ -363,7 +353,6 @@
   border-radius: 10px;
 }
 
-/* ── Organizer info (admin view) ─────────────────────────────────────────────── */
 .organizer-info {
   display: flex;
   flex-direction: column;
@@ -387,7 +376,6 @@
   font-weight: 500;
 }
 
-/* ── Verified badge ──────────────────────────────────────────────────────────── */
 .verified-badge {
   display: inline-flex;
   align-items: center;

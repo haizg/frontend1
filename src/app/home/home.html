@@ -71,7 +71,7 @@
           <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
         </div>
 
-        <p class="event-meta">
+        <p class="event-meta" class="org-email">
         <!--<i class="fa-solid fa-circle-user"></i>-->
             {{ event.organisateurEmail }}
           <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
@@ -121,7 +121,9 @@
                     (click)="openJoinModal(event.id); $event.stopPropagation()"
                     class="btn btn-primary participate-btn"
                     [disabled]="isJoining">
-              <span *ngIf="isJoining">⏳</span>
+              <span *ngIf="isJoining">
+                <i class="fas fa-hourglass-start"></i>
+              </span>
               <span *ngIf="!isJoining">{{ 'events.participate' | translate }}</span>
             </button>
           </ng-container>

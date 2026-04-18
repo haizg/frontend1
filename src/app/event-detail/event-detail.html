@@ -149,7 +149,7 @@
         <button *ngIf="hasAlreadyParticipated"
                 class="btn-already-participated"
                 disabled>
-          Vous participez déjà à cet événement
+          {{ 'eventdetail.alreadyparticipated' | translate }}
         </button>
         <button *ngIf="!hasAlreadyParticipated"
                 class="btn-participer"

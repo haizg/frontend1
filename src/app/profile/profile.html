@@ -145,4 +145,28 @@
   <p>{{ 'profile.loginrequired' | translate }}</p>
 </div>
 
+<!-- profile.html — add at the bottom of the profile section -->
+<div class="deactivation-section">
+  <h3>Zone de danger</h3>
+
+  <div *ngIf="deactivationStatus === 'pending'" class="deactivation-pending">
+    <i class="fa-solid fa-clock"></i>
+    Votre demande de désactivation est en attente d'approbation par l'admin.
+  </div>
+
+  <div *ngIf="deactivationStatus === 'done'" class="deactivation-done">
+    <i class="fa-solid fa-circle-check"></i>
+    Compte désactivé. Vous allez être déconnecté.
+  </div>
+
+  <button *ngIf="deactivationStatus === 'idle'"
+          class="btn-deactivate"
+          (click)="requestDeactivation()"
+          [disabled]="deactivating">
+    <i class="fa-solid fa-user-slash"></i>
+    {{ deactivating ? 'En cours...' : 'Désactiver mon compte' }}
+  </button>
+  <br>
+</div>
+
 <app-footer></app-footer>

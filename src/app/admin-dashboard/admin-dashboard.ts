@@ -30,6 +30,7 @@ export class AdminDashboard {
   adminName = '';
   isLoadingDetails = false;
   eventSearch: string = '';
+  deactivationRequests: any[] = [];
 
   // Detail panel
   selectedUser: any = null;
@@ -81,6 +82,7 @@ export class AdminDashboard {
       this.loadUsers();
       this.loadEvents();
       this.loadOrganisateurs();
+      this.loadDeactivationRequests();
     }
   }
 
@@ -327,13 +329,37 @@ export class AdminDashboard {
     });
   }
 
-
-
-
-
   getRoleBadge(role: string): string {
     if (role === 'ROLE_ADMIN') return 'Admin';
     if (role === 'ROLE_ORGANISATEUR') return 'Organisateur';
     return 'Participant';
+  }
+
+  loadDeactivationRequests() {
+    this.http.get<any[]>(
+      'http://localhost:8081/api/admin/organisateurs/deactivation-requests',
+      { headers: this.getHeaders() }
+    ).subscribe({ next: (data) => { this.deactivationRequests = data; this.cdr.detectChanges(); } });
+  }
+
+  approveDeactivation(org: any) {
+    this.requestDelete(
+      'Approuver la désactivation',
+      `Confirmer la désactivation du compte de ${org.prenom} ${org.nom} ?`,
+      () => this.http.put(
+        `http://localhost:8081/api/admin/organisateurs/${org.id}/deactivate/approve`,
+        {}, { headers: this.getHeaders() }
+      ).subscribe({ next: () => {
+        this.loadDeactivationRequests();
+        this.loadOrganisateurs();
+      }})
+    );
+  }
+
+  rejectDeactivation(org: any) {
+    this.http.put(
+      `http://localhost:8081/api/admin/organisateurs/${org.id}/deactivate/reject`,
+      {}, { headers: this.getHeaders() }
+    ).subscribe({ next: () => this.loadDeactivationRequests() });
   }
 }

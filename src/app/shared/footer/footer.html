@@ -1,44 +1,70 @@
 <footer class="footer">
   <div class="footer-container">
-    <div class="footer-logo">
-      <h1>Invitini</h1>
+
+    <!-- BRAND -->
+    <div class="footer-brand">
+      <h2 class="footer-logo">Invitini</h2>
+      <p class="footer-tagline">{{ 'footer.tagline' | translate }}</p>
+      <a [href]="'mailto:' + supportEmail" class="footer-email-link">
+        <i class="fa-solid fa-envelope"></i>
+        {{ supportEmail }}
+      </a>
     </div>
 
-    <div class="footer-links">
-      <div class="footer-column">
-        <h3>ÉVÉNEMENTS</h3>
-        <ul>
-          <li *ngFor="let link of eventLinks">
-            <a [routerLink]="link.route">{{ link.label }}</a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="footer-column">
-        <h3>AIDE</h3>
-        <ul>
-          <li *ngFor="let link of helpLinks">
-            <a [routerLink]="link.route">{{ link.label }}</a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="footer-column">
-        <h3>À PROPOS</h3>
-        <ul>
-          <li *ngFor="let link of aboutLinks">
-            <a [routerLink]="link.route">{{ link.label }}</a>
-          </li>
-          <li class="footer-email">
-            <span class="email-icon">✉</span>
-            <a [href]="'mailto:' + supportEmail">{{ supportEmail }}</a>
-          </li>
-        </ul>
-      </div>
+    <!-- PLATFORM LINKS -->
+    <div class="footer-column">
+      <h3>{{ 'footer.platformtitle' | translate }}</h3>
+      <ul>
+        <li *ngFor="let link of platformLinks">
+          <a [routerLink]="link.route">{{ link.labelKey | translate }}</a>
+        </li>
+      </ul>
     </div>
+
+    <!-- ACCOUNT LINKS -->
+    <div class="footer-column">
+      <h3>{{ 'footer.accounttitle' | translate }}</h3>
+      <ul>
+        <li>
+          <button class="footer-modal-btn" (click)="openLogin()">
+            {{ 'footer.login' | translate }}
+          </button>
+        </li>
+        <li>
+          <button class="footer-modal-btn" (click)="openSignup()">
+            {{ 'footer.signup' | translate }}
+          </button>
+        </li>
+        <li>
+          <button class="footer-modal-btn" (click)="openSignup()">
+            {{ 'footer.organizer' | translate }}
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- CONTACT COLUMN -->
+    <div class="footer-column">
+      <h3>{{ 'footer.contacttitle' | translate }}</h3>
+      <ul>
+        <li>
+          <i class="fa-solid fa-location-dot"></i>
+          Tunis, Tunisie
+        </li>
+        <li>
+          <i class="fa-solid fa-clock"></i>
+          {{ 'footer.hours' | translate }}
+        </li>
+        <li>
+          <i class="fa-brands fa-instagram"></i>
+          @invitini.tn
+        </li>
+      </ul>
+    </div>
+
   </div>
 
   <div class="footer-bottom">
-    <p>© {{ currentYear }} Invitini— Tous droits réservés.</p>
+    <p>© {{ currentYear }} Invitini — {{ 'footer.rights' | translate }}</p>
   </div>
 </footer>

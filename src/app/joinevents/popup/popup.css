@@ -12,7 +12,7 @@ form {
 
 h1 {
   padding-bottom: 20px;
-  color: #2a6262;
+  color: #A53A6B;
   text-align: center;
 }
 
@@ -42,7 +42,7 @@ form input, form select {
 form button {
   width: 85%;
   padding: 10px;
-  background: #2a6262;
+  background: #A53A6B;
   color: white;
   border: none;
   border-radius: 18px;
@@ -52,7 +52,7 @@ form button {
 
 form button:hover {
   font-weight: bold;
-  background: #306e6e;
+  background: #8E2A5A;
 }
 
 .message {

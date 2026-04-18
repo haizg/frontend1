@@ -9,7 +9,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslateLangService } from '../services/translate-lang.service';
-import {RouterModule} from '@angular/router';
+import {RouterModule, Router} from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -49,11 +49,14 @@ export class Profile {
 
   activeTab = 'events';
 
+  deactivating = false;
+  deactivationStatus: 'idle' | 'pending' | 'done' = 'idle';
 
   constructor(
     private userService: UserService,
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
+    private router: Router,
     // REMOVE: public lang: LangService,
     private translateLang: TranslateLangService, // ADD THIS
     @Inject(PLATFORM_ID) private platformId: Object
@@ -206,4 +209,31 @@ export class Profile {
       }
     });
   }
+
+  requestDeactivation() {
+    if (!confirm('Êtes-vous sûr de vouloir désactiver votre compte ?')) return;
+    this.deactivating = true;
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+
+    this.http.put('http://localhost:8081/api/user/deactivate', {}, { headers })
+      .subscribe({
+        next: (res: any) => {
+          this.deactivating = false;
+          if (res.status === 'PENDING') {
+            this.deactivationStatus = 'pending';
+          } else {
+            this.deactivationStatus = 'done';
+            // Log out after deactivation
+            setTimeout(() => {
+              localStorage.clear();
+              this.userService.clearUser();
+              this.router.navigate(['/home']);
+            }, 2000);
+          }
+        },
+        error: () => { this.deactivating = false; }
+      });
+  }
+
 }

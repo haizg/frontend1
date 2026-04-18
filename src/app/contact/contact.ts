@@ -5,10 +5,12 @@ import { Navbar } from '../navbar/navbar';
 import { Footer } from '../shared/footer/footer';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateLangService } from '../services/translate-lang.service';
 
 @Component({
   selector: 'app-contact',
-  imports: [CommonModule, RouterModule, Navbar, Footer, FormsModule],
+  imports: [CommonModule, RouterModule, Navbar, Footer, FormsModule, TranslateModule],
   templateUrl: './contact.html',
   styleUrl: './contact.css',
 })
@@ -26,30 +28,30 @@ export class Contact {
     message: ''
   };
 
-  faqs = [
-    {
-      q: 'Comment devenir organisateur ?',
-      a: 'Inscrivez-vous en choisissant le rôle "Organisateur". Votre compte sera vérifié par notre équipe sous 24-48h.',
-      open: false
-    },
-    {
-      q: 'La participation aux événements est-elle payante ?',
-      a: 'Non, s\'inscrire à un événement sur Invitini est totalement gratuit pour les participants.',
-      open: false
-    },
-    {
-      q: 'Comment confirmer ma participation ?',
-      a: 'Après votre inscription, vous recevrez un email avec un lien de confirmation. Cliquez dessus pour valider votre place.',
-      open: false
-    },
-    {
-      q: 'Mon événement n\'est pas encore visible, pourquoi ?',
-      a: 'Chaque événement est vérifié par notre équipe avant publication. Ce processus prend généralement moins de 24h.',
-      open: false
-    }
-  ];
-
-  constructor(private http: HttpClient) {}
+faqs = [
+  {
+    q: 'contact.faq1q',
+    a: 'contact.faq1a',
+    open: false
+  },
+  {
+    q: 'contact.faq2q',
+    a: 'contact.faq2a',
+    open: false
+  },
+  {
+    q: 'contact.faq3q',
+    a: 'contact.faq3a',
+    open: false
+  },
+  {
+    q: 'contact.faq4q',
+    a: 'contact.faq4a',
+    open: false
+  }
+];
+  constructor(private http: HttpClient,
+    private translateLang: TranslateLangService) {}
 
   onSubmit() {
     this.sending = true;

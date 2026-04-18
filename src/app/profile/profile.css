@@ -228,3 +228,64 @@
   color: #888;
   font-size: 18px;
 }
+
+
+/* profile.css */
+.deactivation-section {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.deactivation-section h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #c62828;
+  margin: 0 0 16px;
+}
+
+.btn-deactivate {
+  background: white;
+  border: 1.5px solid #c62828;
+  color: #c62828;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-deactivate:hover:not(:disabled) {
+  background: #c62828;
+  color: white;
+}
+
+.btn-deactivate:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.deactivation-pending {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 10px;
+  padding: 14px 18px;
+  color: #5d4037;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.deactivation-done {
+  background: #e8f5e9;
+  border: 1px solid #c8e6c9;
+  border-radius: 10px;
+  padding: 14px 18px;
+  color: #2e7d32;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

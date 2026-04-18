@@ -14,17 +14,14 @@
 
         <div class="cta-wrapper">
           <button (click)="onJoinClick()" class="invitation-btn">
-            <!--{{ 'joincta.button' | translate }}--> Rejoignez-nous
+            {{ 'joincta.joinbutton' | translate }}
           </button>
           <p class="cta-already-msg" *ngIf="showAlreadyMsg">
             <i class="fa-solid fa-circle-info"></i>
-            Vous êtes déjà connecté.
+            {{ 'joincta.alreadylogged' | translate }}
           </p>
         </div>
 
-      <!--  <button class="invitation-btn" (click)="openAuth()">
-          Rejoignez-nous
-        </button>-->
       </div>
     </div>
     <div class="stamp">
@@ -39,6 +36,6 @@
 
 
 
-    <div class="hover-hint">Passez la souris pour ouvrir</div>
+    <div class="hover-hint">{{ 'joincta.hovertosee' | translate }}</div>
   </div>
 </section>

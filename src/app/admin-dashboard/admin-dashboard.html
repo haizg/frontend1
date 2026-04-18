@@ -271,7 +271,45 @@
       <div *ngIf="users.length === 0" class="empty-state">Aucun utilisateur.</div>
     </div>
 
+
     <!-- ORGANISATEURS -->
+    <!-- In admin-dashboard.html, organisateurs tab — add above the table -->
+    <div *ngIf="deactivationRequests.length > 0" class="deactivation-requests-block">
+      <h3 class="section-subtitle" style="color:#c62828">
+        <i class="fa-solid fa-user-slash"></i>
+        Demandes de désactivation
+        <span class="count-badge" style="background:#fdecea;color:#c62828">
+      {{ deactivationRequests.length }}
+    </span>
+      </h3>
+      <table class="admin-table">
+        <thead>
+        <tr>
+          <th>Prénom</th><th>Nom</th><th>Email</th><th>Organisation</th><th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let org of deactivationRequests">
+          <td>{{ org.prenom }}</td>
+          <td>{{ org.nom }}</td>
+          <td class="email-cell">{{ org.email }}</td>
+          <td>{{ org.nomOrganisation || '—' }}</td>
+          <td>
+            <div class="action-buttons-cell">
+              <button (click)="approveDeactivation(org)" class="btn-delete-sm">
+                <i class="fa-solid fa-check"></i> Approuver
+              </button>
+              <button (click)="rejectDeactivation(org)" class="btn-edit-sm">
+                <i class="fa-solid fa-xmark"></i> Refuser
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!--ORGANISATEURS-->
     <div *ngIf="activeTab === 'organisateurs'">
       <div class="tab-header">
         <h1 class="page-title">Gestion des organisateurs</h1>

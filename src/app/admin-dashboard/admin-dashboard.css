@@ -834,3 +834,48 @@
 }
 
 .btn-confirm-logout:hover { opacity: 0.88; }
+
+
+/* ── Active / Inactive badges ─────────────────────────────── */
+.active-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.active-badge.active-yes {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.active-badge.active-no {
+  background: #fdecea;
+  color: #c62828;
+}
+
+.active-badge.active-pending {
+  background: #fff8e1;
+  color: #f57f17;
+}
+
+/* ── Row highlights ───────────────────────────────────────── */
+.inactive-row td {
+  opacity: 0.55;
+}
+
+.inactive-row:hover td {
+  opacity: 0.75;
+}
+
+.pending-deact-row {
+  background: #fffde7 !important;
+}
+
+.pending-deact-row td {
+  opacity: 1;
+}

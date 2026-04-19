@@ -229,6 +229,7 @@
       </div>
       <p class="tab-subtitle">{{ users.length }} utilisateur(s) au total</p>
       <table class="admin-table" *ngIf="users.length > 0">
+        <!-- USERS table — replace thead and tbody -->
         <thead>
         <tr>
           <th>Prénom</th>
@@ -236,29 +237,38 @@
           <th>Email</th>
           <th>Rôle</th>
           <th>Vérifié</th>
+          <th>Statut</th>
           <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let user of users">
+        <tr *ngFor="let user of users" [class.inactive-row]="!user.active">
           <td>{{ user.prenom }}</td>
           <td>{{ user.nom }}</td>
           <td class="email-cell">{{ user.email }}</td>
           <td>
-              <span class="role-badge"
-                    [class.admin]="user.role === 'ROLE_ADMIN'"
-                    [class.org]="user.role === 'ROLE_ORGANISATEUR'">
-                {{ getRoleBadge(user.role) }}
-              </span>
+    <span class="role-badge"
+          [class.admin]="user.role === 'ROLE_ADMIN'"
+          [class.org]="user.role === 'ROLE_ORGANISATEUR'">
+      {{ getRoleBadge(user.role) }}
+    </span>
           </td>
           <td>
-              <span [class.verified]="user.verified" [class.unverified]="!user.verified">
-                {{ user.verified ? 'Vérifié' : 'Non vérifié' }}
-              </span>
+    <span [class.verified]="user.verified" [class.unverified]="!user.verified">
+      {{ user.verified ? 'Vérifié' : 'Non vérifié' }}
+    </span>
+          </td>
+          <td>
+    <span class="active-badge" [class.active-yes]="user.active" [class.active-no]="!user.active">
+      <i class="fa-solid" [class.fa-circle-check]="user.active" [class.fa-circle-xmark]="!user.active"></i>
+      {{ user.active ? 'Actif' : 'Désactivé' }}
+    </span>
           </td>
           <td>
             <div class="action-buttons-cell">
-              <button (click)="viewUserDetails(user)" class="btn-view-sm" [disabled]="isLoadingDetails">{{ isLoadingDetails ? '...' : 'Détails' }}</button>
+              <button (click)="viewUserDetails(user)" class="btn-view-sm" [disabled]="isLoadingDetails">
+                {{ isLoadingDetails ? '...' : 'Détails' }}
+              </button>
               <button (click)="openEditUser(user)" class="btn-edit-sm">Modifier</button>
               <button *ngIf="user.role !== 'ROLE_ADMIN'"
                       (click)="deleteUser(user.id)"
@@ -316,30 +326,45 @@
       </div>
       <p class="tab-subtitle">{{ organisateurs.length }} organisateur(s) au total</p>
       <table class="admin-table orgs-table" *ngIf="organisateurs.length > 0">
+        <!-- ORGANISATEURS table — replace thead and tbody -->
         <thead>
         <tr>
           <th>Prénom</th>
           <th>Nom</th>
           <th>Email</th>
           <th>Organisation</th>
+          <th>Vérification</th>
           <th>Statut</th>
           <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let org of organisateurs">
+        <tr *ngFor="let org of organisateurs" [class.inactive-row]="!org.active" [class.pending-deact-row]="org.deactivationRequested">
           <td>{{ org.prenom }}</td>
           <td>{{ org.nom }}</td>
           <td class="email-cell">{{ org.email }}</td>
           <td>{{ org.nomOrganisation || '—' }}</td>
           <td>
-            <span class="status-dot" [class.dot-green]="org.adminVerified" [class.dot-red]="!org.adminVerified">
-              {{ org.adminVerified ? 'Vérifié par admin' : 'Non vérifié' }}
-            </span>
+    <span class="status-dot" [class.dot-green]="org.adminVerified" [class.dot-red]="!org.adminVerified">
+      {{ org.adminVerified ? 'Vérifié' : 'Non vérifié' }}
+    </span>
+          </td>
+          <td>
+    <span *ngIf="org.deactivationRequested" class="active-badge active-pending">
+      <i class="fa-solid fa-hourglass-half"></i> Demande en cours
+    </span>
+            <span *ngIf="!org.deactivationRequested" class="active-badge"
+                  [class.active-yes]="org.active"
+                  [class.active-no]="!org.active">
+      <i class="fa-solid" [class.fa-circle-check]="org.active" [class.fa-circle-xmark]="!org.active"></i>
+      {{ org.active ? 'Actif' : 'Désactivé' }}
+    </span>
           </td>
           <td>
             <div class="action-buttons-cell">
-              <button (click)="viewOrgDetails(org)" class="btn-view-sm" [disabled]="isLoadingDetails">{{ isLoadingDetails ? '...' : 'Détails' }}</button>
+              <button (click)="viewOrgDetails(org)" class="btn-view-sm" [disabled]="isLoadingDetails">
+                {{ isLoadingDetails ? '...' : 'Détails' }}
+              </button>
               <button (click)="openEditOrg(org)" class="btn-edit-sm">Modifier</button>
               <button (click)="deleteOrganisateur(org.id)" class="btn-delete-sm">Supprimer</button>
               <button (click)="toggleVerifyOrg(org)"
@@ -350,7 +375,6 @@
               </button>
             </div>
           </td>
-
         </tr>
         </tbody>
       </table>

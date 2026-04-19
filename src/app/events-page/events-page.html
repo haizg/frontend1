@@ -4,7 +4,6 @@
   <div class="events-page-container">
     <h1 class="page-title">{{ 'events.allevents' | translate }}</h1>
 
-    <!-- Filters -->
     <div class="events-filters">
       <select #categorySelect (change)="onCategoryChange(categorySelect.value)" [disabled]="isLoadingEvents">
         <option value="all">{{ 'events.ttcategories' | translate }}</option>
@@ -13,7 +12,6 @@
       <input type="date" #dateInput (change)="onDateChange(dateInput.value)" [disabled]="isLoadingEvents">
     </div>
 
-    <!-- LOADING STATE - Skeleton Cards -->
     <div *ngIf="isLoadingEvents" class="skeleton-grid">
       <div class="skeleton-card" *ngFor="let item of [1,2,3,4,5,6,7,8]">
         <div class="skeleton-image"></div>

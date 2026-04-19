@@ -45,7 +45,6 @@ export class EventsPage {
   userEmail:string='';
   participatedEventIds: Set<number> = new Set();
 
-  // Loading states
   isLoadingEvents = false;
   isDeleting = false;
   isJoining = false;
@@ -115,7 +114,6 @@ export class EventsPage {
 
     this.eventService.getEvents().subscribe({
       next: (data) => {
-        // Sort events from closest to today's date to furthest
         const sortedData = this.sortEventsByClosestToToday(data);
         this.allEvents = sortedData;
         this.categories = Array.from(new Set(sortedData.map(e => e.category)));
@@ -131,7 +129,6 @@ export class EventsPage {
     });
   }
 
-  // Method to sort events by closest to today's date first
   private sortEventsByClosestToToday(events: EventModel[]): EventModel[] {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -145,7 +142,7 @@ export class EventsPage {
       const diffA = Math.abs(dateA.getTime() - today.getTime());
       const diffB = Math.abs(dateB.getTime() - today.getTime());
 
-      return diffA - diffB; // Smaller difference first (closest to today)
+      return diffA - diffB;
     });
   }
 

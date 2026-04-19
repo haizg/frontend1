@@ -7,7 +7,7 @@ import {UserService} from '../services/user.service';
 import {CommonModule} from '@angular/common';
 import { ForgotPasswordModal } from '../forgot-password-modal/forgot-password-modal';
 import { TranslateModule } from '@ngx-translate/core';
-import { TranslateLangService } from '../services/translate-lang.service'; // ADD THIS
+import { TranslateLangService } from '../services/translate-lang.service';
 
 @Component({
   selector: 'app-login',
@@ -58,16 +58,8 @@ export class Login {
     this.http.post('http://localhost:8081/api/auth/login', body, { responseType: 'text' })
       .subscribe({
         next:(token)=> {
-          console.log("Token received:", token);
-
           localStorage.setItem('token',token);
-
           const payload = JSON.parse(atob(token.split('.')[1]));
-          console.log(" Full JWT Payload:", payload);
-          console.log(" Role from payload:", payload.role);
-          console.log(" Nom from payload:", payload.nom);
-          console.log(" Prenom from payload:", payload.prenom);
-
           const userData = {
             email: payload.sub,
             nom: payload.nom || '',
@@ -76,8 +68,6 @@ export class Login {
             verified: payload.verified,
             adminVerified:payload.adminVerified
           };
-
-          console.log(" User data object:", userData);
 
           localStorage.setItem('user', JSON.stringify(userData));
           localStorage.setItem('role', payload.role);
@@ -89,17 +79,8 @@ export class Login {
            localStorage.removeItem('redirectAfterLogin')
            this.router.navigate([redirect]);
            }else{
-             console.log('BEFORE closeLoginModal')
-             this.modalService.closeLoginModal();
-
              this.modalService.closeLoginModal();
            }
-
-
-
-          console.log('AFTER closeLoginModal')
-          console.log(" Saved to localStorage:", userData);
-
         },
         error: (err) => {
           console.error("Login error:", err);

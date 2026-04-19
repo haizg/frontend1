@@ -26,7 +26,7 @@ export class SignUpOrg {
   nomOrganisation = '';
   errorMessage = '';
   successMessage = '';
-  isLoading = false; // Add loading state
+  isLoading = false;
   hideSuccessMessage = false;
 
   constructor(
@@ -59,10 +59,6 @@ export class SignUpOrg {
   }
 
   signed(form: any) {
-
-    console.log("form valid?", form.valid);
-    console.log("role value:", this.role);
-
     if (form.invalid) {
       this.translate.get('signup.error_required_fields').subscribe((msg: string) => {
         this.errorMessage = msg;
@@ -87,7 +83,6 @@ export class SignUpOrg {
     this.errorMessage = '';
     this.isLoading = true;
 
-    // Show "processing" message immediately
     this.translate.get('signup.processing').subscribe((msg: string) => {
       this.successMessage = msg;
     });
@@ -114,15 +109,11 @@ export class SignUpOrg {
       }
     ).subscribe({
       next: (response: any) => {
-        console.log('Signup successful - Raw response:', response);
         this.isLoading = false;
-
-        // Replace with success message
         this.translate.get('signup.success_message', { email: this.email }).subscribe((msg: string) => {
           this.successMessage = msg;
         });
 
-        // Wait 5 seconds, then fade out, then close
         setTimeout(() => {
           this.hideSuccessMessage = true;
           setTimeout(() => {
@@ -134,7 +125,7 @@ export class SignUpOrg {
       error: (err) => {
         console.error('Signup error:', err);
         this.isLoading = false;
-        this.successMessage = ''; // Clear processing message
+        this.successMessage = '';
 
         if (err.status === 200) {
           this.translate.get('signup.success_message', { email: this.email }).subscribe((msg: string) => {

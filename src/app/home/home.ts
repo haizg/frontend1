@@ -120,7 +120,6 @@ export class Home implements AfterViewInit {
     }
   }
 
-  // Method to sort events by closest to today's date first
   private sortEventsByClosestToToday(events: EventModel[]): EventModel[] {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -134,7 +133,7 @@ export class Home implements AfterViewInit {
       const diffA = Math.abs(dateA.getTime() - today.getTime());
       const diffB = Math.abs(dateB.getTime() - today.getTime());
 
-      return diffA - diffB; // Smaller difference first (closest to today)
+      return diffA - diffB;
     });
   }
 
@@ -142,8 +141,6 @@ export class Home implements AfterViewInit {
     this.isLoadingEvents = true;
     this.events = [];
     this.availableEvents = [];
-
-    // Add a timeout to show if loading is taking too long
     const slowConnectionTimeout = setTimeout(() => {
       if (this.isLoadingEvents) {
         console.log('Loading is taking longer than expected...');
@@ -154,7 +151,6 @@ export class Home implements AfterViewInit {
     this.eventService.getEvents().subscribe({
       next: (data) => {
         clearTimeout(slowConnectionTimeout);
-        // Sort events from closest to today's date to furthest
         const sortedData = this.sortEventsByClosestToToday(data);
         this.events = sortedData;
         this.availableEvents = sortedData.filter(event => !event.isFull);
@@ -186,7 +182,6 @@ export class Home implements AfterViewInit {
   }
 
   onEventCreated() {
-    console.log('onEventCreated called');
     this.loadEvents();
   }
 
@@ -196,6 +191,9 @@ export class Home implements AfterViewInit {
 
   get isParticipant(): boolean {
     return this.userRole === 'ROLE_USER';
+  }
+  get isAdmin(): boolean {
+      return this.userRole === 'ROLE_ADMIN';
   }
 
   get fullName(): string {
@@ -243,10 +241,6 @@ export class Home implements AfterViewInit {
 
   onEventUpdated() {
     this.loadEvents();
-  }
-
-  get isAdmin(): boolean {
-    return this.userRole === 'ROLE_ADMIN';
   }
 
   loadMyParticipations() {

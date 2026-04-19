@@ -88,7 +88,23 @@
     "newpassword": "New Password",
     "confirmpassword": "Confirm Password",
     "modify": "Update",
-    "loginrequired": "Please log in to view your profile."
+    "loginrequired": "Please log in to view your profile.",
+    "deactivate": {
+      "title": "Deactivate my account",
+      "zone": "Danger zone",
+      "btn": "Deactivate my account",
+      "cancel": "Cancel",
+      "confirm": "Confirm deactivation",
+      "loading": "Processing...",
+      "org_warning": "Your request will be sent to the admin. Once approved, your account will be deactivated and your participations will be deleted. You will receive a confirmation email.",
+      "user_warning": "Your account will be deactivated immediately. All your participations will be deleted. This action requires contacting support@invitini.tn to be reversed.",
+      "org_desc": "Sends a request to the admin. You will receive a decision email within 24 hours.",
+      "user_desc": "Your account will be immediately deactivated and your participations will be deleted.",
+      "pending_title": "Request sent to admin",
+      "pending_msg": "Your request is being processed. You will receive an email within 24 hours with our team's decision.",
+      "done_title": "Account deactivated",
+      "done_msg": "Your account has been deactivated. You will be logged out in a few seconds."
+    }
   },
   "eventdetail": {
     "date": "Date",

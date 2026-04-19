@@ -7,11 +7,13 @@ export class ModalService {
   private signupModalOpen=new BehaviorSubject<boolean>(false);
   private logoutModalOpen = new BehaviorSubject<boolean>(false);
   private joinModalOpen = new BehaviorSubject<boolean>(false);
+  private deactivateModalOpen = new BehaviorSubject<boolean>(false);
 
   loginModal$ = this.loginModalOpen.asObservable();
   signupModal$=this.signupModalOpen.asObservable();
   logoutModal$ = this.logoutModalOpen.asObservable();
   joinModal$=this.joinModalOpen.asObservable();
+  deactivateModal$ = this.deactivateModalOpen.asObservable();
 
 
   private currentEventID = new BehaviorSubject<number|null>(null);
@@ -27,6 +29,9 @@ export class ModalService {
   openLogoutModal()  { this.logoutModalOpen.next(true); }
   closeLogoutModal() { this.logoutModalOpen.next(false); }
 
+  openDeactivateModal()  { this.deactivateModalOpen.next(true); }
+  closeDeactivateModal() { this.deactivateModalOpen.next(false); }
+
   openJoinModal(eventId: number){
     this.currentEventID.next(eventId);
     this.joinModalOpen.next(true);}
@@ -34,6 +39,7 @@ export class ModalService {
   closeJoinModal(){
     this.joinModalOpen.next(false);
     this.currentEventID.next(null);}
+
 
 
 

@@ -46,8 +46,8 @@ export class Profile {
   createdEvents: EventModel[] = [];
   participatedEvents: EventModel[] = [];
 
-
   activeTab = 'events';
+  showDeactivateModal = false;
 
   deactivating = false;
   deactivationStatus: 'idle' | 'pending' | 'done' = 'idle';
@@ -79,6 +79,10 @@ export class Profile {
           this.editPrenom = u.prenom;
           this.editEmail = u.email;
           this.editNomOrganisation = u.nomOrganisation;
+          // Restore pending state if organizer already requested deactivation
+          if (this.isOrganisateur) {
+            this.checkDeactivationStatus();
+          }
           this.loadEvents(u.email);
           this.cdr.detectChanges();
         }
@@ -121,12 +125,6 @@ export class Profile {
         });
     }
   }
-
-
-
-
-
-
 
   updateProfile() {
     this.profileMessage = '';
@@ -210,9 +208,14 @@ export class Profile {
     });
   }
 
+  // Replace requestDeactivation + add confirmDeactivation:
   requestDeactivation() {
-    if (!confirm('Êtes-vous sûr de vouloir désactiver votre compte ?')) return;
+    this.showDeactivateModal = true;
+  }
+
+  confirmDeactivation() {
     this.deactivating = true;
+    this.showDeactivateModal = false;
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
@@ -220,20 +223,41 @@ export class Profile {
       .subscribe({
         next: (res: any) => {
           this.deactivating = false;
-          if (res.status === 'PENDING') {
+          if (res.status === 'PENDING' || res.status === 'ALREADY_PENDING') {
             this.deactivationStatus = 'pending';
-          } else {
+          } else if (res.status === 'DEACTIVATED') {
             this.deactivationStatus = 'done';
-            // Log out after deactivation
             setTimeout(() => {
               localStorage.clear();
               this.userService.clearUser();
               this.router.navigate(['/home']);
-            }, 2000);
+            }, 4000);
           }
+          this.cdr.detectChanges();
         },
-        error: () => { this.deactivating = false; }
+        error: () => {
+          this.deactivating = false;
+          this.cdr.detectChanges();
+        }
       });
   }
+
+  checkDeactivationStatus() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    this.http.get<any>('http://localhost:8081/api/user/deactivation-status', { headers })
+      .subscribe({
+        next: (res) => {
+          if (res.deactivationRequested) {
+            this.deactivationStatus = 'pending';
+            this.cdr.detectChanges();
+          }
+        },
+        error: () => {}
+      });
+  }
+
+
 
 }

@@ -89,7 +89,23 @@
     "newpassword": "Nouveau mot de passe",
     "confirmpassword": "Confirmer le mot de passe",
     "modify": "Modifier",
-    "loginrequired": "Veuillez vous connecter pour voir votre profil."
+    "loginrequired": "Veuillez vous connecter pour voir votre profil.",
+    "deactivate": {
+      "title": "Désactiver mon compte",
+      "zone": "Zone de danger",
+      "btn": "Désactiver mon compte",
+      "cancel": "Annuler",
+      "confirm": "Confirmer la désactivation",
+      "loading": "En cours...",
+      "org_warning": "Votre demande sera envoyée à l'admin. Une fois approuvée, votre compte sera désactivé et vos participations supprimées. Vous recevrez un email de confirmation.",
+      "user_warning": "Votre compte sera désactivé immédiatement. Toutes vos participations seront supprimées. Cette action nécessite une demande à support@invitini.tn pour être annulée.",
+      "org_desc": "Envoie une demande à l'admin. Vous recevrez un email de décision sous 24h.",
+      "user_desc": "Votre compte sera immédiatement désactivé et vos participations supprimées.",
+      "pending_title": "Demande envoyée à l'admin",
+      "pending_msg": "Votre demande est en cours de traitement. Vous recevrez un email dans les 24h avec la décision de notre équipe.",
+      "done_title": "Compte désactivé",
+      "done_msg": "Votre compte a été désactivé. Vous allez être déconnecté dans quelques secondes."
+    }
   },
   "eventdetail": {
     "date": "Date",
@@ -198,13 +214,12 @@
     "cancel": "Annuler",
     "save": "Enregistrer",
     "updating": "Mise à jour...",
-
-      "error_image_format": "Unsupported format. Use JPEG, PNG, WebP or GIF.",
-      "error_image_size": "Image too large (max 5 MB).",
-      "error_upload_failed": "Upload failed. Please check your connection.",
-      "error_form_invalid": "Please fill all required fields correctly.",
-      "error_update": "Failed to update event.",
-      "success": "Event updated successfully!"
+    "error_image_format": "Unsupported format. Use JPEG, PNG, WebP or GIF.",
+    "error_image_size": "Image too large (max 5 MB).",
+    "error_upload_failed": "Upload failed. Please check your connection.",
+    "error_form_invalid": "Please fill all required fields correctly.",
+    "error_update": "Failed to update event.",
+    "success": "Event updated successfully!"
 
   },
   "logout": {

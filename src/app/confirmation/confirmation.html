@@ -3,20 +3,26 @@
 <div class="confirmation-container">
 
   <div *ngIf="status === 'loading'" class="status-card loading">
-    <div class="icon">⏳</div>
+    <div class="icon">
+      <i class="fa-solid fa-hourglass-half"></i>
+    </div>
     <h2>Vérification en cours...</h2>
     <p>Veuillez patienter.</p>
   </div>
 
   <div *ngIf="status === 'success'" class="status-card success">
-    <div class="icon">✅</div>
+    <div class="icon">
+      <i class="fa-solid fa-circle-check"></i>
+    </div>
     <h2>Participation confirmée!</h2>
     <p>Votre inscription a été confirmée avec succès. À bientôt sur Véra!</p>
     <a routerLink="/api/home" class="btn-home">Retour à l'accueil</a>
   </div>
 
   <div *ngIf="status === 'error'" class="status-card error">
-    <div class="icon">❌</div>
+    <div class="icon">
+      <i class="fa-solid fa-times"></i>
+    </div>
     <h2>Lien invalide</h2>
     <p>Ce lien de confirmation est invalide ou a déjà été utilisé.</p>
     <a routerLink="/home" class="btn-home">Retour à l'accueil</a>

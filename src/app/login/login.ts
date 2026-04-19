@@ -6,7 +6,7 @@ import {ModalService} from '../services/modal.service';
 import {UserService} from '../services/user.service';
 import {CommonModule} from '@angular/common';
 import { ForgotPasswordModal } from '../forgot-password-modal/forgot-password-modal';
-import { TranslateModule } from '@ngx-translate/core'; // ADD THIS
+import { TranslateModule } from '@ngx-translate/core';
 import { TranslateLangService } from '../services/translate-lang.service'; // ADD THIS
 
 @Component({
@@ -17,7 +17,7 @@ import { TranslateLangService } from '../services/translate-lang.service'; // AD
         ReactiveFormsModule,
         CommonModule,
         ForgotPasswordModal,
-        TranslateModule // ADD THIS
+        TranslateModule
     ],
   templateUrl: './login.html',
   styleUrl: './login.css',
@@ -32,8 +32,7 @@ export class Login {
   constructor(private http: HttpClient,
               private router :Router,
               private modalService: ModalService,
-              // REMOVE: public lang: LangService,
-              private translateLang: TranslateLangService, // ADD THIS
+              private translateLang: TranslateLangService,
               private userService: UserService) {}
 
 
@@ -106,7 +105,7 @@ export class Login {
           console.error("Login error:", err);
                   if (err.status === 403) {
                     if (err.error?.error === 'ACCOUNT_NOT_VERIFIED') {
-                      this.errorMessage = '⚠️ Veuillez vérifier votre email avant de vous connecter. Consultez votre boîte de réception.';
+                      this.errorMessage = ' Veuillez vérifier votre email avant de vous connecter. Consultez votre boîte de réception.';
                     } else {
                       this.errorMessage = 'Compte non vérifié';
                     }
@@ -114,6 +113,9 @@ export class Login {
                     this.errorMessage = 'Email ou mot de passe incorrect';
                   } else {
                     this.errorMessage = 'Une erreur est survenue. Réessayez';
+                  }
+                  if (err.error?.error === 'ACCOUNT_DEACTIVATED') {
+                      this.errorMessage = 'Ce compte a été désactivé. Contactez support@invitini.tn pour le réactiver.';
                   }
                 }
               });

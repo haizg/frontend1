@@ -39,7 +39,7 @@
 }
 
 .success h2 {
-  color: #2a6262;
+  color: #A53A6B ;
 }
 
 .error {
@@ -59,7 +59,7 @@
 .btn-home {
   display: inline-block;
   padding: 12px 32px;
-  background: #2a6262;
+  background: #A53A6B ;
   color: white;
   border-radius: 8px;
   text-decoration: none;
@@ -68,5 +68,5 @@
 }
 
 .btn-home:hover {
-  background: #306e6e;
+  background: #8E2A5A;
 }

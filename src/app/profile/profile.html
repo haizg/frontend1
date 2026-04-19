@@ -139,34 +139,78 @@
   </div>
 
 
+  <!-- Move this INSIDE the profile-container div, after the tabs content -->
+  <!-- and REMOVE the standalone one outside the container -->
+
+  <!-- DEACTIVATION MODAL OVERLAY -->
+  <div class="modal-overlay" *ngIf="showDeactivateModal" (click)="showDeactivateModal = false">
+    <div class="confirm-box" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="showDeactivateModal = false" type="button">&times;</button>
+
+      <div class="confirm-icon-wrap danger">
+        <i class="fa-solid fa-user-slash"></i>
+      </div>
+
+      <h3>{{ 'profile.deactivate.title' | translate }}</h3>
+
+      <p *ngIf="isOrganisateur">{{ 'profile.deactivate.org_warning' | translate }}</p>
+      <p *ngIf="!isOrganisateur">{{ 'profile.deactivate.user_warning' | translate }}</p>
+
+      <div class="confirm-btns">
+        <button class="btn-cancel-deact" (click)="showDeactivateModal = false">
+          {{ 'profile.deactivate.cancel' | translate }}
+        </button>
+        <button class="btn-confirm-deact" (click)="confirmDeactivation()" [disabled]="deactivating">
+          {{ deactivating ? ('profile.deactivate.loading' | translate) : ('profile.deactivate.confirm' | translate) }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEACTIVATION SECTION at bottom of profile -->
+  <div class="deactivation-section" *ngIf="user">
+    <div class="deactivation-inner">
+
+      <!-- Already pending — hide button entirely -->
+      <div *ngIf="deactivationStatus === 'pending'" class="deactivation-pending">
+        <i class="fa-solid fa-clock"></i>
+        <div>
+          <strong>{{ 'profile.deactivate.pending_title' | translate }}</strong>
+          <p>{{ 'profile.deactivate.pending_msg' | translate }}</p>
+        </div>
+      </div>
+
+      <!-- Done (participant deactivated) -->
+      <div *ngIf="deactivationStatus === 'done'" class="deactivation-done">
+        <i class="fa-solid fa-circle-check"></i>
+        <div>
+          <strong>{{ 'profile.deactivate.done_title' | translate }}</strong>
+          <p>{{ 'profile.deactivate.done_msg' | translate }}</p>
+        </div>
+      </div>
+
+      <!-- Idle — show danger zone with button on the RIGHT -->
+      <div *ngIf="deactivationStatus === 'idle'" class="deactivation-idle">
+        <div class="deactivation-text">
+          <h4>{{ 'profile.deactivate.zone' | translate }}</h4>
+          <p *ngIf="isOrganisateur">{{ 'profile.deactivate.org_desc' | translate }}</p>
+          <p *ngIf="!isOrganisateur">{{ 'profile.deactivate.user_desc' | translate }}</p>
+        </div>
+        <button class="btn-deactivate" (click)="showDeactivateModal = true">
+          <i class="fa-solid fa-user-slash"></i>
+          {{ 'profile.deactivate.btn' | translate }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
 <div *ngIf="!user" class="not-logged-in">
   <p>{{ 'profile.loginrequired' | translate }}</p>
 </div>
 
-<!-- profile.html — add at the bottom of the profile section -->
-<div class="deactivation-section">
-  <h3>Zone de danger</h3>
 
-  <div *ngIf="deactivationStatus === 'pending'" class="deactivation-pending">
-    <i class="fa-solid fa-clock"></i>
-    Votre demande de désactivation est en attente d'approbation par l'admin.
-  </div>
-
-  <div *ngIf="deactivationStatus === 'done'" class="deactivation-done">
-    <i class="fa-solid fa-circle-check"></i>
-    Compte désactivé. Vous allez être déconnecté.
-  </div>
-
-  <button *ngIf="deactivationStatus === 'idle'"
-          class="btn-deactivate"
-          (click)="requestDeactivation()"
-          [disabled]="deactivating">
-    <i class="fa-solid fa-user-slash"></i>
-    {{ deactivating ? 'En cours...' : 'Désactiver mon compte' }}
-  </button>
-  <br>
-</div>
 
 <app-footer></app-footer>

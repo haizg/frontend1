@@ -51,7 +51,7 @@
 
     </div>
     <small *ngIf="mdpRef.errors?.['required'] && mdpRef.touched">* Champs obligatoire</small>
-    <div class="password-rules" *ngIf="mdpRef.touched">
+    <div class="password-rules" *ngIf="mdpRef.touched && mdpRef.invalid">
 
       <p class="rules-title" [class.invalid]="mdpRef.invalid">
         Le mot de passe doit contenir :

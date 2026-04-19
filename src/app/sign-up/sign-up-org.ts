@@ -114,7 +114,7 @@ export class SignUpOrg {
       }
     ).subscribe({
       next: (response: any) => {
-        console.log('✅ Signup successful - Raw response:', response);
+        console.log('Signup successful - Raw response:', response);
         this.isLoading = false;
 
         // Replace with success message
@@ -132,7 +132,7 @@ export class SignUpOrg {
         }, 5000);
       },
       error: (err) => {
-        console.error('❌ Signup error:', err);
+        console.error('Signup error:', err);
         this.isLoading = false;
         this.successMessage = ''; // Clear processing message
 
@@ -171,7 +171,7 @@ export class SignUpOrg {
           });
         }
 
-        // Auto hide error message after 5 seconds
+
         setTimeout(() => {
           this.errorMessage = '';
         }, 5000);

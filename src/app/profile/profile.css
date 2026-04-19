@@ -289,3 +289,225 @@
   align-items: center;
   gap: 10px;
 }
+
+
+.deactivation-section {
+  border-top: 1px solid #f0f0f0;
+  margin-top: 48px;
+  padding: 32px 0 48px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.deactivation-inner {
+  background: #fff8f8;
+  border: 1px solid #ffd0d0;
+  border-radius: 12px;
+  padding: 24px 28px;
+}
+
+.deactivation-idle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.deactivation-text h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #c62828;
+  margin: 0 0 6px;
+}
+
+.deactivation-text p {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+.btn-deactivate {
+  background: white;
+  border: 1.5px solid #c62828;
+  color: #c62828;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-deactivate:hover:not(:disabled) {
+  background: #c62828;
+  color: white;
+}
+
+.btn-deactivate:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.deactivation-pending,
+.deactivation-done {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.deactivation-pending i { font-size: 22px; color: #e65100; margin-top: 2px; }
+.deactivation-done i    { font-size: 22px; color: #2e7d32; margin-top: 2px; }
+
+.deactivation-pending strong { color: #e65100; display: block; margin-bottom: 4px; }
+.deactivation-done strong    { color: #2e7d32; display: block; margin-bottom: 4px; }
+
+.deactivation-pending p,
+.deactivation-done p {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* MODAL OVERLAY - Full screen overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+/* MODAL BOX - Properly centered */
+.confirm-box {
+  position: relative;
+  background: white;
+  border-radius: 16px;
+  padding: 36px 28px 28px;
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.2s ease;
+  margin: 20px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.confirm-icon-wrap.danger {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #fdecea;
+  color: #c62828;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin: 0 auto 16px;
+}
+
+.confirm-box h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 10px;
+}
+
+.confirm-box p {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.confirm-btns {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-cancel-deact {
+  flex: 1;
+  padding: 11px;
+  border: 1.5px solid #ddd;
+  border-radius: 10px;
+  background: white;
+  color: #555;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel-deact:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+.btn-confirm-deact {
+  flex: 1;
+  padding: 11px;
+  border: none;
+  border-radius: 10px;
+  background: #c62828;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-confirm-deact:hover:not(:disabled) {
+  background: #b71c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(198, 40, 40, 0.3);
+}
+
+.btn-confirm-deact:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.2s;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.close-btn:hover {
+  color: #555;
+  background: #f5f5f5;
+}

@@ -1,9 +1,9 @@
 .join-section {
-  padding: 40px 10px;
+  padding: 20px 10px 40px 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 800px;
+  min-height: 550px;
   position: relative;
   overflow: hidden;
 }

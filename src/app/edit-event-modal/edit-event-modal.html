@@ -3,10 +3,20 @@
 <div class="modal-container" *ngIf="isVisible" (click)="$event.stopPropagation()">
   <div class="modal-content">
 
-    <div class="loading-overlay" *ngIf="isLoading">
+    <!-- General saving overlay -->
+    <div class="loading-overlay" *ngIf="isLoading && !isUploadingProgramImage">
       <div class="loading-spinner-modal">
         <div class="spinner-modal"></div>
         <p class="loading-text-modal">{{ 'editevent.updating' | translate }}</p>
+      </div>
+    </div>
+
+    <!-- Program image upload overlay (separate, more specific) -->
+    <div class="loading-overlay upload-overlay" *ngIf="isUploadingProgramImage">
+      <div class="loading-spinner-modal">
+        <div class="spinner-modal"></div>
+        <p class="loading-text-modal">{{ 'editevent.program_image_uploading' | translate }}</p>
+        <p class="upload-sub">{{ 'editevent.program_image_uploading_sub' | translate }}</p>
       </div>
     </div>
 
@@ -15,21 +25,19 @@
       <button class="close-btn" (click)="close()">✕</button>
     </div>
 
+    <!-- Locked banner -->
     <div class="locked-banner" *ngIf="isLocked">
       <i class="fa-solid fa-lock"></i>
       <div class="locked-banner-text">
-        <strong>Événement publié — modifications limitées</strong>
-        <span>
-          Cet événement a été approuvé et des participants se sont inscrits.
-          Seule la <strong>capacité maximale</strong> et le <strong>programme</strong> peuvent être modifiés.
-          Minimum autorisé pour la capacité : {{ minCapacity }} (inscrits confirmés).
-        </span>
+        <strong>{{ 'editevent.locked_title' | translate }}</strong>
+        <span>{{ 'editevent.locked_body' | translate }} {{ minCapacity }} {{ 'editevent.locked_min' | translate }}</span>
       </div>
     </div>
 
     <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
       <div class="form-grid">
 
+        <!-- TITLE -->
         <div class="form-group full-width" [class.field-locked]="isLocked">
           <label>{{ 'editevent.event_title' | translate }}
             <span *ngIf="isLocked" class="lock-icon"><i class="fa-solid fa-lock"></i></span>
@@ -42,87 +50,98 @@
           </small>
         </div>
 
+        <!-- DESCRIPTION -->
         <div class="form-group full-width" [class.field-locked]="isLocked">
           <label>{{ 'editevent.description' | translate }}
             <span *ngIf="isLocked" class="lock-icon"><i class="fa-solid fa-lock"></i></span>
           </label>
           <textarea formControlName="description"
                     [placeholder]="'editevent.description_placeholder' | translate"
-                    rows="4" class="form-input" [disabled]="isLoading"></textarea>
+                    rows="4" class="form-input"></textarea>
           <small class="error" *ngIf="eventForm.get('description')?.invalid && eventForm.get('description')?.touched">
             {{ 'editevent.error_description_min' | translate }}
           </small>
         </div>
 
+        <!-- PROGRAMME -->
         <div class="form-group full-width" [class.field-highlighted]="isLocked">
           <label>
             {{ 'editevent.program' | translate }}
             <span *ngIf="isLocked" class="editable-tag">
-              <i class="fa-solid fa-pen"></i> Modifiable
+              <i class="fa-solid fa-pen"></i> {{ 'editevent.editable' | translate }}
             </span>
           </label>
 
+          <!-- Type toggle -->
           <div class="program-type-toggle">
             <button type="button"
                     class="toggle-btn"
                     [class.active]="programType === 'text'"
                     (click)="onProgramTypeChange('text')"
-                    [disabled]="isLoading">
-              <i class="fa-solid fa-align-left"></i> Texte
+                    [disabled]="isLoading || isUploadingProgramImage">
+              <i class="fa-solid fa-align-left"></i>
+              {{ 'editevent.program_type_text' | translate }}
             </button>
             <button type="button"
                     class="toggle-btn"
                     [class.active]="programType === 'image'"
                     (click)="onProgramTypeChange('image')"
-                    [disabled]="isLoading">
-              <i class="fa-solid fa-image"></i> Image
+                    [disabled]="isLoading || isUploadingProgramImage">
+              <i class="fa-solid fa-image"></i>
+              {{ 'editevent.program_type_image' | translate }}
             </button>
           </div>
 
+          <!-- Text mode -->
           <textarea
             *ngIf="programType === 'text'"
             formControlName="program"
             [placeholder]="'editevent.program_placeholder' | translate"
             rows="5"
-            class="form-input"
-            [disabled]="isLoading"></textarea>
+            class="form-input"></textarea>
 
+          <!-- Image mode -->
           <ng-container *ngIf="programType === 'image'">
 
-            <input
-              type="file"
-              #programFileInput
-              (change)="onProgramFileSelected($event)"
-              accept="image/*"
-              style="display: none;"
-              [disabled]="isLoading">
+            <input type="file"
+                   #programFileInput
+                   (change)="onProgramFileSelected($event)"
+                   accept="image/*"
+                   style="display:none">
 
-            <button
-              type="button"
-              class="btn-upload"
-              (click)="programFileInput.click()"
-              *ngIf="!programImagePreview && !isUploadingProgramImage"
-              [disabled]="isLoading">
+            <!-- No preview yet: show upload button -->
+            <button type="button"
+                    class="btn-upload"
+                    (click)="programFileInput.click()"
+                    *ngIf="!programImagePreview"
+                    [disabled]="isLoading || isUploadingProgramImage">
               <i class="fa-solid fa-upload"></i>
-              Choisir une image de programme
+              {{ 'editevent.program_image_choose' | translate }}
             </button>
 
-            <div class="image-preview-container" *ngIf="programImagePreview">
-              <img [src]="programImagePreview" alt="Aperçu du programme" class="image-preview">
-              <div class="image-actions">
+            <!-- Preview -->
+            <div class="program-preview-container" *ngIf="programImagePreview">
+              <img [src]="programImagePreview"
+                   alt="Aperçu du programme"
+                   class="program-modal-image">
+              <div class="program-preview-actions">
                 <button type="button" class="btn-change"
-                        (click)="programFileInput.click()" [disabled]="isLoading">
-                  Changer
+                        (click)="programFileInput.click()"
+                        [disabled]="isLoading || isUploadingProgramImage">
+                  <i class="fa-solid fa-arrows-rotate"></i>
+                  {{ 'editevent.program_image_change' | translate }}
                 </button>
                 <button type="button" class="btn-remove"
-                        (click)="removeProgramImage()" [disabled]="isLoading">
-                  Supprimer
+                        (click)="removeProgramImage()"
+                        [disabled]="isLoading || isUploadingProgramImage">
+                  <i class="fa-solid fa-trash"></i>
+                  {{ 'editevent.program_image_delete' | translate }}
                 </button>
               </div>
-            </div>
-
-            <div class="program-upload-loading" *ngIf="isUploadingProgramImage">
-              <span>Téléchargement en cours…</span>
+              <!-- Inline uploading indicator shown on the preview itself -->
+              <div class="preview-uploading-bar" *ngIf="isUploadingProgramImage">
+                <div class="preview-uploading-bar-fill"></div>
+              </div>
             </div>
 
           </ng-container>
@@ -130,11 +149,12 @@
           <small class="info-text">{{ 'editevent.program_info' | translate }}</small>
         </div>
 
+        <!-- CATEGORY -->
         <div class="form-group" [class.field-locked]="isLocked">
           <label>{{ 'editevent.category' | translate }}
             <span *ngIf="isLocked" class="lock-icon"><i class="fa-solid fa-lock"></i></span>
           </label>
-          <select formControlName="category" class="form-input" [disabled]="isLoading">
+          <select formControlName="category" class="form-input">
             <option value="">{{ 'editevent.select_category' | translate }}</option>
             <option value="SPORT">{{ 'editevent.category_sport' | translate }}</option>
             <option value="ART">{{ 'editevent.category_art' | translate }}</option>
@@ -145,60 +165,76 @@
           </select>
         </div>
 
+        <!-- DATE -->
         <div class="form-group" [class.field-locked]="isLocked">
           <label>{{ 'editevent.date' | translate }} *</label>
-          <input type="date" formControlName="date" class="form-input" [disabled]="isLoading">
+          <input type="date" formControlName="date" class="form-input">
         </div>
 
+        <!-- TIME -->
         <div class="form-group" [class.field-locked]="isLocked">
           <label>{{ 'editevent.time' | translate }} *</label>
-          <input type="time" formControlName="time" class="form-input" [disabled]="isLoading">
+          <input type="time" formControlName="time" class="form-input">
         </div>
 
+        <!-- LOCATION -->
         <div class="form-group" [class.field-locked]="isLocked">
           <label>{{ 'editevent.location' | translate }}
             <span *ngIf="isLocked" class="lock-icon"><i class="fa-solid fa-lock"></i></span>
           </label>
           <input type="text" formControlName="location"
                  [placeholder]="'editevent.location_placeholder' | translate"
-                 class="form-input" [disabled]="isLoading">
+                 class="form-input">
         </div>
 
+        <!-- IMAGE URL -->
         <div class="form-group full-width" [class.field-locked]="isLocked">
           <label>{{ 'editevent.event_image' | translate }}</label>
           <input type="url" formControlName="imageUrl"
                  [placeholder]="'editevent.image_placeholder' | translate"
-                 class="form-input" [disabled]="isLoading">
+                 class="form-input">
           <small class="info-text">{{ 'editevent.image_info' | translate }}</small>
         </div>
 
+        <!-- MAX PARTICIPANTS -->
         <div class="form-group" [class.field-highlighted]="isLocked">
           <label>
             {{ 'editevent.max_participants' | translate }}
             <span *ngIf="isLocked" class="editable-tag">
-              <i class="fa-solid fa-pen"></i> Modifiable
+              <i class="fa-solid fa-pen"></i> {{ 'editevent.editable' | translate }}
             </span>
           </label>
           <input type="number" formControlName="maxParticipants"
                  [placeholder]="'editevent.max_participants_placeholder' | translate"
-                 [min]="minCapacity || 1" class="form-input">
+                 [min]="minCapacity || 1"
+                 class="form-input">
           <small *ngIf="isLocked" class="info-text">
-            Minimum : {{ minCapacity }} participant(s) confirmé(s)
+            {{ 'editevent.min_capacity_note' | translate }} {{ minCapacity }}
           </small>
         </div>
 
       </div>
 
-      <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+      <div class="error-message"   *ngIf="errorMessage">{{ errorMessage }}</div>
       <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
 
       <div class="modal-footer">
-        <button type="button" class="btn-cancel" (click)="close()" [disabled]="isLoading">
+        <button type="button" class="btn-cancel"
+                (click)="close()"
+                [disabled]="isLoading || isUploadingProgramImage">
           {{ 'editevent.cancel' | translate }}
         </button>
-        <button type="submit" class="btn-submit" [disabled]="isLoading || eventForm.invalid">
-          <span *ngIf="isLoading">{{ 'editevent.updating' | translate }}</span>
-          <span *ngIf="!isLoading">{{ 'editevent.save' | translate }}</span>
+        <button type="submit" class="btn-submit"
+                [disabled]="isLoading || isUploadingProgramImage || eventForm.invalid">
+          <span *ngIf="isLoading || isUploadingProgramImage">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            {{ isUploadingProgramImage
+                ? ('editevent.program_image_uploading' | translate)
+                : ('editevent.updating' | translate) }}
+          </span>
+          <span *ngIf="!isLoading && !isUploadingProgramImage">
+            {{ 'editevent.save' | translate }}
+          </span>
         </button>
       </div>
     </form>

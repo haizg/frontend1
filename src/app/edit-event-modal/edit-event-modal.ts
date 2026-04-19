@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { EventModel } from '../models/event.model';
+import {ChangeDetectorRef, Component, EventEmitter, Output} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {EventModel} from '../models/event.model';
 
 @Component({
   selector: 'app-edit-event-modal',
@@ -16,16 +16,16 @@ export class EditEventModal {
   @Output() eventUpdated = new EventEmitter<void>();
 
   eventForm: FormGroup;
-  isVisible = false;
-  isLoading = false;
-  errorMessage = '';
+  isVisible  = false;
+  isLoading  = false;
+  errorMessage   = '';
   successMessage = '';
   currentEvent: EventModel | null = null;
   isLocked = false;
-  isAdmin = false;
+  isAdmin  = false;
   minCapacity = 1;
 
-  // ── Program image (NEW) ────────────────────────────────────────────────────
+  // program image state
   programType: 'text' | 'image' = 'text';
   selectedProgramFile: File | null = null;
   programImagePreview: string | null = null;
@@ -35,7 +35,8 @@ export class EditEventModal {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private cdr: ChangeDetectorRef          // ← ADDED
   ) {
     this.eventForm = this.fb.group({
       title:           ['', [Validators.required, Validators.minLength(3)]],
@@ -50,16 +51,32 @@ export class EditEventModal {
     });
   }
 
-  // ── open() — existing logic + program image detection (NEW at bottom) ───────
+  // ── open() ───────────────────────────────────────────────────────────────────
 
   open(event: EventModel, isApproved = false, confirmedCount = 0, isAdmin = false) {
     this.currentEvent = event;
-    this.isAdmin = isAdmin;
-    this.isLocked = isApproved && !isAdmin;
-    this.minCapacity = confirmedCount;
-    this.isVisible = true;
-    this.errorMessage = '';
+    this.isAdmin      = isAdmin;
+    this.isLocked     = isApproved && !isAdmin;
+    this.minCapacity  = confirmedCount;
+    this.isVisible    = true;
+    this.errorMessage   = '';
     this.successMessage = '';
+
+    // Detect program type BEFORE patching so textarea is correct
+    const existingProgram = (event as any).program || '';
+    const looksLikeImageUrl =
+      existingProgram.startsWith('http') &&
+      /\.(png|jpg|jpeg|webp|gif)(\?.*)?$/i.test(existingProgram);
+
+    if (looksLikeImageUrl) {
+      this.programType             = 'image';
+      this.uploadedProgramImageUrl = existingProgram;
+      this.programImagePreview     = existingProgram;
+    } else {
+      this.programType             = 'text';
+      this.uploadedProgramImageUrl = null;
+      this.programImagePreview     = null;
+    }
 
     this.eventForm.patchValue({
       title:           event.title,
@@ -70,10 +87,10 @@ export class EditEventModal {
       location:        event.location,
       imageUrl:        event.imageUrl || '',
       maxParticipants: event.maxParticipants || null,
-      program:         (event as any).program || ''
+      program:         looksLikeImageUrl ? '' : existingProgram
     });
 
-    // Enable all first
+    // Enable all, then lock as needed
     Object.keys(this.eventForm.controls).forEach(k => this.eventForm.get(k)?.enable());
 
     if (this.isLocked) {
@@ -88,60 +105,44 @@ export class EditEventModal {
     }
     this.eventForm.get('maxParticipants')?.updateValueAndValidity();
 
-    // ── NEW: Detect if program is a stored image URL ────────────────────────
-    const existingProgram = (event as any).program || '';
-    const looksLikeImageUrl = existingProgram.startsWith('http') &&
-      /\.(png|jpg|jpeg|webp|gif)/i.test(existingProgram);
-
-    if (looksLikeImageUrl) {
-      this.programType = 'image';
-      this.uploadedProgramImageUrl = existingProgram;
-      this.programImagePreview = existingProgram;
-      // Clear the text field since the value is actually an image URL
-      this.eventForm.patchValue({ program: '' });
-    } else {
-      this.programType = 'text';
-      this.uploadedProgramImageUrl = null;
-      this.programImagePreview = null;
-    }
-    // ── END NEW ─────────────────────────────────────────────────────────────
+    this.cdr.markForCheck();
   }
 
-  // ── close() — existing logic + reset program image state (NEW) ──────────────
+  // ── close() ──────────────────────────────────────────────────────────────────
 
   close() {
-    this.isVisible = false;
-    this.errorMessage = '';
-    this.successMessage = '';
-    this.currentEvent = null;
-    this.isLocked = false;
-    this.isAdmin = false;
+    this.isVisible       = false;
+    this.errorMessage    = '';
+    this.successMessage  = '';
+    this.currentEvent    = null;
+    this.isLocked        = false;
+    this.isAdmin         = false;
     Object.keys(this.eventForm.controls).forEach(k => this.eventForm.get(k)?.enable());
     this.eventForm.reset();
-    // ── NEW reset ────────────────────────────────────────────────────────────
-    this.programType = 'text';
-    this.selectedProgramFile = null;
-    this.programImagePreview = null;
+    this.programType             = 'text';
+    this.selectedProgramFile     = null;
+    this.programImagePreview     = null;
     this.uploadedProgramImageUrl = null;
-    // ── END NEW reset ────────────────────────────────────────────────────────
+    this.cdr.markForCheck();
   }
 
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
-    return new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    return new HttpHeaders({'Authorization': `Bearer ${token}`});
   }
 
-  // ── Program image methods (NEW) ────────────────────────────────────────────
+  // ── Program image methods ─────────────────────────────────────────────────────
 
   onProgramTypeChange(type: 'text' | 'image') {
     this.programType = type;
     if (type === 'text') {
-      this.selectedProgramFile = null;
-      this.programImagePreview = null;
+      this.selectedProgramFile     = null;
+      this.programImagePreview     = null;
       this.uploadedProgramImageUrl = null;
     } else {
-      this.eventForm.patchValue({ program: '' });
+      this.eventForm.patchValue({program: ''});
     }
+    this.cdr.markForCheck();
   }
 
   onProgramFileSelected(event: any) {
@@ -149,81 +150,102 @@ export class EditEventModal {
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-      this.errorMessage = 'Le programme doit être une image valide.';
+      this.errorMessage = this.translate.instant('editevent.program_image_error_format');
+      this.cdr.markForCheck();
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      this.errorMessage = "L'image du programme ne doit pas dépasser 10 Mo.";
+      this.errorMessage = this.translate.instant('editevent.program_image_error_size');
+      this.cdr.markForCheck();
       return;
     }
 
-    this.selectedProgramFile = file;
-    this.errorMessage = '';
+    // Reset previous upload — forces re-upload of the new file
+    this.uploadedProgramImageUrl = null;
+    this.selectedProgramFile     = file;
+    this.programImagePreview     = null;   // clear old preview immediately
+    this.errorMessage            = '';
+    this.cdr.markForCheck();               // ← show cleared state right away
 
     const reader = new FileReader();
-    reader.onload = (e: any) => { this.programImagePreview = e.target.result; };
+    reader.onload = (e: any) => {
+      this.programImagePreview = e.target.result;
+      this.cdr.markForCheck(); // ← THIS is the critical fix: update after FileReader async callback
+    };
     reader.readAsDataURL(file);
   }
 
   async uploadProgramImage(): Promise<string | null> {
     if (!this.selectedProgramFile) return null;
     this.isUploadingProgramImage = true;
+    this.cdr.markForCheck();
+
     try {
       const formData = new FormData();
       formData.append('file', this.selectedProgramFile);
-      const response: any = await this.http.post('http://localhost:8081/api/upload', formData).toPromise();
+      const response: any = await this.http
+        .post('http://localhost:8081/api/upload', formData)
+        .toPromise();
       this.uploadedProgramImageUrl = response.url;
       this.isUploadingProgramImage = false;
+      this.cdr.markForCheck();
       return response.url;
     } catch (error) {
       console.error('Error uploading program image:', error);
       this.isUploadingProgramImage = false;
-      this.errorMessage = "Erreur lors du téléchargement de l'image du programme.";
+      this.errorMessage = this.translate.instant('editevent.program_image_error_upload');
+      this.cdr.markForCheck();
       return null;
     }
   }
 
   removeProgramImage() {
-    this.selectedProgramFile = null;
-    this.programImagePreview = null;
+    this.selectedProgramFile     = null;
+    this.programImagePreview     = null;
     this.uploadedProgramImageUrl = null;
+    this.cdr.markForCheck();
   }
 
-  // ── onSubmit() — existing logic + program image extension (NEW blocks) ───────
+  // ── onSubmit() ───────────────────────────────────────────────────────────────
 
   async onSubmit() {
     if (!this.currentEvent) return;
 
     if (this.eventForm.invalid) {
       this.errorMessage = 'Veuillez remplir tous les champs obligatoires.';
+      this.cdr.markForCheck();
       return;
     }
 
-    this.isLoading = true;
-    this.errorMessage = '';
+    this.isLoading     = true;
+    this.errorMessage  = '';
     this.successMessage = '';
+    this.cdr.markForCheck();
 
-    // ── NEW: Resolve program field before sending ─────────────────────────────
+    // Resolve program field
     if (this.programType === 'image') {
       if (this.selectedProgramFile && !this.uploadedProgramImageUrl) {
         const programUrl = await this.uploadProgramImage();
-        if (!programUrl) { this.isLoading = false; return; }
+        if (!programUrl) {
+          this.isLoading = false;
+          this.cdr.markForCheck();
+          return;
+        }
       }
-      this.eventForm.patchValue({ program: this.uploadedProgramImageUrl || '' });
+      this.eventForm.patchValue({program: this.uploadedProgramImageUrl || ''});
     } else {
       this.uploadedProgramImageUrl = null;
     }
-    // ── END NEW ───────────────────────────────────────────────────────────────
 
-    const id = this.currentEvent.id;
+    const id  = this.currentEvent.id;
     const raw = this.eventForm.getRawValue();
 
-    // ADMIN path (existing, unchanged)
+    // ADMIN: full update
     if (this.isAdmin) {
       this.http.put(
         `http://localhost:8081/api/admin/update-event/${id}`,
         raw,
-        { headers: this.getHeaders() }
+        {headers: this.getHeaders()}
       ).subscribe({
         next: () => this.handleSuccess(),
         error: (err) => this.handleError(err)
@@ -231,12 +253,12 @@ export class EditEventModal {
       return;
     }
 
-    // ORGANIZER LOCKED path (existing, unchanged)
+    // ORGANIZER LOCKED: capacity + program only
     if (this.isLocked) {
       this.http.put(
         `http://localhost:8081/api/events/${id}/capacity-and-program`,
-        { maxParticipants: raw.maxParticipants, program: raw.program },
-        { headers: this.getHeaders() }
+        {maxParticipants: raw.maxParticipants, program: raw.program},
+        {headers: this.getHeaders()}
       ).subscribe({
         next: () => this.handleSuccess('Capacité et programme mis à jour.'),
         error: (err) => this.handleError(err)
@@ -246,15 +268,20 @@ export class EditEventModal {
   }
 
   private handleSuccess(msg?: string) {
-    this.isLoading = false;
+    this.isLoading      = false;
     this.successMessage = msg || 'Événement mis à jour avec succès.';
-    setTimeout(() => { this.close(); this.eventUpdated.emit(); }, 1500);
+    this.cdr.markForCheck();
+    setTimeout(() => {
+      this.close();
+      this.eventUpdated.emit();
+    }, 1500);
   }
 
   private handleError(err: any) {
-    this.isLoading = false;
+    this.isLoading    = false;
     this.errorMessage = err.status === 403
       ? "Vous n'êtes pas autorisé à modifier cet événement."
       : 'Erreur lors de la mise à jour. Réessayez.';
+    this.cdr.markForCheck();
   }
 }

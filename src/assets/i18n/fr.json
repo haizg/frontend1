@@ -133,7 +133,9 @@
     "pending_badge": "En attente",
     "participate": "Participer à cet événement",
     "loading": "Chargement...",
-    "alreadyparticipated":"Vous participez déja à cet événement"
+    "alreadyparticipated":"Vous participez déja à cet événement",
+    "program_image_expand":   "Agrandir",
+    "program_image_collapse": "Réduire"
   },
   "createevent": {
     "title": " Créer un Événement",
@@ -219,8 +221,22 @@
     "error_upload_failed": "Upload failed. Please check your connection.",
     "error_form_invalid": "Please fill all required fields correctly.",
     "error_update": "Failed to update event.",
-    "success": "Event updated successfully!"
-
+    "success": "Event updated successfully!",
+    "program_type_text":             "Texte",
+    "program_type_image":            "Image",
+    "program_image_choose":          "Choisir une image de programme",
+    "program_image_change":          "Changer l'image",
+    "program_image_delete":          "Supprimer",
+    "program_image_uploading":       "Téléchargement en cours…",
+    "program_image_uploading_sub":   "Veuillez patienter, l'image est en cours d'envoi.",
+    "program_image_error_format":    "Le programme doit être une image valide (jpg, png, webp…).",
+    "program_image_error_size":      "L'image du programme ne doit pas dépasser 10 Mo.",
+    "program_image_error_upload":    "Erreur lors du téléchargement. Réessayez.",
+    "editable":                      "Modifiable",
+    "locked_title":                  "Événement publié — modifications limitées",
+    "locked_body":                   "Seule la capacité maximale et le programme peuvent être modifiés. Minimum autorisé :",
+    "locked_min":                    "participant(s) confirmé(s).",
+    "min_capacity_note":             "Minimum :"
   },
   "logout": {
     "title": "Se déconnecter",

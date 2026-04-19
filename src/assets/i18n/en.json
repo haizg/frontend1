@@ -132,7 +132,9 @@
     "pending_badge": "Pending",
     "participate": "Participate in this event",
     "loading": "Loading...",
-    "alreadyparticipated": "You already participated in this event"
+    "alreadyparticipated": "You already participated in this event",
+    "program_image_expand":   "Expand",
+    "program_image_collapse": "Collapse"
   },
   "createevent": {
     "title": " Create Event",
@@ -219,8 +221,22 @@
       "error_upload_failed": "Upload failed. Please check your connection.",
       "error_form_invalid": "Please fill all required fields correctly.",
       "error_update": "Failed to update event.",
-      "success": "Event updated successfully!"
-
+      "success": "Event updated successfully!",
+    "program_type_text":             "Text",
+    "program_type_image":            "Image",
+    "program_image_choose":          "Choose a program image",
+    "program_image_change":          "Change image",
+    "program_image_delete":          "Delete",
+    "program_image_uploading":       "Uploading image…",
+    "program_image_uploading_sub":   "Please wait while the image is being sent.",
+    "program_image_error_format":    "The program must be a valid image (jpg, png, webp…).",
+    "program_image_error_size":      "The program image must not exceed 10 MB.",
+    "program_image_error_upload":    "Upload failed. Please try again.",
+    "editable":                      "Editable",
+    "locked_title":                  "Published event — limited edits",
+    "locked_body":                   "Only max capacity and program can be changed. Minimum allowed:",
+    "locked_min":                    "confirmed participant(s).",
+    "min_capacity_note":             "Minimum:"
   },
   "logout": {
     "title": "Log Out",

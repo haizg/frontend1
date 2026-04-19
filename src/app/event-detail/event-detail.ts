@@ -1,4 +1,12 @@
-import {ChangeDetectorRef, Component, Inject, PLATFORM_ID, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild
+} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {EventService} from '../services/event.service';
 import {ModalService} from '../services/modal.service';
@@ -13,12 +21,13 @@ import {RouterModule, Router} from '@angular/router';
 import {UserService} from '../services/user.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {EditEventModal} from '../edit-event-modal/edit-event-modal';
-import { TranslateModule } from '@ngx-translate/core';
-import { TranslateLangService } from '../services/translate-lang.service';
-import { FormsModule } from '@angular/forms';
+import {TranslateModule} from '@ngx-translate/core';
+import {TranslateLangService} from '../services/translate-lang.service';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-event-detail',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     Navbar,
     Footer,
@@ -34,19 +43,22 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './event-detail.html',
   styleUrl: './event-detail.css',
 })
-export class EventDetail {
+export class EventDetail implements OnInit {
   @ViewChild(EditEventModal) editEventModal!: EditEventModal;
 
   event: EventModel | null = null;
-  isJoinModalOpen = false;
-  isModalOpen = false;
+  isJoinModalOpen   = false;
+  isModalOpen       = false;
   isSignupModalOpen = false;
-  isLoggedIn = false;
+  isLoggedIn        = false;
   userRole: string | null = null;
-  userEmail: string = '';
+  userEmail         = '';
   participants: any[] = [];
   hasAlreadyParticipated = false;
   newCapacity: number | null = null;
+
+  // program image lightbox
+  programImageExpanded = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -61,59 +73,54 @@ export class EventDetail {
   ) {}
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      const userStr = localStorage.getItem('user');
-      if (userStr) this.userService.setUser(JSON.parse(userStr));
+    if (!isPlatformBrowser(this.platformId)) return;
 
-      this.userService.currentUser$.subscribe(user => {
-        if (user) {
-          this.isLoggedIn = true;
-          this.userRole = user.role;
-          this.userEmail = user.email;
-          this.checkIfParticipated();
-        } else {
-          this.isLoggedIn = false;
-          this.userRole = null;
-          this.userEmail = '';
-          this.hasAlreadyParticipated = false;
-        }
-        this.cdr.detectChanges();
-      });
+    const userStr = localStorage.getItem('user');
+    if (userStr) this.userService.setUser(JSON.parse(userStr));
 
-      const id = this.route.snapshot.paramMap.get('id');
-      if (id) {
-        this.eventService.getEventById(Number(id)).subscribe({
-          next: (data) => {
-            this.event = data;
-            this.cdr.detectChanges();
-            if (this.isMyEvent || this.isAdmin) {
-              this.loadParticipants(Number(id));
-            }
-            if (this.isLoggedIn) {
-              this.checkIfParticipated();
-            }
-          },
-          error: (err) => console.error('Failed to load event', err)
-        });
+    this.userService.currentUser$.subscribe(user => {
+      if (user) {
+        this.isLoggedIn = true;
+        this.userRole   = user.role;
+        this.userEmail  = user.email;
+      } else {
+        this.isLoggedIn             = false;
+        this.userRole               = null;
+        this.userEmail              = '';
+        this.hasAlreadyParticipated = false;
       }
+      this.cdr.markForCheck();
+    });
 
-      this.modalService.joinModal$.subscribe(state => {
-        this.isJoinModalOpen = state;
-        this.cdr.detectChanges();
-      });
-
-      this.modalService.loginModal$.subscribe(state => {
-        this.isModalOpen = state;
-        this.cdr.detectChanges();
-      });
-
-      this.modalService.signupModal$.subscribe(state => {
-        this.isSignupModalOpen = state;
-        this.cdr.detectChanges();
+    const rawId = this.route.snapshot.paramMap.get('id');
+    if (rawId) {
+      const id = Number(rawId);
+      this.eventService.getEventById(id).subscribe({
+        next: (data) => {
+          this.event = data;
+          this.cdr.markForCheck();
+          if (this.isMyEvent || this.isAdmin) this.loadParticipants(id);
+          if (this.isLoggedIn)                this.checkIfParticipated();
+        },
+        error: (err) => console.error('Failed to load event', err)
       });
     }
+
+    this.modalService.joinModal$.subscribe(state => {
+      this.isJoinModalOpen = state;
+      this.cdr.markForCheck();
+    });
+    this.modalService.loginModal$.subscribe(state => {
+      this.isModalOpen = state;
+      this.cdr.markForCheck();
+    });
+    this.modalService.signupModal$.subscribe(state => {
+      this.isSignupModalOpen = state;
+      this.cdr.markForCheck();
+    });
   }
 
+  // ── Getters ──────────────────────────────────────────────────────────────────
 
   get unconfirmedParticipants(): any[] {
     return this.participants.filter(p => !p.verified);
@@ -146,13 +153,13 @@ export class EventDetail {
     return this.userRole === 'ROLE_ADMIN';
   }
 
-  // Detects whether the program field contains a MinIO image URL
   get isProgramImage(): boolean {
     const p = this.event?.program;
     if (!p) return false;
     return p.startsWith('http') && /\.(png|jpg|jpeg|webp|gif)(\?.*)?$/i.test(p);
   }
 
+  // ── Methods ──────────────────────────────────────────────────────────────────
 
   loadParticipants(eventId: number) {
     const token = localStorage.getItem('token');
@@ -161,7 +168,7 @@ export class EventDetail {
       .subscribe({
         next: (data) => {
           this.participants = data;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: (err) => console.error('Failed to load participants', err)
       });
@@ -178,9 +185,9 @@ export class EventDetail {
 
   openEditEventModal() {
     if (this.event) {
-      const isApproved = !!(this.event as any).approved;
+      const isApproved     = !!(this.event as any).approved;
       const confirmedCount = this.verifiedParticipants.length;
-      const shouldLock = isApproved && this.isMyEvent && !this.isAdmin;
+      const shouldLock     = isApproved && this.isMyEvent && !this.isAdmin;
       this.editEventModal.open(this.event, shouldLock, confirmedCount, this.isAdmin);
     }
   }
@@ -192,31 +199,39 @@ export class EventDetail {
       return;
     }
     const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
     this.http.put(
       `http://localhost:8081/api/events/${this.event.id}/capacity`,
-      { maxParticipants: this.newCapacity },
-      { headers }
+      {maxParticipants: this.newCapacity},
+      {headers}
     ).subscribe({
       next: () => {
         this.event!.maxParticipants = this.newCapacity!;
         this.newCapacity = null;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       },
       error: (err) => console.error('Failed to update capacity', err)
     });
   }
 
+  // Null first so OnPush sees a genuine reference change → img [src] re-renders
   onEventUpdated() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.eventService.getEventById(Number(id)).subscribe({
-        next: (data) => {
-          this.event = data;
-          this.cdr.detectChanges();
-        }
-      });
-    }
+    const rawId = this.route.snapshot.paramMap.get('id');
+    if (!rawId) return;
+    const id = Number(rawId);
+
+    this.event = null;
+    this.programImageExpanded = false;
+    this.cdr.markForCheck();
+
+    this.eventService.getEventById(id).subscribe({
+      next: (data) => {
+        this.event = data;
+        this.cdr.markForCheck();
+        if (this.isMyEvent || this.isAdmin) this.loadParticipants(id);
+      },
+      error: (err) => console.error('Failed to reload event', err)
+    });
   }
 
   deleteEvent() {
@@ -227,25 +242,29 @@ export class EventDetail {
       ? `http://localhost:8081/api/admin/${this.event?.id}`
       : `http://localhost:8081/api/events/${this.event?.id}`;
 
-    this.http.delete(url, {headers})
-      .subscribe({
-        next: () => this.router.navigate(['/events']),
-        error: (err) => console.error('Delete failed', err)
-      });
+    this.http.delete(url, {headers}).subscribe({
+      next: () => this.router.navigate(['/events']),
+      error: (err) => console.error('Delete failed', err)
+    });
   }
 
   checkIfParticipated() {
     const token = localStorage.getItem('token');
     if (!token) return;
-    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    this.http.get<number[]>('http://localhost:8081/api/user/my-participations', { headers })
+    const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
+    this.http.get<number[]>('http://localhost:8081/api/user/my-participations', {headers})
       .subscribe({
         next: (ids) => {
           const eventId = this.event?.id;
           this.hasAlreadyParticipated = eventId ? ids.includes(eventId) : false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: (err) => console.error('Failed to check participation', err)
       });
+  }
+
+  toggleProgramImageExpand() {
+    this.programImageExpanded = !this.programImageExpanded;
+    this.cdr.markForCheck();
   }
 }

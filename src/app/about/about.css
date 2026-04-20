@@ -48,7 +48,6 @@
    color: rgba(255,255,255,0.9);
    }
 
-/* on white sections override tag style */
 .about-values .about-tag,
 .how-section .about-tag {
   background: rgba(165, 58, 107, 0.12);
@@ -350,7 +349,6 @@
   background-color: #A53A6B  ;
   }
 
-/* RESPONSIVE */
 @media (max-width: 900px) {
   .about-stats { grid-template-columns: repeat(2, 1fr); }
   .about-section-inner { grid-template-columns: 1fr; gap: 40px; }

@@ -4,7 +4,7 @@
   padding: 0 20px;
 }
 
-/* ── Hero ────────────────────────────────────────────────────────────────────── */
+/*HERO*/
 .event-hero {
   position: relative;
   width: 100%;
@@ -51,7 +51,7 @@
   font-weight: 600;
 }
 
-/* ── Body ────────────────────────────────────────────────────────────────────── */
+/*BODY*/
 .event-body { padding: 0 10px; }
 
 .event-info {
@@ -91,7 +91,7 @@
   font-weight: 500;
 }
 
-/* ── Description ─────────────────────────────────────────────────────────────── */
+/* DESCRIPTION*/
 .event-description { margin-bottom: 40px; }
 
 .event-description h2 {
@@ -107,7 +107,7 @@
   line-height: 1.8;
 }
 
-/* ── Programme ───────────────────────────────────────────────────────────────── */
+/*PROGRAM*/
 .event-program { margin-bottom: 40px; }
 
 .event-program h2 {
@@ -229,7 +229,7 @@
   to   { opacity: 1; }
 }
 
-/* ── Actions ─────────────────────────────────────────────────────────────────── */
+/*ACTIONS*/
 .org-actions {
   display: flex;
   gap: 12px;
@@ -266,7 +266,7 @@
 }
 .btn-delete:hover { background: #c82333; }
 
-/* ── Participate ─────────────────────────────────────────────────────────────── */
+/*PARTICIPATE*/
 .btn-participer {
   display: block;
   width: 100%;
@@ -297,7 +297,7 @@
   opacity: 0.9;
 }
 
-/* ── Stats ───────────────────────────────────────────────────────────────────── */
+/*STATS*/
 .stats-section { margin-bottom: 40px; }
 
 .stats-section h2, .participants-section h2 {
@@ -355,7 +355,7 @@
 .bar-warning { background: #f0a500; }
 .bar-full    { background: #dc3545; }
 
-/* ── Participants table ───────────────────────────────────────────────────────── */
+/*PARTICIPANT TABLE*/
 .participants-section { margin-bottom: 40px; }
 
 .participants-table {
@@ -398,7 +398,7 @@
   border-radius: 10px;
 }
 
-/* ── Organizer info ──────────────────────────────────────────────────────────── */
+/*ORGANIZER INFO*/
 .organizer-info {
   display: flex;
   flex-direction: column;
@@ -413,7 +413,6 @@
 .organizer-info .info-label  { font-size: 13px; color: #888; font-weight: 600; }
 .organizer-info .info-value  { font-size: 16px; color: #e65100; font-weight: 500; }
 
-/* ── Misc ────────────────────────────────────────────────────────────────────── */
 .loading {
   text-align: center;
   padding: 100px;

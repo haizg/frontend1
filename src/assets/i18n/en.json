@@ -334,5 +334,20 @@
     "organizer": "Become an organizer",
     "hours": "Mon – Fri, 9am – 6pm",
     "rights": "All rights reserved."
+  },
+  "resetpassword" : {
+    "verificationlien": "Verifying link..",
+    "lieninvalide": "Invalid or expired link",
+    "liende..": "The reset link is valid for 30 minutes.\n          If your link has expired, please request a new one.",
+    "retourhome": "Back to home",
+    "resetmdp": "Reset password",
+    "saisenewpsw": "Enter your new password",
+    "newmdp": "New password",
+    "confirmmdp": "Confirm password",
+    "mdpmusthave" : "The password must contain:",
+    "mdpcorrespondent": "Passwords match",
+    "redirecthome": "Redirecting to the home page...",
+    "returnacceuil": "← Back to home",
+    "loading": "Resetting..."
   }
 }

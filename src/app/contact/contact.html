@@ -74,14 +74,14 @@
       <div class="contact-form-wrap">
         <h2>{{ 'contact.contactsendmsg' | translate }}</h2>
 
-        <!-- Success message - MOVED OUTSIDE the form -->
+        <!-- success message -->
         <div *ngIf="showSuccessMessage" class="success-banner">
           <i class="fa-solid fa-circle-check"></i>
           {{ 'contact.successmsg' | translate }}
         <br>
         </div>
 
-        <!-- Error message -->
+        <!-- error message -->
         <div *ngIf="errorMessage" class="error-banner">
           <i class="fa-solid fa-triangle-exclamation"></i>
           {{ errorMessage }}

@@ -1,15 +1,14 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core'; // ADD THIS
-// REMOVE: import { LangService } from '../../services/lang.service';
-import { TranslateLangService } from '../../services/translate-lang.service'; // ADD THIS
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateLangService } from '../../services/translate-lang.service';
 import { ModalService } from '../../services/modal.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-join-cta',
   standalone: true,
-  imports: [CommonModule, TranslateModule], // ADD TranslateModule
+  imports: [CommonModule, TranslateModule],
   templateUrl: './join-cta.html',
   styleUrl: './join-cta.css',
 
@@ -22,21 +21,7 @@ export class JoinCta {
     private userService: UserService
   ){}
   showAlreadyMsg = false;
-  ngOnInit() {
-      //this.lang.lang$.subscribe(() => {
-        //this.cdr.detectChanges();
-      //});
-    }
-  /*
- openAuth() {
-    const user = this.userService.getUser();
 
-    if (user) {
-      alert('Vous êtes déjà connecté!');
-    } else {
-      this.modalService.openSignupModal();
-    }
-  }*/
   onJoinClick() {
     if (this.userService.getUser()) {
       this.showAlreadyMsg = true;

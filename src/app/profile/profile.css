@@ -229,8 +229,6 @@
   font-size: 18px;
 }
 
-
-/* profile.css */
 .deactivation-section {
   margin-top: 48px;
   padding-top: 32px;
@@ -374,7 +372,7 @@
   line-height: 1.6;
 }
 
-/* MODAL OVERLAY - Full screen overlay */
+/* MODAL */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -389,7 +387,7 @@
   backdrop-filter: blur(2px);
 }
 
-/* MODAL BOX - Properly centered */
+
 .confirm-box {
   position: relative;
   background: white;

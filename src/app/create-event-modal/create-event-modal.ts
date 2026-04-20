@@ -26,7 +26,6 @@ export class CreateEventModal {
   isUploadingImage = false;
   uploadedImageUrl: string | null = null;
 
-  // ── Program image (NEW) ────────────────────────────────────────────────────
   programType: 'text' | 'image' = 'text';
   selectedProgramFile: File | null = null;
   programImagePreview: string | null = null;
@@ -139,7 +138,6 @@ export class CreateEventModal {
   onProgramTypeChange(type: 'text' | 'image') {
     this.programType = type;
     if (type === 'text') {
-      // Switching to text: clear image state
       this.selectedProgramFile = null;
       this.programImagePreview = null;
       this.uploadedProgramImageUrl = null;
@@ -221,7 +219,6 @@ export class CreateEventModal {
         }
         this.eventForm.patchValue({ program: this.uploadedProgramImageUrl || '' });
       } else {
-        // Text mode: ensure no leftover image URL
         this.uploadedProgramImageUrl = null;
       }
 

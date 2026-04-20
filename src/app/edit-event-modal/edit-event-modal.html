@@ -3,7 +3,6 @@
 <div class="modal-container" *ngIf="isVisible" (click)="$event.stopPropagation()">
   <div class="modal-content">
 
-    <!-- General saving overlay -->
     <div class="loading-overlay" *ngIf="isLoading && !isUploadingProgramImage">
       <div class="loading-spinner-modal">
         <div class="spinner-modal"></div>
@@ -11,7 +10,6 @@
       </div>
     </div>
 
-    <!-- Program image upload overlay (separate, more specific) -->
     <div class="loading-overlay upload-overlay" *ngIf="isUploadingProgramImage">
       <div class="loading-spinner-modal">
         <div class="spinner-modal"></div>
@@ -25,7 +23,6 @@
       <button class="close-btn" (click)="close()">✕</button>
     </div>
 
-    <!-- Locked banner -->
     <div class="locked-banner" *ngIf="isLocked">
       <i class="fa-solid fa-lock"></i>
       <div class="locked-banner-text">
@@ -37,7 +34,6 @@
     <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
       <div class="form-grid">
 
-        <!-- TITLE -->
         <div class="form-group full-width" [class.field-locked]="isLocked">
           <label>{{ 'editevent.event_title' | translate }}
             <span *ngIf="isLocked" class="lock-icon"><i class="fa-solid fa-lock"></i></span>
@@ -50,7 +46,6 @@
           </small>
         </div>
 
-        <!-- DESCRIPTION -->
         <div class="form-group full-width" [class.field-locked]="isLocked">
           <label>{{ 'editevent.description' | translate }}
             <span *ngIf="isLocked" class="lock-icon"><i class="fa-solid fa-lock"></i></span>
@@ -63,7 +58,6 @@
           </small>
         </div>
 
-        <!-- PROGRAMME -->
         <div class="form-group full-width" [class.field-highlighted]="isLocked">
           <label>
             {{ 'editevent.program' | translate }}
@@ -72,7 +66,6 @@
             </span>
           </label>
 
-          <!-- Type toggle -->
           <div class="program-type-toggle">
             <button type="button"
                     class="toggle-btn"
@@ -92,7 +85,6 @@
             </button>
           </div>
 
-          <!-- Text mode -->
           <textarea
             *ngIf="programType === 'text'"
             formControlName="program"
@@ -100,7 +92,6 @@
             rows="5"
             class="form-input"></textarea>
 
-          <!-- Image mode -->
           <ng-container *ngIf="programType === 'image'">
 
             <input type="file"
@@ -109,7 +100,6 @@
                    accept="image/*"
                    style="display:none">
 
-            <!-- No preview yet: show upload button -->
             <button type="button"
                     class="btn-upload"
                     (click)="programFileInput.click()"
@@ -119,7 +109,6 @@
               {{ 'editevent.program_image_choose' | translate }}
             </button>
 
-            <!-- Preview -->
             <div class="program-preview-container" *ngIf="programImagePreview">
               <img [src]="programImagePreview"
                    alt="Aperçu du programme"
@@ -138,7 +127,6 @@
                   {{ 'editevent.program_image_delete' | translate }}
                 </button>
               </div>
-              <!-- Inline uploading indicator shown on the preview itself -->
               <div class="preview-uploading-bar" *ngIf="isUploadingProgramImage">
                 <div class="preview-uploading-bar-fill"></div>
               </div>
@@ -149,7 +137,6 @@
           <small class="info-text">{{ 'editevent.program_info' | translate }}</small>
         </div>
 
-        <!-- CATEGORY -->
         <div class="form-group" [class.field-locked]="isLocked">
           <label>{{ 'editevent.category' | translate }}
             <span *ngIf="isLocked" class="lock-icon"><i class="fa-solid fa-lock"></i></span>
@@ -165,19 +152,16 @@
           </select>
         </div>
 
-        <!-- DATE -->
         <div class="form-group" [class.field-locked]="isLocked">
           <label>{{ 'editevent.date' | translate }} *</label>
           <input type="date" formControlName="date" class="form-input">
         </div>
 
-        <!-- TIME -->
         <div class="form-group" [class.field-locked]="isLocked">
           <label>{{ 'editevent.time' | translate }} *</label>
           <input type="time" formControlName="time" class="form-input">
         </div>
 
-        <!-- LOCATION -->
         <div class="form-group" [class.field-locked]="isLocked">
           <label>{{ 'editevent.location' | translate }}
             <span *ngIf="isLocked" class="lock-icon"><i class="fa-solid fa-lock"></i></span>
@@ -187,7 +171,6 @@
                  class="form-input">
         </div>
 
-        <!-- IMAGE URL -->
         <div class="form-group full-width" [class.field-locked]="isLocked">
           <label>{{ 'editevent.event_image' | translate }}</label>
           <input type="url" formControlName="imageUrl"
@@ -196,7 +179,6 @@
           <small class="info-text">{{ 'editevent.image_info' | translate }}</small>
         </div>
 
-        <!-- MAX PARTICIPANTS -->
         <div class="form-group" [class.field-highlighted]="isLocked">
           <label>
             {{ 'editevent.max_participants' | translate }}

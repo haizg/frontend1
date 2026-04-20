@@ -24,7 +24,6 @@
       </div>
     </div>
 
-    <!-- CONTENT - When not loading -->
     <div *ngIf="!isLoadingEvents">
       <div class="events-grid" *ngIf="filteredEvents.length > 0">
         <div class="event-card"
@@ -39,7 +38,6 @@
           </div>
 
           <p class="event-meta">
-            <!--<i class="fa-solid fa-circle-user"></i>-->
             {{ event.organisateurEmail }}
             <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
           </p>
@@ -88,7 +86,9 @@
                       (click)="openJoinModal(event.id); $event.stopPropagation()"
                       class="btn-participate"
                       [disabled]="isJoining">
-                <span *ngIf="isJoining">⏳</span>
+                <span *ngIf="isJoining">
+                  <i class="fa-solid fa-hourglass-half"></i>
+                </span>
                 <span *ngIf="!isJoining">{{ 'events.participate' | translate }}</span>
               </button>
             </ng-container>

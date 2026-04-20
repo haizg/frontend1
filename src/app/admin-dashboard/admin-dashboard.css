@@ -79,8 +79,6 @@
   border-top: 1px solid rgba(255,255,255,0.1);
 }
 
-
-
 .sidebar-link {
   display: block;
   color: rgba(255,255,255,0.7);
@@ -189,9 +187,7 @@
   font-family: 'Georgia', serif;
 }
 
-
 /*ADMIN*/
-
 .admin-table {
   width: 100%;
   border-collapse: collapse;
@@ -199,7 +195,7 @@
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  table-layout: auto; /* ← change from fixed to auto */
+  table-layout: auto;
 }
 
 .admin-table th,
@@ -245,8 +241,6 @@
   color: rgba(255,255,255,0.6);
   margin-bottom: 10px;
 }
-
-
 
 .category-badge {
   background: rgba(142, 42, 90, 0.07);
@@ -327,7 +321,6 @@
   margin-bottom: 8px;
 }
 
-
 .btn-delete-sm {
   background: #fdecea;
   color: #c62828;
@@ -346,8 +339,6 @@
   background: #dc3545;
   color: white;
 }
-
-
 
 .btn-edit-sm {
   background: #e8f5f5;
@@ -372,8 +363,6 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
-
-
 
 .btn-view-sm {
   background: #f0f0f0;
@@ -452,14 +441,11 @@
   margin-top: 16px;
 }
 
-
-
 .form-message {
   color: #2a6262;
   font-size: 13px;
   margin-top: 8px;
 }
-
 
 /* DETAIL PANEL */
 .detail-panel {
@@ -576,7 +562,6 @@
 }
 
 
-/* VERIFIED BADGE BUTTONS */
 .toggle-btn {
   display: inline-flex;
   align-items: center;
@@ -591,8 +576,6 @@
   white-space: nowrap;
   height: 30px;
 }
-
-
 
 .toggle-btn.approved {
   background: #d4edda;
@@ -691,8 +674,8 @@
   display: flex;
   align-items: center;
   margin-bottom: 1.5rem;
-   width: 340px;          /* fixed width so it doesn't stretch */
-    flex-shrink: 0;
+  width: 340px;
+  flex-shrink: 0;
 }
 
 .search-icon {
@@ -835,8 +818,7 @@
 
 .btn-confirm-logout:hover { opacity: 0.88; }
 
-
-/* ── Active / Inactive badges ─────────────────────────────── */
+/*ACTIVE AND NOT ACTIVE*/
 .active-badge {
   display: inline-flex;
   align-items: center;
@@ -863,7 +845,6 @@
   color: #f57f17;
 }
 
-/* ── Row highlights ───────────────────────────────────────── */
 .inactive-row td {
   opacity: 0.55;
 }

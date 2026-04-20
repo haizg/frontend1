@@ -69,29 +69,6 @@ export class Navbar implements OnInit {
     this.modalService.openSignupModal();
   }
 
-/*
-  logOut() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    localStorage.removeItem('user');
-    this.userService.clearUser();
-    this.router.navigate(['/home']);
-  }
-
-
-
- // OLD LOGOUT BEFORE MODAL:
- logOut() {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('role');
-      localStorage.removeItem('user');
-    }
-    this.isLoggedIn = false;
-    this.userService.clearUser();
-    this.router.navigate(['/api/home']);
-  }
-*/
   get isAdmin(): boolean {
     return this.userRole === 'ROLE_ADMIN';
   }

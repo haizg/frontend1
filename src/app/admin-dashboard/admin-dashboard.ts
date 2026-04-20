@@ -53,6 +53,14 @@ export class AdminDashboard {
   deleteConfirmMessage = '';
   private pendingDeleteFn: (() => void) | null = null;
 
+  private requestDelete(title: string, message: string, fn: () => void) {
+    this.deleteConfirmTitle = title;
+    this.deleteConfirmMessage = message;
+    this.pendingDeleteFn = fn;
+    this.showDeleteConfirm = true;
+  }
+
+
 
   constructor(
     private http: HttpClient,
@@ -122,21 +130,12 @@ export class AdminDashboard {
       .subscribe({ next: (data) => { this.organisateurs = data; this.cdr.detectChanges(); } });
   }
 
-  // SHARED DELETE TRIGGER
-    private requestDelete(title: string, message: string, fn: () => void) {
-      this.deleteConfirmTitle = title;
-      this.deleteConfirmMessage = message;
-      this.pendingDeleteFn = fn;
-      this.showDeleteConfirm = true;
-    }
 
-    confirmDelete() {
-      this.showDeleteConfirm = false;
-      this.pendingDeleteFn?.();
-      this.pendingDeleteFn = null;
-    }
-
-
+  confirmDelete() {
+    this.showDeleteConfirm = false;
+    this.pendingDeleteFn?.();
+    this.pendingDeleteFn = null;
+  }
 
   deleteUser(userId: number) {
     this.requestDelete(
@@ -167,14 +166,14 @@ export class AdminDashboard {
 
 
   approveEvent(event: any) {
-    if (event.approved) return; // guard: never un-approve
+    if (event.approved) return;
     this.http.put(
       `http://localhost:8081/api/admin/events/${event.id}/approve`,
       {},
       { headers: this.getHeaders() }
     ).subscribe({
       next: (res: any) => {
-        event.approved = true; // always set to true, never toggle
+        event.approved = true;
         this.loadStats();
         this.cdr.detectChanges();
       },
@@ -201,8 +200,6 @@ export class AdminDashboard {
       event.organisateurEmail?.toLowerCase().includes(q)
     );
   }
-
-
 
   openEditEvent(event: EventModel) {
     this.editEventModal.open(event, false, 0, true);

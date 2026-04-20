@@ -30,7 +30,7 @@
 
   <div class="events-section" *ngIf="activeTab==='events'">
 
-    <!-- Organizer: Created events -->
+    <!-- Organizer: created events -->
     <div *ngIf="isOrganisateur">
       <h2>{{ 'profile.createdEvents' | translate }}</h2>
       <div class="events-grid" *ngIf="createdEvents.length > 0; else noCreated">
@@ -88,12 +88,6 @@
 
   </div>
 
-
-
-
-
-
-
   <div *ngIf="activeTab === 'edit'" class="form-section">
     <h2>{{ 'profile.editprofile' | translate }}</h2>
     <div class="form-group">
@@ -138,11 +132,6 @@
     <button class="btn-save" (click)="changePassword()">{{ 'profile.modify' | translate }}</button>
   </div>
 
-
-  <!-- Move this INSIDE the profile-container div, after the tabs content -->
-  <!-- and REMOVE the standalone one outside the container -->
-
-  <!-- DEACTIVATION MODAL OVERLAY -->
   <div class="modal-overlay" *ngIf="showDeactivateModal" (click)="showDeactivateModal = false">
     <div class="confirm-box" (click)="$event.stopPropagation()">
       <button class="close-btn" (click)="showDeactivateModal = false" type="button">&times;</button>
@@ -167,11 +156,9 @@
     </div>
   </div>
 
-  <!-- DEACTIVATION SECTION at bottom of profile -->
   <div class="deactivation-section" *ngIf="user">
     <div class="deactivation-inner">
 
-      <!-- Already pending — hide button entirely -->
       <div *ngIf="deactivationStatus === 'pending'" class="deactivation-pending">
         <i class="fa-solid fa-clock"></i>
         <div>
@@ -180,7 +167,6 @@
         </div>
       </div>
 
-      <!-- Done (participant deactivated) -->
       <div *ngIf="deactivationStatus === 'done'" class="deactivation-done">
         <i class="fa-solid fa-circle-check"></i>
         <div>
@@ -189,7 +175,6 @@
         </div>
       </div>
 
-      <!-- Idle — show danger zone with button on the RIGHT -->
       <div *ngIf="deactivationStatus === 'idle'" class="deactivation-idle">
         <div class="deactivation-text">
           <h4>{{ 'profile.deactivate.zone' | translate }}</h4>

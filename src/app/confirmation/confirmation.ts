@@ -26,25 +26,20 @@ export class Confirmation {
   ngOnInit(){
     if (isPlatformBrowser(this.platformId)) {
       const token = this.route.snapshot.queryParamMap.get('token');
-      console.log('Token from url : ',token);
       if (token) {
-        console.log('calling backend with token :', token);
         this.http.get(`http://localhost:8081/api/events/confirm?token=${token}`,
           { responseType: 'text' }
         ).subscribe({
           next: (response) => {
-            console.log('backend response:', response);
             this.status = 'success';
             this.cdr.detectChanges();
           },
           error: (err) => {
-            console.log('backend error: ', err);
             this.status = 'error';
             this.cdr.detectChanges();
           }
         });
       } else {
-        console.log('no token found in url');
         this.status = 'error';
       }
     }

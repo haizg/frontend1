@@ -36,7 +36,7 @@ export class EditEventModal {
     private fb: FormBuilder,
     private http: HttpClient,
     private translate: TranslateService,
-    private cdr: ChangeDetectorRef          // ← ADDED
+    private cdr: ChangeDetectorRef
   ) {
     this.eventForm = this.fb.group({
       title:           ['', [Validators.required, Validators.minLength(3)]],
@@ -51,7 +51,6 @@ export class EditEventModal {
     });
   }
 
-  // ── open() ───────────────────────────────────────────────────────────────────
 
   open(event: EventModel, isApproved = false, confirmedCount = 0, isAdmin = false) {
     this.currentEvent = event;
@@ -62,7 +61,6 @@ export class EditEventModal {
     this.errorMessage   = '';
     this.successMessage = '';
 
-    // Detect program type BEFORE patching so textarea is correct
     const existingProgram = (event as any).program || '';
     const looksLikeImageUrl =
       existingProgram.startsWith('http') &&
@@ -90,7 +88,6 @@ export class EditEventModal {
       program:         looksLikeImageUrl ? '' : existingProgram
     });
 
-    // Enable all, then lock as needed
     Object.keys(this.eventForm.controls).forEach(k => this.eventForm.get(k)?.enable());
 
     if (this.isLocked) {
@@ -108,7 +105,6 @@ export class EditEventModal {
     this.cdr.markForCheck();
   }
 
-  // ── close() ──────────────────────────────────────────────────────────────────
 
   close() {
     this.isVisible       = false;
@@ -131,7 +127,6 @@ export class EditEventModal {
     return new HttpHeaders({'Authorization': `Bearer ${token}`});
   }
 
-  // ── Program image methods ─────────────────────────────────────────────────────
 
   onProgramTypeChange(type: 'text' | 'image') {
     this.programType = type;
@@ -160,17 +155,16 @@ export class EditEventModal {
       return;
     }
 
-    // Reset previous upload — forces re-upload of the new file
     this.uploadedProgramImageUrl = null;
     this.selectedProgramFile     = file;
-    this.programImagePreview     = null;   // clear old preview immediately
+    this.programImagePreview     = null;
     this.errorMessage            = '';
-    this.cdr.markForCheck();               // ← show cleared state right away
+    this.cdr.markForCheck();
 
     const reader = new FileReader();
     reader.onload = (e: any) => {
       this.programImagePreview = e.target.result;
-      this.cdr.markForCheck(); // ← THIS is the critical fix: update after FileReader async callback
+      this.cdr.markForCheck();
     };
     reader.readAsDataURL(file);
   }
@@ -206,7 +200,6 @@ export class EditEventModal {
     this.cdr.markForCheck();
   }
 
-  // ── onSubmit() ───────────────────────────────────────────────────────────────
 
   async onSubmit() {
     if (!this.currentEvent) return;
@@ -222,7 +215,6 @@ export class EditEventModal {
     this.successMessage = '';
     this.cdr.markForCheck();
 
-    // Resolve program field
     if (this.programType === 'image') {
       if (this.selectedProgramFile && !this.uploadedProgramImageUrl) {
         const programUrl = await this.uploadProgramImage();
@@ -240,7 +232,6 @@ export class EditEventModal {
     const id  = this.currentEvent.id;
     const raw = this.eventForm.getRawValue();
 
-    // ADMIN: full update
     if (this.isAdmin) {
       this.http.put(
         `http://localhost:8081/api/admin/update-event/${id}`,
@@ -253,7 +244,6 @@ export class EditEventModal {
       return;
     }
 
-    // ORGANIZER LOCKED: capacity + program only
     if (this.isLocked) {
       this.http.put(
         `http://localhost:8081/api/events/${id}/capacity-and-program`,

@@ -118,7 +118,6 @@
   font-size: 14px;
 }
 
-/* Custom arrow */
 .custom-select-wrapper::after {
   content: "▾";
   position: absolute;

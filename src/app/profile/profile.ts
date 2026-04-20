@@ -19,7 +19,7 @@ import {RouterModule, Router} from '@angular/router';
     CommonModule,
     FormsModule,
     RouterModule,
-    TranslateModule // ADD THIS
+    TranslateModule
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
@@ -57,8 +57,7 @@ export class Profile {
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    // REMOVE: public lang: LangService,
-    private translateLang: TranslateLangService, // ADD THIS
+    private translateLang: TranslateLangService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
   }
@@ -79,7 +78,6 @@ export class Profile {
           this.editPrenom = u.prenom;
           this.editEmail = u.email;
           this.editNomOrganisation = u.nomOrganisation;
-          // Restore pending state if organizer already requested deactivation
           if (this.isOrganisateur) {
             this.checkDeactivationStatus();
           }
@@ -95,7 +93,6 @@ export class Profile {
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
     if (this.isOrganisateur) {
-      // Organizer: load both created and participated events
       this.http.get<EventModel[]>(`http://localhost:8081/api/events/created?email=${email}`, { headers })
         .subscribe({
           next: (created) => {
@@ -114,7 +111,6 @@ export class Profile {
           error: (err) => console.error('Failed to load participated events', err)
         });
     } else {
-      // Participant: only load participated events
       this.http.get<EventModel[]>(`http://localhost:8081/api/events/my-events?email=${email}`, { headers })
         .subscribe({
           next: (data) => {
@@ -208,7 +204,6 @@ export class Profile {
     });
   }
 
-  // Replace requestDeactivation + add confirmDeactivation:
   requestDeactivation() {
     this.showDeactivateModal = true;
   }

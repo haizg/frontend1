@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { TranslateLangService } from '../services/translate-lang.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './reset-password.html',
   styleUrls: ['./reset-password.css']
 })
@@ -26,10 +28,10 @@ export class ResetPassword implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-
     public router: Router,
+    private http: HttpClient,
+    private translateLang: TranslateLangService,
 
-    private http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -120,7 +122,7 @@ export class ResetPassword implements OnInit {
           this.confirmPassword = '';
 
           setTimeout(() => {
-            this.router.navigate(['/api/home']);
+            this.router.navigate(['/home']);
           }, 2000);
         },
 

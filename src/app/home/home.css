@@ -148,7 +148,8 @@
   color: #8E2A5A;
   margin-bottom: 24px;
 }
-/* Skeleton loading styles for home page */
+
+/*Loader*/
 .skeleton-card {
   border-radius: 10px;
   overflow: hidden;
@@ -271,8 +272,6 @@
      font-weight: 600;
      display: block;
 }
-
-
 
 .event-title {
   font-size: 15px;
@@ -420,8 +419,8 @@
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s;
-  min-width: 0;          /* Prevents overflow issues */
-  white-space: nowrap;   /* Prevents text wrapping */
+  min-width: 0;
+  white-space: nowrap;
 }
 
 .btn-edit {

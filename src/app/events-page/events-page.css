@@ -144,7 +144,7 @@
   margin-left:8px;
 }
 
-/* Skeleton loading styles */
+/* LOADER */
 .skeleton-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -235,10 +235,10 @@
 .btn-edit,
 .btn-delete {
   flex: 1;
-  display: flex;           /* Add this */
-  align-items: center;     /* Add this */
-  justify-content: center; /* Add this */
-  gap: 8px;               /* Add this - space between icon and text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   background: #2a6262;
   color: white;
   padding: 10px ;
@@ -247,9 +247,9 @@
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s;
-  min-width: 0;           /* Add this - prevents flex overflow */
+  min-width: 0;
   font-size: 14px;
-  white-space: nowrap; /* Add this - prevents text wrapping */
+  white-space: nowrap;
 }
 
 .btn-edit {
@@ -270,7 +270,6 @@
   transform: translateY(-2px);
 }
 
-/* Make icons the same size */
 .btn-edit i,
 .btn-delete i {
   width: 14px;
@@ -341,7 +340,6 @@
   font-size: 13px;
 }
 
-/* Disabled button styles */
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;

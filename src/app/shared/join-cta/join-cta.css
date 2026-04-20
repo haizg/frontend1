@@ -73,8 +73,8 @@
 
 .stamp {
   position: absolute;
-  top: 62%;     /* Percentage from top */
-  right: 43%;    /* Percentage from right */
+  top: 62%;
+  right: 43%;
   width: 40px;
   height: 40px;
   background: white;

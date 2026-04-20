@@ -13,7 +13,6 @@ import { HttpClient } from '@angular/common/http';
 export class ForgotPasswordModal {
   @Output() closeModal = new EventEmitter<void>();
 
-  // Component state
   isVisible = false;
   isLoading = false;
   errorMessage = '';

@@ -334,5 +334,20 @@
     "organizer": "Devenir organisateur",
     "hours": "Lun – Ven, 9h – 18h",
     "rights": "Tous droits réservés."
+  },
+  "resetpassword" : {
+    "verificationlien": "Vérification du lien..",
+    "lieninvalide": "Lien invalide ou expiré",
+    "liende..": "Le lien de réinitialisation est valable pendant 30 minutes.\n          Si votre lien a expiré, veuillez demander un nouveau lien.",
+    "retourhome": "Retour à l'accueil",
+    "resetmdp": "Réinitialiser le mot de passe",
+    "saisenewpsw": "Entrez votre nouveau mot de passe",
+    "newmdp": "Nouveau mot de passe",
+    "confirmmdp": "Confirmer le mot de passe",
+    "mdpmusthave" : "Le mot de passe doit contenir :",
+    "mdpcorrespondent": "Les mots de passe correspondent",
+    "redirecthome": "Redirection vers la page d'accueil...",
+    "returnacceuil": "← Retour à l'accueil",
+    "loading": "Réinitialisation..."
   }
 }

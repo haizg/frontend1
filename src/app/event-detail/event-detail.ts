@@ -57,7 +57,6 @@ export class EventDetail implements OnInit {
   hasAlreadyParticipated = false;
   newCapacity: number | null = null;
 
-  // program image lightbox
   programImageExpanded = false;
 
   constructor(
@@ -120,7 +119,6 @@ export class EventDetail implements OnInit {
     });
   }
 
-  // ── Getters ──────────────────────────────────────────────────────────────────
 
   get unconfirmedParticipants(): any[] {
     return this.participants.filter(p => !p.verified);
@@ -159,7 +157,6 @@ export class EventDetail implements OnInit {
     return p.startsWith('http') && /\.(png|jpg|jpeg|webp|gif)(\?.*)?$/i.test(p);
   }
 
-  // ── Methods ──────────────────────────────────────────────────────────────────
 
   loadParticipants(eventId: number) {
     const token = localStorage.getItem('token');
@@ -214,7 +211,6 @@ export class EventDetail implements OnInit {
     });
   }
 
-  // Null first so OnPush sees a genuine reference change → img [src] re-renders
   onEventUpdated() {
     const rawId = this.route.snapshot.paramMap.get('id');
     if (!rawId) return;

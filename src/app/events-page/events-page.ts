@@ -15,6 +15,7 @@ import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslateLangService } from '../services/translate-lang.service';
+import { ConfirmDelete } from '../confirm-delete/confirm-delete';
 
 @Component({
   selector: 'app-events-page',
@@ -27,7 +28,8 @@ import { TranslateLangService } from '../services/translate-lang.service';
     RouterLink,
     CommonModule,
     EditEventModal,
-    TranslateModule
+    TranslateModule,
+    ConfirmDelete
   ],
   templateUrl: './events-page.html',
   styleUrl: './events-page.css',
@@ -194,26 +196,25 @@ export class EventsPage {
 
   deleteEvent(eventModel: EventModel, $event: MouseEvent) {
     $event.stopPropagation();
-    if (!confirm(`Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`)) return;
+    this.modalService.openDeleteModal(
+      'Supprimer l\'événement',
+      `Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`,
+      () => {
+        this.isDeleting = true;
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.isDeleting = true;
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-
-    this.http.delete(`http://localhost:8081/api/admin/${eventModel.id}`, { headers }).subscribe({
-      next: () => {
-        this.isDeleting = false;
-        this.loadEvents();
-      },
-      error: (error) => {
-        this.isDeleting = false;
-        if (error.status === 403) {
-          alert('Vous ne pouvez supprimer que vos propres événements');
-        } else {
-          alert('Erreur lors de la suppression de l\'événement');
-        }
+        this.http.delete(`http://localhost:8081/api/admin/${eventModel.id}`, { headers }).subscribe({
+          next: () => {
+            this.isDeleting = false;
+            this.loadEvents();
+          },
+          error: () => {
+            this.isDeleting = false;
+          }
+        });
       }
-    });
+    );
   }
 
   onEventUpdated() {

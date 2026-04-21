@@ -8,13 +8,17 @@ export class ModalService {
   private logoutModalOpen = new BehaviorSubject<boolean>(false);
   private joinModalOpen = new BehaviorSubject<boolean>(false);
   private deactivateModalOpen = new BehaviorSubject<boolean>(false);
+  private deleteModalOpen = new BehaviorSubject<boolean>(false);
+  private deleteModalData = new BehaviorSubject<{ title: string; message: string; onConfirm: () => void } | null>(null);
+
 
   loginModal$ = this.loginModalOpen.asObservable();
   signupModal$=this.signupModalOpen.asObservable();
   logoutModal$ = this.logoutModalOpen.asObservable();
   joinModal$=this.joinModalOpen.asObservable();
   deactivateModal$ = this.deactivateModalOpen.asObservable();
-
+  deleteModal$ = this.deleteModalOpen.asObservable();
+  deleteModalData$ = this.deleteModalData.asObservable();
 
   private currentEventID = new BehaviorSubject<number|null>(null);
   currentEventId$ = this.currentEventID.asObservable();
@@ -40,6 +44,15 @@ export class ModalService {
     this.joinModalOpen.next(false);
     this.currentEventID.next(null);}
 
+  openDeleteModal(title: string, message: string, onConfirm: () => void) {
+    this.deleteModalData.next({ title, message, onConfirm });
+    this.deleteModalOpen.next(true);
+  }
+
+  closeDeleteModal() {
+    this.deleteModalOpen.next(false);
+    this.deleteModalData.next(null);
+  }
 
 
 

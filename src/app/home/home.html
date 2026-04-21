@@ -39,7 +39,6 @@
           <span class="btn-text">
             <strong>{{ 'home.createeventbtn' | translate }}</strong>
             <small *ngIf="isAdminVerified">{{ 'home.createeventbtndsc' | translate }}</small>
-            <!-- add translation-->
             <small *ngIf="!isAdminVerified" style="color:red;">Compte non vérifié — Attendre l'approbation de l'administrateur</small>
           </span>
         </button>
@@ -142,3 +141,4 @@
 <app-popup *ngIf="isJoinModalOpen"></app-popup>
 <app-create-event-modal (eventCreated)="onEventCreated()"></app-create-event-modal>
 <app-edit-event-modal (eventUpdated)="onEventUpdated()"></app-edit-event-modal>
+<app-confirm-delete></app-confirm-delete>

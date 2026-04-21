@@ -9,13 +9,15 @@ import { EventModel } from '../models/event.model';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { ConfirmLogout } from '../confirm-logout/confirm-logout';
 import { ModalService } from '../services/modal.service';
+import { ConfirmDelete } from '../confirm-delete/confirm-delete';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
   imports: [CommonModule, RouterModule,
     EditEventModal, FormsModule,
-    TranslateModule, ConfirmLogout],
+    TranslateModule, ConfirmLogout,
+    ConfirmDelete],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css',
 })
@@ -46,21 +48,6 @@ export class AdminDashboard {
   // Edit Org
   showEditOrg = false;
   editingOrg: any = null;
-
-  //Delete modal
-  showDeleteConfirm = false;
-  deleteConfirmTitle = '';
-  deleteConfirmMessage = '';
-  private pendingDeleteFn: (() => void) | null = null;
-
-  private requestDelete(title: string, message: string, fn: () => void) {
-    this.deleteConfirmTitle = title;
-    this.deleteConfirmMessage = message;
-    this.pendingDeleteFn = fn;
-    this.showDeleteConfirm = true;
-  }
-
-
 
   constructor(
     private http: HttpClient,
@@ -130,15 +117,8 @@ export class AdminDashboard {
       .subscribe({ next: (data) => { this.organisateurs = data; this.cdr.detectChanges(); } });
   }
 
-
-  confirmDelete() {
-    this.showDeleteConfirm = false;
-    this.pendingDeleteFn?.();
-    this.pendingDeleteFn = null;
-  }
-
   deleteUser(userId: number) {
-    this.requestDelete(
+    this.modalService.openDeleteModal(
       'Supprimer l\'utilisateur',
       'Cet utilisateur sera définitivement supprimé.',
       () => this.http.delete(`http://localhost:8081/api/admin/users/${userId}`, { headers: this.getHeaders() })
@@ -147,7 +127,7 @@ export class AdminDashboard {
   }
 
   deleteOrganisateur(id: number) {
-    this.requestDelete(
+    this.modalService.openDeleteModal(
       'Supprimer l\'organisateur',
       'Cet organisateur sera définitivement supprimé.',
       () => this.http.delete(`http://localhost:8081/api/admin/organisateurs/${id}`, { headers: this.getHeaders() })
@@ -156,7 +136,7 @@ export class AdminDashboard {
   }
 
   deleteEvent(eventId: number) {
-    this.requestDelete(
+    this.modalService.openDeleteModal(
       'Supprimer l\'événement',
       'Cet événement et toutes ses inscriptions seront définitivement supprimés.',
       () => this.http.delete(`http://localhost:8081/api/admin/${eventId}`, { headers: this.getHeaders() })
@@ -340,7 +320,7 @@ export class AdminDashboard {
   }
 
   approveDeactivation(org: any) {
-    this.requestDelete(
+    this.modalService.openDeleteModal(
       'Approuver la désactivation',
       `Confirmer la désactivation du compte de ${org.prenom} ${org.nom} ?`,
       () => this.http.put(

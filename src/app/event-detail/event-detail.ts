@@ -24,6 +24,7 @@ import {EditEventModal} from '../edit-event-modal/edit-event-modal';
 import {TranslateModule} from '@ngx-translate/core';
 import {TranslateLangService} from '../services/translate-lang.service';
 import {FormsModule} from '@angular/forms';
+import { ConfirmDelete } from '../confirm-delete/confirm-delete';
 
 @Component({
   selector: 'app-event-detail',
@@ -38,7 +39,8 @@ import {FormsModule} from '@angular/forms';
     RouterModule,
     EditEventModal,
     TranslateModule,
-    FormsModule
+    FormsModule,
+    ConfirmDelete
   ],
   templateUrl: './event-detail.html',
   styleUrl: './event-detail.css',
@@ -231,19 +233,20 @@ export class EventDetail implements OnInit {
   }
 
   deleteEvent() {
-    if (!confirm(`Êtes-vous sûr de vouloir supprimer "${this.event?.title}" ?`)) return;
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
-    const url = this.isAdmin
-      ? `http://localhost:8081/api/admin/${this.event?.id}`
-      : `http://localhost:8081/api/events/${this.event?.id}`;
+    this.modalService.openDeleteModal(
+      'Supprimer l\'événement',
+      `Êtes-vous sûr de vouloir supprimer "${this.event?.title}" ?`,
+      () => {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.http.delete(url, {headers}).subscribe({
-      next: () => this.router.navigate(['/events']),
-      error: (err) => console.error('Delete failed', err)
-    });
+        this.http.delete(`http://localhost:8081/api/admin/${this.event?.id}`, { headers }).subscribe({
+          next: () => this.router.navigate(['/events']),
+          error: (err) => console.error('Delete failed', err)
+        });
+      }
+    );
   }
-
   checkIfParticipated() {
     const token = localStorage.getItem('token');
     if (!token) return;

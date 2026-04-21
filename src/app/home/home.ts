@@ -16,12 +16,16 @@ import { CreateEventModal } from '../create-event-modal/create-event-modal';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TranslateLangService } from '../services/translate-lang.service';
+import { ConfirmDelete } from '../confirm-delete/confirm-delete';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, Navbar, RouterModule, JoinCta, Footer, SignUpOrg, Login, Popup, CreateEventModal, EditEventModal, TranslateModule],
+  imports: [CommonModule, Navbar, RouterModule,
+  JoinCta, Footer, SignUpOrg, Login,
+   Popup, CreateEventModal, EditEventModal,
+   TranslateModule, ConfirmDelete],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
@@ -216,28 +220,27 @@ export class Home implements AfterViewInit {
 
   deleteEvent(eventModel: EventModel, $event: MouseEvent) {
     $event.stopPropagation();
-    if (!confirm(`Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`)) return;
+    this.modalService.openDeleteModal(
+        'Supprimer l\'événement',
+        `Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`,
+        () => {
+            this.isDeleting = true;
+            const token = localStorage.getItem('token');
+            const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.isDeleting = true;
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-
-    this.http.delete(`http://localhost:8081/api/admin/${eventModel.id}`, { headers }).subscribe({
-      next: () => {
-        this.isDeleting = false;
-        this.loadEvents();
-      },
-      error: (error) => {
-        this.isDeleting = false;
-        if (error.status === 403) {
-          alert('Vous ne pouvez supprimer que vos propres événements');
-        } else {
-          alert('Erreur lors de la suppression');
+            this.http.delete(`http://localhost:8081/api/admin/${eventModel.id}`, { headers }).subscribe({
+              next: () => {
+                this.isDeleting = false;
+                this.loadEvents();
+              },
+              error: (error) => {
+                this.isDeleting = false;
+              }
+            });
         }
-      }
-    });
-  }
+      );
+    }
 
   onEventUpdated() {
     this.loadEvents();

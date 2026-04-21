@@ -1,0 +1,13 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="cancel()">
+  <div class="confirm-box" (click)="$event.stopPropagation()">
+    <div class="confirm-icon-wrap danger">
+      <i class="fa-solid fa-trash"></i>
+    </div>
+    <h3>{{ title }}</h3>
+    <p>{{ message }}</p>
+    <div class="confirm-btns">
+      <button class="btn-confirm-cancel" (click)="cancel()">Annuler</button>
+      <button class="btn-confirm-delete" (click)="confirm()">Supprimer</button>
+    </div>
+  </div>
+</div>

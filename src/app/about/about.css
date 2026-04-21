@@ -294,7 +294,7 @@
 
 /* CTA */
 .about-cta {
-  background: #A53A6B;
+  background: linear-gradient(135deg, #F7D1DC, #E08AA4);
   padding: 80px 20px;
   text-align: center;
 }

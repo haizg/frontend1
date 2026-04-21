@@ -14,10 +14,9 @@ import { UserService } from '../services/user.service';
 import { Popup } from '../joinevents/popup/popup';
 import { CreateEventModal } from '../create-event-modal/create-event-modal';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TranslateLangService } from '../services/translate-lang.service';
 import { ConfirmDelete } from '../confirm-delete/confirm-delete';
-
+import { ApiService } from '../services/api.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -63,8 +62,8 @@ export class Home implements AfterViewInit {
     private eventService: EventService,
     private modalService: ModalService,
     private userService: UserService,
+    private apiService : ApiService,
     private cdr: ChangeDetectorRef,
-    private http: HttpClient,
     private router: Router,
     private translateLang: TranslateLangService,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -114,9 +113,7 @@ export class Home implements AfterViewInit {
         }
         this.cdr.detectChanges();
       });
-
       this.loadEvents();
-
       setInterval(() => {
         this.currentSlide = (this.currentSlide + 1) % this.slides.length;
         this.cdr.detectChanges();
@@ -163,12 +160,43 @@ export class Home implements AfterViewInit {
       },
       error: (err) => {
         clearTimeout(slowConnectionTimeout);
-        console.error('Failed to load events', err);
         this.isLoadingEvents = false;
         this.cdr.detectChanges();
       }
     });
   }
+
+  deleteEvent(eventModel: EventModel, $event: MouseEvent) {
+    $event.stopPropagation();
+    this.modalService.openDeleteModal(
+        'Supprimer l\'événement',
+        `Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`,
+        () => {
+            this.isDeleting = true;
+            this.apiService.deleteEvent(eventModel.id).subscribe({
+              next: () => {
+                this.isDeleting = false;
+                this.loadEvents();
+              },
+              error: (error : any) => {
+                this.isDeleting = false;
+              }
+            });
+        }
+      );
+    }
+
+
+  loadMyParticipations() {
+    this.apiService.getMyParticipationsIds().subscribe({
+        next: (ids: number []) => {
+          this.participatedEventIds = new Set(ids);
+          this.cdr.detectChanges();
+        },
+        error: (err : any) => console.error('Failed to load participations', err)
+      });
+  }
+
 
   canModifyEvent(event: EventModel): boolean {
     if (!this.isOrganisateur) {
@@ -177,16 +205,22 @@ export class Home implements AfterViewInit {
     return event.organisateurEmail === this.userEmail;
   }
 
-  goToSlide(index: number) {
-    this.currentSlide = index;
+  openJoinModal(eventId: number) {
+    if (!this.userService.getUser()) {
+      localStorage.setItem('redirectAfterLogin', this.router.url);
+      this.modalService.openLoginModal();
+      return;
+    }
+    this.modalService.openJoinModal(eventId);
   }
 
-  openCreateEventModal() {
-    this.createEventModal.open();
+  openEditEventModal(eventModel: EventModel, $event: MouseEvent) {
+    $event.stopPropagation();
+    this.editEventModal.open(eventModel, false, 0, this.isAdmin);
   }
 
-  onEventCreated() {
-    this.loadEvents();
+  hasParticipated(eventId: number): boolean {
+    return this.participatedEventIds.has(eventId);
   }
 
   get isOrganisateur(): boolean {
@@ -204,63 +238,22 @@ export class Home implements AfterViewInit {
     return `${this.userPrenom} ${this.userName}`;
   }
 
-  openJoinModal(eventId: number) {
-    if (!this.userService.getUser()) {
-      localStorage.setItem('redirectAfterLogin', this.router.url);
-      this.modalService.openLoginModal();
-      return;
-    }
-    this.modalService.openJoinModal(eventId);
+  goToSlide(index: number) {
+    this.currentSlide = index;
   }
 
-  openEditEventModal(eventModel: EventModel, $event: MouseEvent) {
-    $event.stopPropagation();
-    this.editEventModal.open(eventModel, false, 0, this.isAdmin);
+  openCreateEventModal() {
+    this.createEventModal.open();
   }
 
-  deleteEvent(eventModel: EventModel, $event: MouseEvent) {
-    $event.stopPropagation();
-    this.modalService.openDeleteModal(
-        'Supprimer l\'événement',
-        `Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`,
-        () => {
-            this.isDeleting = true;
-            const token = localStorage.getItem('token');
-            const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-
-
-            this.http.delete(`http://localhost:8081/api/admin/${eventModel.id}`, { headers }).subscribe({
-              next: () => {
-                this.isDeleting = false;
-                this.loadEvents();
-              },
-              error: (error) => {
-                this.isDeleting = false;
-              }
-            });
-        }
-      );
-    }
+  onEventCreated() {
+    this.loadEvents();
+  }
 
   onEventUpdated() {
     this.loadEvents();
   }
 
-  loadMyParticipations() {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    this.http.get<number[]>('http://localhost:8081/api/user/my-participations', { headers })
-      .subscribe({
-        next: (ids) => {
-          this.participatedEventIds = new Set(ids);
-          this.cdr.detectChanges();
-        },
-        error: (err) => console.error('Failed to load participations', err)
-      });
-  }
 
-  hasParticipated(eventId: number): boolean {
-    return this.participatedEventIds.has(eventId);
-  }
+
 }

@@ -19,18 +19,8 @@ import { ConfirmDelete } from '../confirm-delete/confirm-delete';
 
 @Component({
   selector: 'app-events-page',
-  imports: [
-    Popup,
-    Login,
-    SignUpOrg,
-    Footer,
-    Navbar,
-    RouterLink,
-    CommonModule,
-    EditEventModal,
-    TranslateModule,
-    ConfirmDelete
-  ],
+  imports: [Popup, Login, SignUpOrg, Footer, Navbar, RouterLink,
+    CommonModule, EditEventModal, TranslateModule, ConfirmDelete ],
   templateUrl: './events-page.html',
   styleUrl: './events-page.css',
 })
@@ -102,11 +92,36 @@ export class EventsPage {
       });
 
       this.loadEvents();
-
       setTimeout(() => {
         this.cdr.detectChanges();
       });
     }
+  }
+
+  private sortEventsByClosestToToday(events: EventModel[]): EventModel[] {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return [...events].sort((a, b) => {
+      const dateA = new Date(a.date);
+      dateA.setHours(0, 0, 0, 0);
+      const dateB = new Date(b.date);
+      dateB.setHours(0, 0, 0, 0);
+
+      const diffA = Math.abs(dateA.getTime() - today.getTime());
+      const diffB = Math.abs(dateB.getTime() - today.getTime());
+
+      return diffA - diffB;
+    });
+  }
+
+
+  applyFilters() {
+    this.filteredEvents = this.allEvents.filter(event => {
+      const matchesCategory = this.selectedCategory === 'all' || event.category === this.selectedCategory;
+      const matchesDate = !this.selectedDate || event.date === this.selectedDate;
+      return matchesCategory && matchesDate;
+    });
   }
 
   loadEvents() {
@@ -129,69 +144,6 @@ export class EventsPage {
         this.cdr.detectChanges();
       }
     });
-  }
-
-  private sortEventsByClosestToToday(events: EventModel[]): EventModel[] {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    return [...events].sort((a, b) => {
-      const dateA = new Date(a.date);
-      dateA.setHours(0, 0, 0, 0);
-      const dateB = new Date(b.date);
-      dateB.setHours(0, 0, 0, 0);
-
-      const diffA = Math.abs(dateA.getTime() - today.getTime());
-      const diffB = Math.abs(dateB.getTime() - today.getTime());
-
-      return diffA - diffB;
-    });
-  }
-
-  get isAdmin(): boolean {
-    return this.userRole === 'ROLE_ADMIN';
-  }
-
-  applyFilters() {
-    this.filteredEvents = this.allEvents.filter(event => {
-      const matchesCategory = this.selectedCategory === 'all' || event.category === this.selectedCategory;
-      const matchesDate = !this.selectedDate || event.date === this.selectedDate;
-      return matchesCategory && matchesDate;
-    });
-  }
-
-  onCategoryChange(category: string) {
-    this.selectedCategory = category;
-    this.applyFilters();
-  }
-
-  onDateChange(date: string) {
-    this.selectedDate = date;
-    this.applyFilters();
-  }
-
-  get fullEventsCount(): number {
-    return this.allEvents.filter(event => event.isFull).length;
-  }
-
-  openJoinModal(eventId: number) {
-    this.modalService.openJoinModal(eventId);
-  }
-
-  get isOrganisateur(): boolean {
-    return this.userRole === 'ROLE_ORGANISATEUR';
-  }
-
-  canModifyEvent(event: EventModel): boolean {
-    if (!this.isOrganisateur) {
-      return false;
-    }
-    return event.organisateurEmail === this.userEmail;
-  }
-
-  openEditEventModal(eventModel: EventModel, $event: MouseEvent) {
-    $event.stopPropagation();
-    this.editEventModal.open(eventModel, false, 0, this.isAdmin);
   }
 
   deleteEvent(eventModel: EventModel, $event: MouseEvent) {
@@ -217,10 +169,6 @@ export class EventsPage {
     );
   }
 
-  onEventUpdated() {
-    this.loadEvents();
-  }
-
   loadMyParticipations() {
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -235,7 +183,56 @@ export class EventsPage {
       });
   }
 
+
+  openEditEventModal(eventModel: EventModel, $event: MouseEvent) {
+    $event.stopPropagation();
+    this.editEventModal.open(eventModel, false, 0, this.isAdmin);
+  }
+
+  openJoinModal(eventId: number) {
+    this.modalService.openJoinModal(eventId);
+  }
+
+  canModifyEvent(event: EventModel): boolean {
+    if (!this.isOrganisateur) {
+      return false;
+    }
+    return event.organisateurEmail === this.userEmail;
+  }
+
+  get fullEventsCount(): number {
+    return this.allEvents.filter(event => event.isFull).length;
+  }
+
+  get isAdmin(): boolean {
+    return this.userRole === 'ROLE_ADMIN';
+  }
+
+  get isOrganisateur(): boolean {
+    return this.userRole === 'ROLE_ORGANISATEUR';
+  }
+
+
+
   hasParticipated(eventId: number): boolean {
     return this.participatedEventIds.has(eventId);
   }
+
+  onEventUpdated() {
+    this.loadEvents();
+  }
+
+  onCategoryChange(category: string) {
+    this.selectedCategory = category;
+    this.applyFilters();
+  }
+
+  onDateChange(date: string) {
+    this.selectedDate = date;
+    this.applyFilters();
+  }
+
+
+
+
 }

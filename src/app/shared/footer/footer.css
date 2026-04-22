@@ -123,3 +123,15 @@
 }
 
 .footer-modal-btn:hover { color: white; }
+
+.footer-info-msg {
+  margin-top: 10px;
+  font-size: 0.82rem;
+  color: white;
+  line-height: 1.4;
+  max-width: 220px;
+}
+
+.footer-info-msg i {
+  margin-right: 5px;
+}

@@ -7,6 +7,7 @@ import { ModalService } from '../services/modal.service';
 import { UserService } from '../services/user.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateLangService } from '../services/translate-lang.service';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-sign-up-org',
@@ -34,6 +35,8 @@ export class SignUpOrg {
     private http: HttpClient,
     private modalService: ModalService,
     private userService: UserService,
+    private apiService : ApiService,
+
     private translate: TranslateService,
     private translateLang: TranslateLangService,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -99,15 +102,9 @@ export class SignUpOrg {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-
-    this.http.post(
-      'http://localhost:8081/api/auth/signup',
-      newUser,
-      {
-        headers: headers,
-        responseType: 'text' as 'json'
-      }
-    ).subscribe({
+    this.apiService.signup({nom: this.nom, prenom: this.prenom,
+     email: this.email, password: this.mdp,
+     role: this.role, nomOrganisation: this.nomOrganisation}).subscribe({
       next: (response: any) => {
         this.isLoading = false;
         this.translate.get('signup.success_message', { email: this.email }).subscribe((msg: string) => {

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-forgot-password-modal',
@@ -12,18 +12,16 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ForgotPasswordModal {
   @Output() closeModal = new EventEmitter<void>();
-
   isVisible = false;
   isLoading = false;
   errorMessage = '';
   successMessage = '';
   email = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private apiService : ApiService) {}
 
   open() {
     this.isVisible = true;
-
     this.email = '';
     this.errorMessage = '';
     this.successMessage = '';
@@ -32,14 +30,11 @@ export class ForgotPasswordModal {
 
   close() {
     this.isVisible = false;
-
     this.email = '';
     this.errorMessage = '';
     this.successMessage = '';
-
     this.closeModal.emit();
   }
-
 
   onSubmit() {
     this.errorMessage = '';
@@ -58,10 +53,7 @@ export class ForgotPasswordModal {
 
     this.isLoading = true;
 
-
-    this.http.post('http://localhost:8081/api/auth/forgot-password', {
-      email: this.email
-    }).subscribe({
+    this.apiService.forgotPassword(this.email).subscribe({
       next: (response: any) => {
         console.log('Password reset email sent:', response);
 

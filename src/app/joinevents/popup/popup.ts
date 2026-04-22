@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {ModalService} from '../../services/modal.service';
-import {HttpClient} from '@angular/common/http';
+import {ApiService} from '../../services/api.service';
 import {UserService} from '../../services/user.service';
 
 @Component({
@@ -20,7 +20,7 @@ export class Popup {
 
   constructor(
     private modalService:ModalService,
-    private http:HttpClient,
+    private apiService : ApiService,
     private userService: UserService
   ) {}
 
@@ -28,7 +28,6 @@ export class Popup {
     this.modalService.currentEventId$.subscribe(id => {
       this.eventId=id;
     });
-
     const user = this.userService.getUser();
     if (user) {
       this.email = user.email;
@@ -40,26 +39,10 @@ export class Popup {
   }
 
   submit() {
-    if (!this.userService.getUser()) {
-      this.message = 'Vous devez être connecté pour participer à un événement.';
-      return;
-    }
-
-
-
-
     this.isLoading = true;
     this.message='';
 
-    const data = {
-      email: this.email,
-      eventId:this.eventId
-    };
-
-    console.log('Registration data:', data);
-
-    this.http.post('http://localhost:8081/api/events/join', data, {responseType:'text'})
-      .subscribe({
+    this.apiService.joinEvent(this.email, this.eventId).subscribe({
         next:()=>{
           this.isLoading=false;
           this.message='Registration successful';

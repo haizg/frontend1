@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, Inject, PLATFORM_ID} from '@angular/core';
 import {EventModel} from '../models/event.model';
 import {UserService} from '../services/user.service';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { ApiService } from '../services/api.service';
 import {isPlatformBrowser} from '@angular/common';
 import {Navbar} from '../navbar/navbar';
 import {Footer} from '../shared/footer/footer';
@@ -13,14 +13,8 @@ import {RouterModule, Router} from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [
-    Navbar,
-    Footer,
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    TranslateModule
-  ],
+  imports: [Navbar, Footer, CommonModule,
+    FormsModule, RouterModule, TranslateModule],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -54,13 +48,12 @@ export class Profile {
 
   constructor(
     private userService: UserService,
-    private http: HttpClient,
+    private apiService : ApiService,
     private cdr: ChangeDetectorRef,
     private router: Router,
     private translateLang: TranslateLangService,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
@@ -68,8 +61,6 @@ export class Profile {
       if (userStr) {
         this.userService.setUser(JSON.parse(userStr));
       }
-
-
       this.userService.currentUser$.subscribe(u => {
         if (u) {
           this.user = u;
@@ -89,12 +80,8 @@ export class Profile {
   }
 
   loadEvents(email: string) {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-
     if (this.isOrganisateur) {
-      this.http.get<EventModel[]>(`http://localhost:8081/api/events/created?email=${email}`, { headers })
-        .subscribe({
+      this.apiService.getCreatedEvents(email).subscribe({
           next: (created) => {
             this.createdEvents = created;
             this.cdr.detectChanges();
@@ -102,8 +89,7 @@ export class Profile {
           error: (err) => console.error('Failed to load created events', err)
         });
 
-      this.http.get<EventModel[]>(`http://localhost:8081/api/events/my-events?email=${email}`, { headers })
-        .subscribe({
+      this.apiService.getMyEvents(email).subscribe({
           next: (participated) => {
             this.participatedEvents = participated;
             this.cdr.detectChanges();
@@ -111,8 +97,7 @@ export class Profile {
           error: (err) => console.error('Failed to load participated events', err)
         });
     } else {
-      this.http.get<EventModel[]>(`http://localhost:8081/api/events/my-events?email=${email}`, { headers })
-        .subscribe({
+      this.apiService.getMyEvents(email).subscribe({
           next: (data) => {
             this.participatedEvents = data;
             this.cdr.detectChanges();
@@ -125,24 +110,18 @@ export class Profile {
   updateProfile() {
     this.profileMessage = '';
     this.profileError = '';
-
     if (!this.editEmail) {
       this.profileError = 'Email est obligatoire.';
       return;
     }
 
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
-
-    const body = {
-      email: this.user.email,
-      nom: this.editNom,
-      prenom: this.editPrenom,
-      newEmail: this.editEmail,
-      nomOrganisation: this.editNomOrganisation
-    };
-
-    this.http.put('http://localhost:8081/api/user/update-profile', body, {headers}).subscribe({
+    this.apiService.updateProfile({
+          email: this.user.email,
+          nom: this.editNom,
+          prenom: this.editPrenom,
+          newEmail: this.editEmail,
+          nomOrganisation: this.editNomOrganisation
+    }).subscribe({
       next: (response: any) => {
         const updatedUser = {
           ...this.user,
@@ -181,16 +160,11 @@ export class Profile {
       return;
     }
 
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
-
-    const body = {
-      email: this.user.email,
-      oldPassword: this.oldPassword,
-      newPassword: this.newPassword
-    };
-
-    this.http.put('http://localhost:8081/api/user/change-password', body, {headers, responseType: 'text'}).subscribe({
+    this.apiService.changePassword({
+          email: this.user.email,
+          oldPassword: this.oldPassword,
+          newPassword: this.newPassword
+    }).subscribe({
       next: () => {
         this.passwordMessage = 'Mot de passe modifié avec succès.';
         this.oldPassword = '';
@@ -198,7 +172,7 @@ export class Profile {
         this.confirmPassword = '';
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: (err: any) => {
         this.passwordError = err.error || 'Erreur lors du changement de mot de passe.';
       }
     });
@@ -211,11 +185,8 @@ export class Profile {
   confirmDeactivation() {
     this.deactivating = true;
     this.showDeactivateModal = false;
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.http.put('http://localhost:8081/api/user/deactivate', {}, { headers })
-      .subscribe({
+    this.apiService.requestDeactivation().subscribe({
         next: (res: any) => {
           this.deactivating = false;
           if (res.status === 'PENDING' || res.status === 'ALREADY_PENDING') {
@@ -238,12 +209,8 @@ export class Profile {
   }
 
   checkDeactivationStatus() {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    this.http.get<any>('http://localhost:8081/api/user/deactivation-status', { headers })
-      .subscribe({
-        next: (res) => {
+    this.apiService.getDeactivationStatus().subscribe({
+        next: (res: any) => {
           if (res.deactivationRequested) {
             this.deactivationStatus = 'pending';
             this.cdr.detectChanges();

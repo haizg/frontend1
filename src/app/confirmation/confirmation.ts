@@ -6,6 +6,7 @@ import {subscribe} from 'node:diagnostics_channel';
 import {Navbar} from '../navbar/navbar';
 import {Footer} from '../shared/footer/footer';
 import {CommonModule} from '@angular/common';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-confirmation',
@@ -18,7 +19,7 @@ export class Confirmation {
 
   constructor(
     private route: ActivatedRoute,
-    private http: HttpClient,
+    private apiService : ApiService,
     private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
@@ -27,14 +28,12 @@ export class Confirmation {
     if (isPlatformBrowser(this.platformId)) {
       const token = this.route.snapshot.queryParamMap.get('token');
       if (token) {
-        this.http.get(`http://localhost:8081/api/events/confirm?token=${token}`,
-          { responseType: 'text' }
-        ).subscribe({
+        this.apiService.confirmToken(token).subscribe({
           next: (response) => {
             this.status = 'success';
             this.cdr.detectChanges();
           },
-          error: (err) => {
+          error: (err : 'text') => {
             this.status = 'error';
             this.cdr.detectChanges();
           }

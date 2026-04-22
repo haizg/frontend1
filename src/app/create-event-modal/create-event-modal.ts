@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-create-event-modal',
@@ -34,7 +35,7 @@ export class CreateEventModal {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
+    private apiService: ApiService,
     private translate: TranslateService
   ) {
     this.eventForm = this.fb.group({
@@ -111,9 +112,12 @@ export class CreateEventModal {
     if (!this.selectedFile) return null;
     this.isUploadingImage = true;
     try {
-      const formData = new FormData();
-      formData.append('file', this.selectedFile);
-      const response: any = await this.http.post('http://localhost:8081/api/upload', formData).toPromise();
+      //API CALL BEFORE SWITCHING TO API SERVICE
+      //const formData = new FormData();
+      //formData.append('file', this.selectedFile);
+      //const response: any = await this.http.post('http://localhost:8081/api/upload', formData).toPromise();
+
+      const response: any = await this.apiService.uploadImage(this.selectedFile).toPromise() as {url: string};
       this.uploadedImageUrl = response.url;
       this.isUploadingImage = false;
       return response.url;
@@ -171,9 +175,11 @@ export class CreateEventModal {
     if (!this.selectedProgramFile) return null;
     this.isUploadingProgramImage = true;
     try {
-      const formData = new FormData();
-      formData.append('file', this.selectedProgramFile);
-      const response: any = await this.http.post('http://localhost:8081/api/upload', formData).toPromise();
+
+      //const formData = new FormData();
+      //formData.append('file', this.selectedProgramFile);
+      //const response: any = await this.http.post('http://localhost:8081/api/upload', formData).toPromise();
+      const response: any = await this.apiService.uploadImage(this.selectedProgramFile).toPromise() as { url: string };
       this.uploadedProgramImageUrl = response.url;
       this.isUploadingProgramImage = false;
       return response.url;
@@ -222,19 +228,14 @@ export class CreateEventModal {
         this.uploadedProgramImageUrl = null;
       }
 
-      const token = localStorage.getItem('token');
-      const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-
-      this.http.post('http://localhost:8081/api/events', this.eventForm.value, { headers })
-        .subscribe({
+      this.apiService.createEvent(this.eventForm.value).subscribe({
           next: (response: any) => {
-            console.log('Event created:', response);
             this.isLoading = false;
             this.translate.get('createevent.approval_message').subscribe(msg => {
               this.approvalMessage = msg;
             });
           },
-          error: (error) => {
+          error: (error: any) => {
             if (error.status === 403 && error.error?.error === 'ACCOUNT_NOT_VERIFIED') {
               this.translate.get('createevent.error_account_not_verified').subscribe(msg => {
                 this.errorMessage = msg;
@@ -249,7 +250,6 @@ export class CreateEventModal {
         });
 
     } catch (error) {
-      console.error('Error in onSubmit:', error);
       this.translate.get('createevent.error_unexpected').subscribe(msg => {
         this.errorMessage = msg;
       });

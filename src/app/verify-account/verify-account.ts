@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { ApiService } from '../services/api.service';
 
 
 @Component({
@@ -19,23 +19,19 @@ export class VerifyAccount implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private apiService : ApiService,
     public router: Router,
-    private http: HttpClient
   ) {}
 
   ngOnInit() {
-
-
     this.route.queryParams.subscribe(params => {
       const token = params['token'];
-
       if (!token) {
         this.isVerifying = false;
         this.isVerified = false;
         this.errorMessage = 'Token de vérification manquant';
         return;
       }
-
       this.verifyToken(token);
     });
   }
@@ -43,25 +39,19 @@ export class VerifyAccount implements OnInit {
 
   verifyToken(token: string) {
     this.isVerifying = true;
-
-    this.http.get(`http://localhost:8081/api/auth/verify-account?token=${token}`)
-      .subscribe({
+    this.apiService.verifyToken(token).subscribe({
         next: (response: any) => {
-
           this.isVerifying = false;
           this.isVerified = true;
           this.successMessage = response.message || 'Compte vérifié avec succès!';
-
           setTimeout(() => {
-            this.router.navigate(['/api/home']);
+            this.router.navigate(['/home']);
           }, 3000);
         },
 
-        error: (error) => {
-
+        error: (error : any) => {
           this.isVerifying = false;
           this.isVerified = false;
-
           if (error.error?.error) {
             this.errorMessage = error.error.error;
           } else {

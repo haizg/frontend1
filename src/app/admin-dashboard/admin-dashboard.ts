@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ApiService } from '../services/api.service';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { UserService } from '../services/user.service';
@@ -21,7 +21,7 @@ import { ConfirmDelete } from '../confirm-delete/confirm-delete';
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css',
 })
-export class AdminDashboard {
+export class AdminDashboard implements OnInit{
   @ViewChild(EditEventModal) editEventModal!: EditEventModal;
 
   stats: any = null;
@@ -50,7 +50,7 @@ export class AdminDashboard {
   editingOrg: any = null;
 
   constructor(
-    private http: HttpClient,
+    private apiService : ApiService,
     private router: Router,
     private userService: UserService,
     private cdr: ChangeDetectorRef,
@@ -81,95 +81,6 @@ export class AdminDashboard {
     }
   }
 
-
-  get pendingEvents(): EventModel[] {
-    return this.events.filter(e => !(e as any).approved);
-  }
-
-  get approvedEvents(): EventModel[] {
-    return this.events.filter(e => (e as any).approved);
-  }
-
-
-  getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    return new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-  }
-
-
-  loadStats() {
-    this.http.get(`http://localhost:8081/api/admin/stats`, { headers: this.getHeaders() })
-      .subscribe({ next: (data) => { this.stats = data; this.cdr.detectChanges(); } });
-  }
-
-  loadUsers() {
-    this.http.get<any[]>(`http://localhost:8081/api/admin/users`, { headers: this.getHeaders() })
-      .subscribe({ next: (data) => { this.users = data; this.cdr.detectChanges(); } });
-  }
-
-  loadEvents() {
-    this.http.get<EventModel[]>(`http://localhost:8081/api/admin/events/all`, { headers: this.getHeaders() })
-      .subscribe({ next: (data) => { this.events = data; this.cdr.detectChanges(); } });
-  }
-
-  loadOrganisateurs() {
-    this.http.get<any[]>(`http://localhost:8081/api/admin/organisateurs`, { headers: this.getHeaders() })
-      .subscribe({ next: (data) => { this.organisateurs = data; this.cdr.detectChanges(); } });
-  }
-
-  deleteUser(userId: number) {
-    this.modalService.openDeleteModal(
-      'Supprimer l\'utilisateur',
-      'Cet utilisateur sera définitivement supprimé.',
-      () => this.http.delete(`http://localhost:8081/api/admin/users/${userId}`, { headers: this.getHeaders() })
-        .subscribe({ next: () => this.loadUsers() })
-    );
-  }
-
-  deleteOrganisateur(id: number) {
-    this.modalService.openDeleteModal(
-      'Supprimer l\'organisateur',
-      'Cet organisateur sera définitivement supprimé.',
-      () => this.http.delete(`http://localhost:8081/api/admin/organisateurs/${id}`, { headers: this.getHeaders() })
-        .subscribe({ next: () => this.loadOrganisateurs() })
-    );
-  }
-
-  deleteEvent(eventId: number) {
-    this.modalService.openDeleteModal(
-      'Supprimer l\'événement',
-      'Cet événement et toutes ses inscriptions seront définitivement supprimés.',
-      () => this.http.delete(`http://localhost:8081/api/admin/${eventId}`, { headers: this.getHeaders() })
-        .subscribe({ next: () => this.loadEvents() })
-    );
-}
-
-
-  approveEvent(event: any) {
-    if (event.approved) return;
-    this.http.put(
-      `http://localhost:8081/api/admin/events/${event.id}/approve`,
-      {},
-      { headers: this.getHeaders() }
-    ).subscribe({
-      next: (res: any) => {
-        event.approved = true;
-        this.loadStats();
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Failed to approve event', err)
-    });
-  }
-
-
-  get filteredPendingEvents(): any[] {
-    return this.pendingEvents.filter(e => this.matchesSearch(e));
-  }
-
-  get filteredApprovedEvents(): any[] {
-    return this.approvedEvents.filter(e => this.matchesSearch(e));
-  }
-
   private matchesSearch(event: any): boolean {
     if (!this.eventSearch.trim()) return true;
     const q = this.eventSearch.toLowerCase();
@@ -181,14 +92,31 @@ export class AdminDashboard {
     );
   }
 
+  get pendingEvents(): EventModel[] {
+    return this.events.filter(e => !(e as any).approved);
+  }
+
+  get approvedEvents(): EventModel[] {
+    return this.events.filter(e => (e as any).approved);
+  }
+
+  get filteredPendingEvents(): any[] {
+    return this.pendingEvents.filter(e => this.matchesSearch(e));
+  }
+
+  get filteredApprovedEvents(): any[] {
+    return this.approvedEvents.filter(e => this.matchesSearch(e));
+  }
+
+  getRoleBadge(role: string): string {
+    if (role === 'ROLE_ADMIN') return 'Admin';
+    if (role === 'ROLE_ORGANISATEUR') return 'Organisateur';
+    return 'Participant';
+  }
+
   openEditEvent(event: EventModel) {
     this.editEventModal.open(event, false, 0, true);
   }
-
-  onEventUpdated() {
-    this.loadEvents();
-  }
-
 
   openEditUser(user: any) {
     this.editingUser = { ...user };
@@ -196,35 +124,109 @@ export class AdminDashboard {
     this.cdr.detectChanges();
   }
 
-  saveEditUser() {
-    this.http.put(
-      `http://localhost:8081/api/admin/users/${this.editingUser.id}`,
-      this.editingUser,
-      { headers: this.getHeaders() }
-    ).subscribe({
-      next: () => { this.showEditUser = false; this.loadUsers(); },
-      error: (err) => console.error('Failed to update user', err)
-    });
-  }
-
-
   openEditOrg(org: any) {
     this.editingOrg = { ...org };
     this.showEditOrg = true;
     this.cdr.detectChanges();
   }
 
+  closeDetailPanel() {
+    this.showDetailPanel = false;
+    this.selectedUser = null;
+    this.selectedOrg = null;
+    this.userEvents = [];
+    this.orgEvents = [];
+  }
+
+  onEventUpdated() {
+    this.loadEvents();
+  }
+
+  loadStats() {
+    this.apiService.getAdminStats().subscribe({
+      next: (data) => { this.stats = data; this.cdr.detectChanges(); }
+    });
+  }
+
+  loadUsers() {
+    this.apiService.getAdminUsers().subscribe({
+      next: (data) => { this.users = data; this.cdr.detectChanges(); }
+    });
+  }
+
+  loadEvents() {
+    this.apiService.getAdminEvents().subscribe({
+      next: (data) => { this.events = data; this.cdr.detectChanges(); }
+    });
+  }
+
+  loadOrganisateurs() {
+    this.apiService.getAdminOrganisateurs().subscribe({
+      next: (data) => { this.organisateurs = data; this.cdr.detectChanges(); }
+    });
+  }
+
+  loadDeactivationRequests() {
+    this.apiService.getDeactivationRequests().subscribe({
+      next: (data) => { this.deactivationRequests = data; this.cdr.detectChanges(); }
+    });
+  }
+
+  deleteUser(userId: number) {
+    this.modalService.openDeleteModal(
+      'Supprimer l\'utilisateur',
+      'Cet utilisateur sera définitivement supprimé.',
+      () => this.apiService.deleteAdminUser(userId).subscribe({
+        next: () => this.loadUsers()
+      })
+    );
+  }
+
+  deleteOrganisateur(id: number) {
+    this.modalService.openDeleteModal(
+      'Supprimer l\'organisateur',
+      'Cet organisateur sera définitivement supprimé.',
+      () => this.apiService.deleteAdminOrganisateur(id).subscribe({
+        next: () => this.loadOrganisateurs()
+      })
+    );
+  }
+
+  deleteEvent(eventId: number) {
+    this.modalService.openDeleteModal(
+      'Supprimer l\'événement',
+      'Cet événement et toutes ses inscriptions seront définitivement supprimés.',
+      () => this.apiService.deleteEvent(eventId).subscribe({
+        next: () => this.loadEvents()
+      })
+    );
+}
+
+  approveEvent(event: any) {
+    if (event.approved) return;
+    this.apiService.approveEvent(event.id).subscribe({
+      next: (res: any) => {
+        event.approved = true;
+        this.loadStats();
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => console.error('Failed to approve event', err)
+    });
+  }
+
+  saveEditUser() {
+    this.apiService.updateAdminUser(this.editingUser.id, this.editingUser).subscribe({
+      next: () => { this.showEditUser = false; this.loadUsers(); },
+      error: (err: any) => console.error('Failed to update user', err)
+    });
+  }
+
   saveEditOrg() {
-    this.http.put(
-      `http://localhost:8081/api/admin/organisateurs/${this.editingOrg.id}`,
-      this.editingOrg,
-      { headers: this.getHeaders() }
-    ).subscribe({
+    this.apiService.updateAdminOrganisateur(this.editingOrg.id, this.editingOrg).subscribe({
       next: () => { this.showEditOrg = false; this.loadOrganisateurs(); },
       error: (err) => console.error('Failed to update org', err)
     });
   }
-
 
   viewUserDetails(user: any) {
     this.showDetailPanel = false;
@@ -235,10 +237,7 @@ export class AdminDashboard {
     this.isLoadingDetails = true;
     this.cdr.detectChanges();
 
-    this.http.get<any[]>(
-      `http://localhost:8081/api/admin/user/${user.id}/participations`,
-      { headers: this.getHeaders() }
-    ).subscribe({
+    this.apiService.getUserParticipations(user.id).subscribe({
       next: (data) => {
         this.selectedUser = user;
         this.userEvents = data;
@@ -246,7 +245,7 @@ export class AdminDashboard {
         this.isLoadingDetails = false;
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Failed to load user participations', err);
         this.isLoadingDetails = false;
         this.cdr.detectChanges();
@@ -263,10 +262,7 @@ export class AdminDashboard {
     this.isLoadingDetails = true;
     this.cdr.detectChanges();
 
-    this.http.get<any[]>(
-      `http://localhost:8081/api/admin/organisateur/${org.id}/events`,
-      { headers: this.getHeaders() }
-    ).subscribe({
+    this.apiService.getOrganisateurEvents(org.id).subscribe({
       next: (data) => {
         this.selectedOrg = org;
         this.orgEvents = data;
@@ -274,7 +270,7 @@ export class AdminDashboard {
         this.isLoadingDetails = false;
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Failed to load org events', err);
         this.isLoadingDetails = false;
         this.cdr.detectChanges();
@@ -282,51 +278,23 @@ export class AdminDashboard {
     });
   }
 
-  closeDetailPanel() {
-    this.showDetailPanel = false;
-    this.selectedUser = null;
-    this.selectedOrg = null;
-    this.userEvents = [];
-    this.orgEvents = [];
-  }
-
-
   toggleVerifyOrg(org: any) {
     if (!org.id) { console.error('Organizer ID is undefined', org); return; }
-    this.http.put(
-      `http://localhost:8081/api/admin/organisateurs/${org.id}/verify`,
-      {},
-      { headers: this.getHeaders() }
-    ).subscribe({
+    this.apiService.toggleVerifyOrganisateur(org.id).subscribe({
       next: (res: any) => {
         org.adminVerified = res.adminVerified;
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error toggling verification:', err)
+      error: (err: any) => console.error('Error toggling verification:', err)
     });
-  }
-
-  getRoleBadge(role: string): string {
-    if (role === 'ROLE_ADMIN') return 'Admin';
-    if (role === 'ROLE_ORGANISATEUR') return 'Organisateur';
-    return 'Participant';
-  }
-
-  loadDeactivationRequests() {
-    this.http.get<any[]>(
-      'http://localhost:8081/api/admin/organisateurs/deactivation-requests',
-      { headers: this.getHeaders() }
-    ).subscribe({ next: (data) => { this.deactivationRequests = data; this.cdr.detectChanges(); } });
   }
 
   approveDeactivation(org: any) {
     this.modalService.openDeleteModal(
       'Approuver la désactivation',
       `Confirmer la désactivation du compte de ${org.prenom} ${org.nom} ?`,
-      () => this.http.put(
-        `http://localhost:8081/api/admin/organisateurs/${org.id}/deactivate/approve`,
-        {}, { headers: this.getHeaders() }
-      ).subscribe({ next: () => {
+      () => this.apiService.approveDeactivation(org.id).subscribe({
+      next: () => {
         this.loadDeactivationRequests();
         this.loadOrganisateurs();
       }})
@@ -334,9 +302,7 @@ export class AdminDashboard {
   }
 
   rejectDeactivation(org: any) {
-    this.http.put(
-      `http://localhost:8081/api/admin/organisateurs/${org.id}/deactivate/reject`,
-      {}, { headers: this.getHeaders() }
-    ).subscribe({ next: () => this.loadDeactivationRequests() });
+    this.apiService.rejectDeactivation(org.id).subscribe({
+      next: () => this.loadDeactivationRequests() });
   }
 }

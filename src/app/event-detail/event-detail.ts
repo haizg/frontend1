@@ -19,12 +19,12 @@ import {Login} from '../login/login';
 import {SignUpOrg} from '../sign-up/sign-up-org';
 import {RouterModule, Router} from '@angular/router';
 import {UserService} from '../services/user.service';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {EditEventModal} from '../edit-event-modal/edit-event-modal';
 import {TranslateModule} from '@ngx-translate/core';
 import {TranslateLangService} from '../services/translate-lang.service';
 import {FormsModule} from '@angular/forms';
 import { ConfirmDelete } from '../confirm-delete/confirm-delete';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -58,17 +58,16 @@ export class EventDetail implements OnInit {
   participants: any[] = [];
   hasAlreadyParticipated = false;
   newCapacity: number | null = null;
-
   programImageExpanded = false;
 
   constructor(
     private route: ActivatedRoute,
     private eventService: EventService,
     private modalService: ModalService,
+    private userService: UserService,
+    private apiService : ApiService,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private userService: UserService,
-    private http: HttpClient,
     private translateLang: TranslateLangService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
@@ -101,7 +100,7 @@ export class EventDetail implements OnInit {
           this.event = data;
           this.cdr.markForCheck();
           if (this.isMyEvent || this.isAdmin) this.loadParticipants(id);
-          if (this.isLoggedIn)                this.checkIfParticipated();
+          if (this.isLoggedIn) this.checkIfParticipated();
         },
         error: (err) => console.error('Failed to load event', err)
       });
@@ -119,6 +118,98 @@ export class EventDetail implements OnInit {
       this.isSignupModalOpen = state;
       this.cdr.markForCheck();
     });
+  }
+
+  loadParticipants(eventId: number) {
+    this.apiService.getEventParticipants(eventId).subscribe({
+        next: (data) => {
+          this.participants = data;
+          this.cdr.markForCheck();
+        },
+        error: (err) => console.error('Failed to load participants', err)
+      });
+  }
+
+  updateCapacity() {
+    if (!this.newCapacity || !this.event) return;
+    if (this.newCapacity < this.verifiedParticipants.length) {
+      alert(`La capacité ne peut pas être inférieure au nombre de participants confirmés (${this.verifiedParticipants.length})`);
+      return;
+    }
+    this.apiService.updateCapacity(this.event.id,this.newCapacity).subscribe({
+      next: () => {
+        this.event!.maxParticipants = this.newCapacity!;
+        this.newCapacity = null;
+        this.cdr.markForCheck();
+      },
+      error: (err) => console.error('Failed to update capacity', err)
+    });
+  }
+
+  deleteEvent() {
+    this.modalService.openDeleteModal(
+      'Supprimer l\'événement',
+      `Êtes-vous sûr de vouloir supprimer "${this.event?.title}" ?`,
+      () => {
+        this.apiService.deleteEvent(this.event!.id).subscribe({
+          next: () => this.router.navigate(['/events']),
+          error: (err) => console.error('Delete failed', err)
+        });
+      }
+    );
+  }
+
+  onEventUpdated() {
+    const rawId = this.route.snapshot.paramMap.get('id');
+    if (!rawId) return;
+    const id = Number(rawId);
+
+    this.event = null;
+    this.programImageExpanded = false;
+    this.cdr.markForCheck();
+
+    this.apiService.getEventById(id).subscribe({
+      next: (data) => {
+        this.event = data;
+        this.cdr.markForCheck();
+        if (this.isMyEvent || this.isAdmin) this.loadParticipants(id);
+      },
+      error: (err) => console.error('Failed to reload event', err)
+    });
+  }
+
+  checkIfParticipated() {
+    this.apiService.getMyParticipationsIds().subscribe({
+        next: (ids) => {
+          const eventId = this.event?.id;
+          this.hasAlreadyParticipated = eventId ? ids.includes(eventId) : false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => console.error('Failed to check participation', err)
+      });
+  }
+
+  toggleProgramImageExpand() {
+    this.programImageExpanded = !this.programImageExpanded;
+    this.cdr.markForCheck();
+  }
+
+  openJoinModal(eventId: number) {
+    if (!this.userService.getUser()) {
+      localStorage.setItem('redirectAfterLogin', this.router.url);
+      this.modalService.openLoginModal();
+      return;
+    }
+    this.modalService.openJoinModal(eventId);
+  }
+
+  openEditEventModal() {
+    if (this.event) {
+      const isApproved     = !!(this.event as any).approved;
+      const confirmedCount = this.verifiedParticipants.length;
+      const shouldLock     = isApproved && this.isMyEvent && !this.isAdmin;
+      this.editEventModal.open(this.event, shouldLock, confirmedCount, this.isAdmin);
+    }
   }
 
 
@@ -160,110 +251,4 @@ export class EventDetail implements OnInit {
   }
 
 
-  loadParticipants(eventId: number) {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
-    this.http.get<any[]>(`http://localhost:8081/api/events/${eventId}/participants`, {headers})
-      .subscribe({
-        next: (data) => {
-          this.participants = data;
-          this.cdr.markForCheck();
-        },
-        error: (err) => console.error('Failed to load participants', err)
-      });
-  }
-
-  openJoinModal(eventId: number) {
-    if (!this.userService.getUser()) {
-      localStorage.setItem('redirectAfterLogin', this.router.url);
-      this.modalService.openLoginModal();
-      return;
-    }
-    this.modalService.openJoinModal(eventId);
-  }
-
-  openEditEventModal() {
-    if (this.event) {
-      const isApproved     = !!(this.event as any).approved;
-      const confirmedCount = this.verifiedParticipants.length;
-      const shouldLock     = isApproved && this.isMyEvent && !this.isAdmin;
-      this.editEventModal.open(this.event, shouldLock, confirmedCount, this.isAdmin);
-    }
-  }
-
-  updateCapacity() {
-    if (!this.newCapacity || !this.event) return;
-    if (this.newCapacity < this.verifiedParticipants.length) {
-      alert(`La capacité ne peut pas être inférieure au nombre de participants confirmés (${this.verifiedParticipants.length})`);
-      return;
-    }
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
-    this.http.put(
-      `http://localhost:8081/api/events/${this.event.id}/capacity`,
-      {maxParticipants: this.newCapacity},
-      {headers}
-    ).subscribe({
-      next: () => {
-        this.event!.maxParticipants = this.newCapacity!;
-        this.newCapacity = null;
-        this.cdr.markForCheck();
-      },
-      error: (err) => console.error('Failed to update capacity', err)
-    });
-  }
-
-  onEventUpdated() {
-    const rawId = this.route.snapshot.paramMap.get('id');
-    if (!rawId) return;
-    const id = Number(rawId);
-
-    this.event = null;
-    this.programImageExpanded = false;
-    this.cdr.markForCheck();
-
-    this.eventService.getEventById(id).subscribe({
-      next: (data) => {
-        this.event = data;
-        this.cdr.markForCheck();
-        if (this.isMyEvent || this.isAdmin) this.loadParticipants(id);
-      },
-      error: (err) => console.error('Failed to reload event', err)
-    });
-  }
-
-  deleteEvent() {
-    this.modalService.openDeleteModal(
-      'Supprimer l\'événement',
-      `Êtes-vous sûr de vouloir supprimer "${this.event?.title}" ?`,
-      () => {
-        const token = localStorage.getItem('token');
-        const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-
-        this.http.delete(`http://localhost:8081/api/admin/${this.event?.id}`, { headers }).subscribe({
-          next: () => this.router.navigate(['/events']),
-          error: (err) => console.error('Delete failed', err)
-        });
-      }
-    );
-  }
-  checkIfParticipated() {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-    const headers = new HttpHeaders({'Authorization': `Bearer ${token}`});
-    this.http.get<number[]>('http://localhost:8081/api/user/my-participations', {headers})
-      .subscribe({
-        next: (ids) => {
-          const eventId = this.event?.id;
-          this.hasAlreadyParticipated = eventId ? ids.includes(eventId) : false;
-          this.cdr.markForCheck();
-        },
-        error: (err) => console.error('Failed to check participation', err)
-      });
-  }
-
-  toggleProgramImageExpand() {
-    this.programImageExpanded = !this.programImageExpanded;
-    this.cdr.markForCheck();
-  }
 }

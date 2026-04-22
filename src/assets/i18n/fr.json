@@ -333,7 +333,12 @@
     "signup": "S'inscrire",
     "organizer": "Devenir organisateur",
     "hours": "Lun – Ven, 9h – 18h",
-    "rights": "Tous droits réservés."
+    "rights": "Tous droits réservés.",
+    "msg_already_logged_in": "Vous êtes déjà connecté.",
+    "msg_already_has_account": "Vous avez déjà un compte et êtes connecté.",
+    "msg_already_organizer": "Vous êtes déjà organisateur.",
+    "msg_is_admin": "Vous êtes connecté en tant qu'administrateur.",
+    "msg_is_participant": "Vous êtes connecté en tant que participant. Pour des raisons de sécurité, chaque rôle nécessite un compte distinct — déconnectez-vous et créez un nouveau compte en tant qu'organisateur."
   },
   "resetpassword" : {
     "verificationlien": "Vérification du lien..",
@@ -350,4 +355,5 @@
     "returnacceuil": "← Retour à l'accueil",
     "loading": "Réinitialisation..."
   }
+
 }

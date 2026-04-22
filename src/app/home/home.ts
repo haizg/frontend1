@@ -149,7 +149,7 @@ export class Home implements AfterViewInit {
       }
     }, 2000);
 
-    this.eventService.getEvents().subscribe({
+    this.apiService.getEvents().subscribe({
       next: (data) => {
         clearTimeout(slowConnectionTimeout);
         const sortedData = this.sortEventsByClosestToToday(data);

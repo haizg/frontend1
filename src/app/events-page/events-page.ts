@@ -16,6 +16,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslateLangService } from '../services/translate-lang.service';
 import { ConfirmDelete } from '../confirm-delete/confirm-delete';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-events-page',
@@ -25,7 +26,6 @@ import { ConfirmDelete } from '../confirm-delete/confirm-delete';
   styleUrl: './events-page.css',
 })
 export class EventsPage {
-
   @ViewChild(EditEventModal) editEventModal!: EditEventModal;
 
   events: EventModel[]=[];
@@ -51,6 +51,7 @@ export class EventsPage {
     private eventService: EventService,
     private modalService: ModalService,
     private userService: UserService,
+    private apiService : ApiService,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private translateLang: TranslateLangService,
@@ -129,7 +130,7 @@ export class EventsPage {
     this.allEvents = [];
     this.filteredEvents = [];
 
-    this.eventService.getEvents().subscribe({
+    this.apiService.getEvents().subscribe({
       next: (data) => {
         const sortedData = this.sortEventsByClosestToToday(data);
         this.allEvents = sortedData;
@@ -153,10 +154,7 @@ export class EventsPage {
       `Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`,
       () => {
         this.isDeleting = true;
-        const token = localStorage.getItem('token');
-        const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-
-        this.http.delete(`http://localhost:8081/api/admin/${eventModel.id}`, { headers }).subscribe({
+        this.apiService.deleteEvent(eventModel.id).subscribe({
           next: () => {
             this.isDeleting = false;
             this.loadEvents();
@@ -170,11 +168,7 @@ export class EventsPage {
   }
 
   loadMyParticipations() {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    this.http.get<number[]>('http://localhost:8081/api/user/my-participations', { headers })
-      .subscribe({
+    this.apiService.getMyParticipationsIds().subscribe({
         next: (ids) => {
           this.participatedEventIds = new Set(ids);
           this.cdr.detectChanges();
@@ -182,7 +176,6 @@ export class EventsPage {
         error: (err) => console.error('Failed to load participations', err)
       });
   }
-
 
   openEditEventModal(eventModel: EventModel, $event: MouseEvent) {
     $event.stopPropagation();
@@ -212,8 +205,6 @@ export class EventsPage {
     return this.userRole === 'ROLE_ORGANISATEUR';
   }
 
-
-
   hasParticipated(eventId: number): boolean {
     return this.participatedEventIds.has(eventId);
   }
@@ -231,8 +222,4 @@ export class EventsPage {
     this.selectedDate = date;
     this.applyFilters();
   }
-
-
-
-
 }

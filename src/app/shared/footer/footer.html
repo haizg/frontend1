@@ -38,6 +38,10 @@
           </button>
         </li>
       </ul>
+      <p *ngIf="footerMessage" class="footer-info-msg">
+        <i class="fa-solid fa-circle-info"></i>
+        {{ footerMessage }}
+      </p>
     </div>
 
     <div class="footer-column">

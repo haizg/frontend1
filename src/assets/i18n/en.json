@@ -333,7 +333,12 @@
     "signup": "Sign up",
     "organizer": "Become an organizer",
     "hours": "Mon – Fri, 9am – 6pm",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "msg_already_logged_in": "You are already logged in.",
+    "msg_already_has_account": "You already have an account and are logged in.",
+    "msg_already_organizer": "You are already an organizer.",
+    "msg_is_admin": "You are logged in as an administrator.",
+    "msg_is_participant": "You are logged in as a participant. For security reasons, each role requires a separate account — log out and create a new account as an organizer."
   },
   "resetpassword" : {
     "verificationlien": "Verifying link..",
@@ -349,5 +354,6 @@
     "redirecthome": "Redirecting to the home page...",
     "returnacceuil": "← Back to home",
     "loading": "Resetting..."
-  }
+  },
+
 }

@@ -4,6 +4,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {EventModel} from '../models/event.model';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-edit-event-modal',
@@ -34,7 +35,7 @@ export class EditEventModal {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
+    private apiService: ApiService,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef
   ) {
@@ -105,7 +106,6 @@ export class EditEventModal {
     this.cdr.markForCheck();
   }
 
-
   close() {
     this.isVisible       = false;
     this.errorMessage    = '';
@@ -120,11 +120,6 @@ export class EditEventModal {
     this.programImagePreview     = null;
     this.uploadedProgramImageUrl = null;
     this.cdr.markForCheck();
-  }
-
-  private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    return new HttpHeaders({'Authorization': `Bearer ${token}`});
   }
 
 
@@ -173,13 +168,12 @@ export class EditEventModal {
     if (!this.selectedProgramFile) return null;
     this.isUploadingProgramImage = true;
     this.cdr.markForCheck();
-
     try {
-      const formData = new FormData();
-      formData.append('file', this.selectedProgramFile);
-      const response: any = await this.http
-        .post('http://localhost:8081/api/upload', formData)
-        .toPromise();
+      //const formData = new FormData();
+      //formData.append('file', this.selectedProgramFile);
+      //const response: any = await this.http
+        //.post('http://localhost:8081/api/upload', formData).toPromise();
+      const response = await this.apiService.uploadImage(this.selectedProgramFile).toPromise() as { url: string };
       this.uploadedProgramImageUrl = response.url;
       this.isUploadingProgramImage = false;
       this.cdr.markForCheck();
@@ -233,25 +227,19 @@ export class EditEventModal {
     const raw = this.eventForm.getRawValue();
 
     if (this.isAdmin) {
-      this.http.put(
-        `http://localhost:8081/api/admin/update-event/${id}`,
-        raw,
-        {headers: this.getHeaders()}
-      ).subscribe({
+      this.apiService.updateEventAdmin(id, raw).subscribe({
         next: () => this.handleSuccess(),
-        error: (err) => this.handleError(err)
+        error: (err: any) => this.handleError(err)
       });
       return;
     }
 
     if (this.isLocked) {
-      this.http.put(
-        `http://localhost:8081/api/events/${id}/capacity-and-program`,
-        {maxParticipants: raw.maxParticipants, program: raw.program},
-        {headers: this.getHeaders()}
-      ).subscribe({
+      this.apiService.updateEventCapacityAndProgram(id, {
+        maxParticipants: raw.maxParticipants, program: raw.program})
+      .subscribe({
         next: () => this.handleSuccess('Capacité et programme mis à jour.'),
-        error: (err) => this.handleError(err)
+        error: (err: any) => this.handleError(err)
       });
       return;
     }

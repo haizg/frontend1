@@ -8,6 +8,7 @@ import {CommonModule} from '@angular/common';
 import { ForgotPasswordModal } from '../forgot-password-modal/forgot-password-modal';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslateLangService } from '../services/translate-lang.service';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-login',
@@ -33,10 +34,8 @@ export class Login {
               private router :Router,
               private modalService: ModalService,
               private translateLang: TranslateLangService,
-              private userService: UserService) {}
-
-
-
+              private userService: UserService,
+              private apiService: ApiService) {}
 
   email="";
   password="";
@@ -54,9 +53,7 @@ export class Login {
       email:this.email,
       password:this.password,
     };
-
-    this.http.post('http://localhost:8081/api/auth/login', body, { responseType: 'text' })
-      .subscribe({
+    this.apiService.login(this.email, this.password).subscribe({
         next:(token)=> {
           localStorage.setItem('token',token);
           const payload = JSON.parse(atob(token.split('.')[1]));

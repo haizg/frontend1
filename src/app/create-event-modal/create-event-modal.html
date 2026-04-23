@@ -187,6 +187,24 @@
             [disabled]="isLoading">
             {{ 'createevent.choose_image' | translate }}
           </button>
+          <button
+            type="button"
+            class="btn-generate-poster"
+            (click)="generatePoster()"
+            *ngIf="!imagePreview && !isLoading"
+            [disabled]="isGeneratingPoster">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            {{ isGeneratingPoster
+            ? ('createevent.generate_poster_loading' | translate)
+            : ('createevent.generate_poster_btn'     | translate) }}
+          </button>
+
+          <div class="poster-generating-overlay" *ngIf="isGeneratingPoster">
+            <div class="poster-spinner"></div>
+            <span>{{ 'createevent.generate_poster_overlay' | translate }}</span>
+          </div>
+
+          <span *ngIf="generatePosterError" class="generate-poster-error">{{ generatePosterError }}</span>
 
           <div class="image-preview-container" *ngIf="imagePreview && !isLoading">
             <img [src]="imagePreview" alt="Preview" class="image-preview">

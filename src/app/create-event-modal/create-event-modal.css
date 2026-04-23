@@ -164,10 +164,12 @@ textarea.form-input { resize: vertical; min-height: 100px; }
   overflow: hidden;
 }
 .image-preview {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  display: block;
+   width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: contain;
+    display: block;
+    background: #f5f5f5;
 }
 .image-actions {
   display: flex;
@@ -280,4 +282,61 @@ textarea.form-input { resize: vertical; min-height: 100px; }
 .enhance-error {
   font-size: 0.8rem;
   color: #e53935;
+}
+
+/* AI Poster  */
+.btn-generate-poster {
+  width: 100%;
+  padding: 15px;
+  margin-top: 8px;
+  background: linear-gradient(135deg, #A53A6B, #7b1fa2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.btn-generate-poster:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+.btn-generate-poster:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.poster-generating-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 28px;
+  border: 2px dashed #A53A6B;
+  border-radius: 8px;
+  background: rgba(165, 58, 107, 0.05);
+  color: #A53A6B;
+  font-size: 14px;
+  font-style: italic;
+  margin-top: 8px;
+}
+
+.poster-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(165, 58, 107, 0.2);
+  border-top-color: #A53A6B;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.generate-poster-error {
+  display: block;
+  font-size: 0.8rem;
+  color: #e53935;
+  margin-top: 4px;
 }

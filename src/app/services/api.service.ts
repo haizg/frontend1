@@ -351,6 +351,13 @@ export class ApiService {
       map((res: { improved: string }) => res.improved)
     );
   }
+generatePoster(title: string, description: string, category?: string, style?: string): Observable<{ url: string }> {
+  return this.http.post<{ url: string }>(
+    `${this.base}/api/ai/generate-poster`,
+    { title, description, category: category || '', style: style || '' },
+    { headers: this.getHeaders() }
+  );
+}
 
 
 

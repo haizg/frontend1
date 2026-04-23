@@ -36,6 +36,8 @@ export class CreateEventModal {
   /*INTEGRATION D'AI*/
   isEnhancing = false;
   enhanceError = '';
+  isGeneratingPoster = false;
+  generatePosterError = '';
 
   constructor(
     private fb: FormBuilder,
@@ -116,10 +118,7 @@ export class CreateEventModal {
     if (!this.selectedFile) return null;
     this.isUploadingImage = true;
     try {
-      //API CALL BEFORE SWITCHING TO API SERVICE
-      //const formData = new FormData();
-      //formData.append('file', this.selectedFile);
-      //const response: any = await this.http.post('http://localhost:8081/api/upload', formData).toPromise();
+
 
       const response: any = await this.apiService.uploadImage(this.selectedFile).toPromise() as {url: string};
       this.uploadedImageUrl = response.url;
@@ -179,9 +178,7 @@ export class CreateEventModal {
     this.isUploadingProgramImage = true;
     try {
 
-      //const formData = new FormData();
-      //formData.append('file', this.selectedProgramFile);
-      //const response: any = await this.http.post('http://localhost:8081/api/upload', formData).toPromise();
+
       const response: any = await this.apiService.uploadImage(this.selectedProgramFile).toPromise() as { url: string };
       this.uploadedProgramImageUrl = response.url;
       this.isUploadingProgramImage = false;
@@ -279,5 +276,46 @@ export class CreateEventModal {
       }
     });
   }
+
+generatePoster() {
+  const title       = this.eventForm.get('title')?.value?.trim();
+  const description = this.eventForm.get('description')?.value?.trim();
+  const category    = this.eventForm.get('category')?.value || '';
+
+  if (!title || title.length < 3) {
+    this.translate.get('createevent.generate_poster_error_no_title').subscribe(msg => {
+      this.generatePosterError = msg;
+      setTimeout(() => this.generatePosterError = '', 3000);
+    });
+    return;
+  }
+  if (!description || description.length < 10) {
+    this.translate.get('createevent.generate_poster_error_no_desc').subscribe(msg => {
+      this.generatePosterError = msg;
+      setTimeout(() => this.generatePosterError = '', 3000);
+    });
+    return;
+  }
+
+  this.isGeneratingPoster = true;
+  this.generatePosterError = '';
+
+  this.apiService.generatePoster(title, description, category).subscribe({
+    next: (res) => {
+      this.uploadedImageUrl = res.url;
+      this.imagePreview     = res.url;
+      this.selectedFile     = null;
+      this.eventForm.patchValue({ imageUrl: res.url });
+      this.isGeneratingPoster = false;
+    },
+    error: () => {
+      this.translate.get('createevent.generate_poster_error_failed').subscribe(msg => {
+        this.generatePosterError = msg;
+      });
+      this.isGeneratingPoster = false;
+    }
+  });
+}
+
 
 }

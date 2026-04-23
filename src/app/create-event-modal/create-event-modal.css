@@ -252,3 +252,32 @@ textarea.form-input { resize: vertical; min-height: 100px; }
   .modal-footer { flex-direction: column; }
   .btn-cancel, .btn-submit { width: 100%; }
 }
+
+.ai-enhance-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.btn-enhance-ai {
+  background: linear-gradient(135deg, #A53A6B, #c2185b);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s;
+}
+
+.btn-enhance-ai:hover:not(:disabled) { opacity: 0.85; }
+.btn-enhance-ai:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.enhance-error {
+  font-size: 0.8rem;
+  color: #e53935;
+}

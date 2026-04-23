@@ -33,6 +33,10 @@ export class CreateEventModal {
   isUploadingProgramImage = false;
   uploadedProgramImageUrl: string | null = null;
 
+  /*INTEGRATION D'AI*/
+  isEnhancing = false;
+  enhanceError = '';
+
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
@@ -138,7 +142,6 @@ export class CreateEventModal {
     this.eventForm.patchValue({ imageUrl: '' });
   }
 
-
   onProgramTypeChange(type: 'text' | 'image') {
     this.programType = type;
     if (type === 'text') {
@@ -197,8 +200,6 @@ export class CreateEventModal {
     this.uploadedProgramImageUrl = null;
   }
 
-
-
   async onSubmit() {
     if (this.eventForm.invalid) {
       this.translate.get('createevent.error_required_fields').subscribe(msg => {
@@ -256,4 +257,27 @@ export class CreateEventModal {
       this.isLoading = false;
     }
   }
+
+  enhanceDescription() {
+    const current = this.eventForm.get('description')?.value;
+    if (!current || current.trim().length < 10) {
+      this.enhanceError = 'Veuillez d\'abord écrire une description.';
+      setTimeout(() => this.enhanceError = '', 3000);
+      return;
+    }
+    this.isEnhancing = true;
+    this.enhanceError = '';
+
+    this.apiService.enhanceDescription(current).subscribe({
+      next: (improved: string) => {
+        this.eventForm.patchValue({ description: improved });
+        this.isEnhancing = false;
+      },
+      error: () => {
+        this.enhanceError = 'Erreur lors de l\'amélioration. Réessayez.';
+        this.isEnhancing = false;
+      }
+    });
+  }
+
 }

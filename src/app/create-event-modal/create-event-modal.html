@@ -31,6 +31,17 @@
             rows="4"
             class="form-input"
             [disabled]="isLoading"></textarea>
+          <div class="ai-enhance-row">
+            <button
+              type="button"
+              class="btn-enhance-ai"
+              (click)="enhanceDescription()"
+              [disabled]="isEnhancing">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              {{ isEnhancing ? 'Amélioration en cours...' : 'Améliorer avec l\'IA' }}
+            </button>
+            <span *ngIf="enhanceError" class="enhance-error">{{ enhanceError }}</span>
+          </div>
           <small class="error" *ngIf="eventForm.get('description')?.invalid && eventForm.get('description')?.touched">
             {{ 'createevent.error_description_min' | translate }}
           </small>

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { EventModel } from '../models/event.model';
 
 @Injectable({providedIn: 'root'})
@@ -339,5 +339,19 @@ export class ApiService {
       { headers: this.getHeaders() }
     );
   }
+
+
+  /* INTEGRATION D'AI */
+  enhanceDescription(roughDescription: string): Observable<string> {
+    return this.http.post<{ improved: string }>(
+      `${this.base}/api/ai/enhance-description`,
+      { description: roughDescription },
+      { headers: this.getHeaders() }
+    ).pipe(
+      map((res: { improved: string }) => res.improved)
+    );
+  }
+
+
 
 }

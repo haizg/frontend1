@@ -49,6 +49,13 @@ export class Home implements AfterViewInit {
   isAdminVerified = false;
   participatedEventIds: Set<number> = new Set();
 
+  /*ai part*/
+  recommendations: { event: EventModel; reason: string }[] = [];
+  isLoadingRecommendations = false;
+  eventsLoaded = false;
+  participationsLoaded = false;
+  recommendationsRequested = false;
+
   currentSlide = 0;
   slides = [
     { image: 'assets/slide1.jpg' },
@@ -142,6 +149,7 @@ export class Home implements AfterViewInit {
     this.isLoadingEvents = true;
     this.events = [];
     this.availableEvents = [];
+    this.eventsLoaded = false;
     const slowConnectionTimeout = setTimeout(() => {
       if (this.isLoadingEvents) {
         console.log('Loading is taking longer than expected...');
@@ -156,6 +164,8 @@ export class Home implements AfterViewInit {
         this.events = sortedData;
         this.availableEvents = sortedData.filter(event => !event.isFull);
         this.isLoadingEvents = false;
+        this.eventsLoaded = true;
+        this.tryLoadRecommendations();
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -186,17 +196,63 @@ export class Home implements AfterViewInit {
       );
     }
 
-
   loadMyParticipations() {
+    this.participationsLoaded = false;
     this.apiService.getMyParticipationsIds().subscribe({
-        next: (ids: number []) => {
-          this.participatedEventIds = new Set(ids);
-          this.cdr.detectChanges();
-        },
-        error: (err : any) => console.error('Failed to load participations', err)
-      });
+      next: (ids: number[]) => {
+        this.participatedEventIds = new Set(ids);
+        this.participationsLoaded = true;
+        this.tryLoadRecommendations();
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        console.error('Failed to load participations', err)
+        this.participationsLoaded = true;
+        this.tryLoadRecommendations();
+        this.cdr.detectChanges();
+      }
+    });
   }
 
+  private tryLoadRecommendations() {
+    if (!this.eventsLoaded || !this.participationsLoaded) return;
+    if (!this.isLoggedIn || (!this.isParticipant && !this.isOrganisateur)) return;
+    if (this.recommendationsRequested) return; // ← add this
+    this.recommendationsRequested = true;
+    this.loadRecommendations();
+  }
+
+    loadRecommendations() {
+      if (!this.isLoggedIn || (!this.isParticipant && !this.isOrganisateur)) return;
+      if (this.events.length === 0) return;
+
+      this.isLoadingRecommendations = true;
+
+      const notJoined = this.events.filter(e => !this.participatedEventIds.has(e.id));
+      if (notJoined.length === 0) { this.isLoadingRecommendations = false; return; }
+
+      const history = this.events
+        .filter(e => this.participatedEventIds.has(e.id))
+        .map(e => ({ title: e.title, category: e.category }));
+
+      this.apiService.getRecommendations(history, notJoined).subscribe({
+        next: (res) => {
+          this.recommendations = res.recommendations
+            .map(r => ({
+              event: this.events.find(e => e.id === r.id)!,
+              reason: r.reason
+            }))
+            .filter(r => r.event != null);
+          this.isLoadingRecommendations = false;
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+          console.error('Recommendations failed', err);
+          this.isLoadingRecommendations = false;
+          this.cdr.detectChanges();
+        }
+      });
+    }
 
   canModifyEvent(event: EventModel): boolean {
     if (!this.isOrganisateur) {
@@ -253,7 +309,5 @@ export class Home implements AfterViewInit {
   onEventUpdated() {
     this.loadEvents();
   }
-
-
 
 }

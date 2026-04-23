@@ -43,7 +43,13 @@
     "faitespartie": "Be part of an engaged community.",
     "joinsubtitle": "Discover, organize, and share cultural events with ease. Membership is completely free.",
     "alreadylogged":"You are already logged in",
-    "hovertosee":"Hover your mouse to open"
+    "hovertosee":"Hover your mouse to open",
+    "feature1title": "Discover Events",
+    "feature1text": "Access a curated selection of cultural and educational events across Tunisia.",
+    "feature2title": "Secure Registration",
+    "feature2text": "Your data is protected. Confirm your participation with confidence.",
+    "feature3title": "Stay Informed",
+    "feature3text": "Receive an email confirmation for every event you register for."
   },
   "login": {
     "mdp": "Password:",

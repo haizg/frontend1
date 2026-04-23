@@ -351,14 +351,34 @@ export class ApiService {
       map((res: { improved: string }) => res.improved)
     );
   }
-generatePoster(title: string, description: string, category?: string, style?: string): Observable<{ url: string }> {
-  return this.http.post<{ url: string }>(
-    `${this.base}/api/ai/generate-poster`,
-    { title, description, category: category || '', style: style || '' },
-    { headers: this.getHeaders() }
-  );
-}
 
+  generatePoster(title: string, description: string, category?: string, style?: string): Observable<{ url: string }> {
+    return this.http.post<{ url: string }>(
+      `${this.base}/api/ai/generate-poster`,
+      { title, description, category: category || '', style: style || '' },
+      { headers: this.getHeaders() }
+    );
+  }
+
+  getRecommendations(
+    participatedEvents: { title: string; category: string }[],
+    availableEvents: EventModel[]
+  ): Observable<{ recommendations: { id: number; reason: string }[] }> {
+
+    const userHistory = participatedEvents.length > 0
+      ? participatedEvents.map(e => `- "${e.title}" (${e.category})`).join('\n')
+      : 'No participation history yet.';
+
+    const available = availableEvents
+      .map(e => `- ID:${e.id} | "${e.title}" | ${e.category} | ${e.date} | ${e.location}`)
+      .join('\n');
+
+    return this.http.post<{ recommendations: { id: number; reason: string }[] }>(
+      `${this.base}/api/ai/recommend-events`,
+      { userHistory, availableEvents: available },
+      { headers: this.getHeaders() }
+    );
+  }
 
 
 }

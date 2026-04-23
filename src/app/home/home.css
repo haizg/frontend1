@@ -514,3 +514,143 @@
 .org-email{
   margin-left:8px;
 }
+
+.recommendations-section {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+}
+
+.recommendations-title {
+  font-family: Georgia, serif;
+  color: #A53A6B;
+  font-size: 1.4rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reco-loading {
+  color: #888;
+  font-size: 0.95rem;
+  padding: 1rem 0;
+}
+
+.recommendations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+
+.reco-card {
+  border: 1.5px solid #f0d0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: #fff;
+}
+
+.reco-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(165, 58, 107, 0.15);
+}
+
+.reco-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.reco-body {
+  padding: 1rem;
+}
+
+.reco-category {
+  background: #fce4ec;
+  color: #A53A6B;
+  font-size: 0.75rem;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.reco-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0.5rem 0 0.3rem;
+  color: #222;
+}
+
+.reco-date, .reco-location {
+  font-size: 0.82rem;
+  color: #666;
+  margin: 2px 0;
+}
+
+.reco-date i, .reco-location i {
+  color: #A53A6B;
+  margin-right: 4px;
+}
+
+.reco-reason {
+  margin-top: 0.7rem;
+  font-size: 0.8rem;
+  color: #A53A6B;
+  background: #fdf0f5;
+  border-left: 3px solid #A53A6B;
+  padding: 6px 10px;
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+}
+
+.reco-reason i {
+  margin-right: 4px;
+}
+
+.home-stats-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 28px 40px;
+  background: #fdf5f8;
+  border-top: 1px solid #f0dde7;
+  border-bottom: 1px solid #f0dde7;
+}
+
+.home-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 40px;
+}
+
+.home-stat i {
+  font-size: 18px;
+  color: #A53A6B;
+  margin-bottom: 4px;
+}
+
+.home-stat-num {
+  font-size: 26px;
+  font-weight: 800;
+  color: #A53A6B;
+  font-family: Georgia, serif;
+}
+
+.home-stat-label {
+  font-size: 12px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.home-stat-divider {
+  width: 1px;
+  height: 50px;
+  background: #e8d0db;
+}

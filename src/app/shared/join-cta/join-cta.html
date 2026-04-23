@@ -1,4 +1,4 @@
-<section class="join-section">
+<!--<section class="join-section">
   <div class="envelope-container">
 
 
@@ -37,5 +37,51 @@
 
 
     <div class="hover-hint">{{ 'joincta.hovertosee' | translate }}</div>
+  </div>
+</section>
+-->
+<section class="join-cta-section">
+  <div class="join-cta-inner">
+
+    <div class="join-cta-text">
+      <span class="join-tag">{{ 'joincta.join' | translate }}</span>
+      <h2>{{ 'joincta.faitespartie' | translate }}</h2>
+      <p>{{ 'joincta.joinsubtitle' | translate }}</p>
+      <div class="cta-wrapper">
+        <button (click)="onJoinClick()" class="join-btn">
+          <i class="fa-solid fa-arrow-right"></i>
+          {{ 'joincta.joinbutton' | translate }}
+        </button>
+        <p class="cta-already-msg" *ngIf="showAlreadyMsg">
+          <i class="fa-solid fa-circle-info"></i>
+          {{ 'joincta.alreadylogged' | translate }}
+        </p>
+      </div>
+    </div>
+
+    <div class="join-cta-cards">
+      <div class="join-feature-card">
+        <div class="join-feature-icon">
+          <i class="fa-solid fa-calendar-check"></i>
+        </div>
+        <h3>{{ 'joincta.feature1title' | translate }}</h3>
+        <p>{{ 'joincta.feature1text' | translate }}</p>
+      </div>
+      <div class="join-feature-card">
+        <div class="join-feature-icon">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h3>{{ 'joincta.feature2title' | translate }}</h3>
+        <p>{{ 'joincta.feature2text' | translate }}</p>
+      </div>
+      <div class="join-feature-card">
+        <div class="join-feature-icon">
+          <i class="fa-solid fa-bell"></i>
+        </div>
+        <h3>{{ 'joincta.feature3title' | translate }}</h3>
+        <p>{{ 'joincta.feature3text' | translate }}</p>
+      </div>
+    </div>
+
   </div>
 </section>

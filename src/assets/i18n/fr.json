@@ -44,7 +44,13 @@
     "faitespartie": "Faites partie d'une communauté engagée.",
     "joinsubtitle": "Découvrez, organisez et partagez des événements culturels en toute simplicité. L'adhésion est entièrement gratuite.",
     "alreadylogged": "Vous êtes déjà connecté.",
-    "hovertosee": "Passez la souris pour ouvrir"
+    "hovertosee": "Passez la souris pour ouvrir",
+    "feature1title": "Découvrez des événements",
+    "feature1text": "Accédez à une sélection d'événements culturels et éducatifs à travers toute la Tunisie.",
+    "feature2title": "Inscription sécurisée",
+    "feature2text": "Vos données sont protégées. Confirmez votre participation en toute confiance.",
+    "feature3title": "Restez informé",
+    "feature3text": "Recevez une confirmation par email pour chaque événement auquel vous vous inscrivez."
   },
   "login": {
     "mdp": "Mot de passe:",

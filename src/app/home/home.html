@@ -27,6 +27,37 @@
     </p>
   </section>
 
+
+  <section class="home-stats-bar" *ngIf="!isLoggedIn || isAdmin">
+    <div class="home-stat">
+      <i class="fa-solid fa-calendar-days"></i>
+      <span class="home-stat-num">{{ events.length }}+</span>
+      <span class="home-stat-label">Événements</span>
+    </div>
+    <div class="home-stat-divider"></div>
+    <div class="home-stat">
+      <i class="fa-solid fa-users"></i>
+      <span class="home-stat-num">100+</span>
+      <span class="home-stat-label">Participants</span>
+    </div>
+    <div class="home-stat-divider"></div>
+    <div class="home-stat">
+      <i class="fa-solid fa-location-dot"></i>
+      <span class="home-stat-num">5+</span>
+      <span class="home-stat-label">Villes</span>
+    </div>
+    <div class="home-stat-divider"></div>
+    <div class="home-stat">
+      <i class="fa-solid fa-flag"></i>
+      <span class="home-stat-num">🇹🇳</span>
+      <span class="home-stat-label">Tunisie</span>
+    </div>
+  </section>
+
+
+
+
+
   <section class="quick-actions" *ngIf="isOrganisateur">
     <div class="action-container">
       <h2>{{ 'home.createevent' | translate }}</h2>
@@ -45,6 +76,48 @@
       </div>
     </div>
   </section>
+
+
+
+  <!--  EVENTS RECOMMENDED BY AI-->
+  <div *ngIf="(isParticipant || isOrganisateur) && (recommendations.length > 0 || isLoadingRecommendations)"
+       class="recommendations-section">
+
+    <h2 class="recommendations-title">
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+      Recommandés pour vous
+    </h2>
+
+    <div *ngIf="isLoadingRecommendations" class="reco-loading">
+      <i class="fa-solid fa-spinner fa-spin"></i> Analyse de vos préférences...
+    </div>
+
+    <div class="recommendations-grid" *ngIf="!isLoadingRecommendations">
+      <div class="reco-card" *ngFor="let reco of recommendations"
+           [routerLink]="['/events', reco.event.id]">
+        <img *ngIf="reco.event.imageUrl" [src]="reco.event.imageUrl" class="reco-img" />
+        <div class="reco-body">
+          <span class="reco-category">{{ reco.event.category }}</span>
+          <h3 class="reco-title">{{ reco.event.title }}</h3>
+          <p class="reco-date">
+            <i class="fa-solid fa-calendar-days"></i> {{ reco.event.date }}
+          </p>
+          <p class="reco-location">
+            <i class="fa-solid fa-location-dot"></i> {{ reco.event.location }}
+          </p>
+          <div class="reco-reason">
+            <i class="fa-solid fa-lightbulb"></i> {{ reco.reason }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
 
   <section class="event-section">
     <div class="section-header">

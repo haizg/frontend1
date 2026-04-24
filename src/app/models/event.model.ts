@@ -15,5 +15,8 @@ export interface EventModel {
   isFull?: boolean;
   approved?: boolean;
   program?: string;
-
+  riskScore?: number;
+  riskReason?: string;
+  predictedParticipation?: string;
+  predictedParticipationReason?: string;
 }

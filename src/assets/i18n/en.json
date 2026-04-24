@@ -366,6 +366,21 @@
     "redirecthome": "Redirecting to the home page...",
     "returnacceuil": "← Back to home",
     "loading": "Resetting..."
+  },
+  "howitworks": {
+    "tag": "Simple & fast",
+    "title": "How does it work?",
+    "step1title": "Create an account",
+    "step1text": "Sign up for free as a participant or organizer.",
+    "step2title": "Discover events",
+    "step2text": "Browse cultural and educational events near you.",
+    "step3title": "Participate",
+    "step3text": "Register in one click and receive your confirmation by email."
+  },
+  "loggedinbanner": {
+    "title": "Explore all events",
+    "text": "Discover all the cultural and educational events available on Invitini.",
+    "btn": "View all events"
   }
 
 }

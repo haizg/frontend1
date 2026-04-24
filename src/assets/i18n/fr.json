@@ -366,6 +366,21 @@
     "redirecthome": "Redirection vers la page d'accueil...",
     "returnacceuil": "← Retour à l'accueil",
     "loading": "Réinitialisation..."
+  },
+  "howitworks": {
+    "tag": "Simple & rapide",
+    "title": "Comment ça marche ?",
+    "step1title": "Créez un compte",
+    "step1text": "Inscrivez-vous gratuitement en tant que participant ou organisateur.",
+    "step2title": "Découvrez des événements",
+    "step2text": "Parcourez les événements culturels et éducatifs près de chez vous.",
+    "step3title": "Participez",
+    "step3text": "Inscrivez-vous en un clic et recevez votre confirmation par email."
+  },
+  "loggedinbanner": {
+    "title": "Explorez tous les événements",
+    "text": "Découvrez l'ensemble des événements culturels et éducatifs disponibles sur Invitini.",
+    "btn": "Voir tous les événements"
   }
 
 }

@@ -205,6 +205,51 @@
     <p *ngIf="!isLoadingEvents && events.length === 0" class="no-events">No events available yet.</p>
   </section>
 
+  <ng-container *ngIf="!isLoggedIn">
+  <section class="how-it-works">
+    <div class="how-inner">
+      <span class="how-tag">{{ 'howitworks.tag' | translate }}</span>
+      <h2>{{ 'howitworks.title' | translate }}</h2>
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-number">01</div>
+          <div class="how-icon"><i class="fa-solid fa-user-plus"></i></div>
+          <h3>{{ 'howitworks.step1title' | translate }}</h3>
+          <p>{{ 'howitworks.step1text' | translate }}</p>
+        </div>
+        <div class="how-connector"></div>
+        <div class="how-step">
+          <div class="how-number">02</div>
+          <div class="how-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+          <h3>{{ 'howitworks.step2title' | translate }}</h3>
+          <p>{{ 'howitworks.step2text' | translate }}</p>
+        </div>
+        <div class="how-connector"></div>
+        <div class="how-step">
+          <div class="how-number">03</div>
+          <div class="how-icon"><i class="fa-solid fa-envelope-circle-check"></i></div>
+          <h3>{{ 'howitworks.step3title' | translate }}</h3>
+          <p>{{ 'howitworks.step3text' | translate }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  </ng-container>
+
+  <section class="logged-in-banner" *ngIf="isLoggedIn">
+    <div class="logged-in-banner-inner">
+      <div class="logged-in-banner-text">
+        <h2>{{ 'loggedinbanner.title' | translate }}</h2>
+        <p>{{ 'loggedinbanner.text' | translate }}</p>
+      </div>
+      <a routerLink="/events" class="logged-in-banner-btn">
+        <i class="fa-solid fa-calendar-days"></i>
+        {{ 'loggedinbanner.btn' | translate }}
+      </a>
+    </div>
+  </section>
+
+
   <app-join-cta></app-join-cta>
   <app-footer></app-footer>
 </div>

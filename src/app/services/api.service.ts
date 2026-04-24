@@ -380,5 +380,32 @@ export class ApiService {
     );
   }
 
+  analyzeRisk(event: {
+    title: string;
+    description: string;
+    location: string;
+  }): Observable<{ riskScore: number; reason: string }> {
+    return this.http.post<{ riskScore: number; reason: string }>(
+      `${this.base}/api/ai/analyze-event-risk`,
+      event,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  predictParticipation(event: {
+    title: string;
+    description: string;
+    category: string;
+    location: string;
+    date: string;
+    maxParticipants: string;
+  }): Observable<{ level: string; reason: string }> {
+    return this.http.post<{ level: string; reason: string }>(
+      `${this.base}/api/ai/predict-participation`,
+      event,
+      { headers: this.getHeaders() }
+    );
+  }
+
 
 }

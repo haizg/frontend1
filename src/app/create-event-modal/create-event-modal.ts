@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ApiService } from '../services/api.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-create-event-modal',
@@ -118,8 +119,6 @@ export class CreateEventModal {
     if (!this.selectedFile) return null;
     this.isUploadingImage = true;
     try {
-
-
       const response: any = await this.apiService.uploadImage(this.selectedFile).toPromise() as {url: string};
       this.uploadedImageUrl = response.url;
       this.isUploadingImage = false;
@@ -226,10 +225,61 @@ export class CreateEventModal {
         this.uploadedProgramImageUrl = null;
       }
 
+      const eventData = this.eventForm.value;
+
+      forkJoin({
+        risk: this.apiService.analyzeRisk({
+          title: eventData.title,
+          description: eventData.description,
+          location: eventData.location
+        }),
+        prediction: this.apiService.predictParticipation({
+          title: eventData.title,
+          description: eventData.description,
+          category: eventData.category,
+          location: eventData.location,
+          date: eventData.date,
+          maxParticipants: eventData.maxParticipants?.toString() || 'non spécifié'
+        })
+      }).subscribe({
+        next: (results: any) => {
+          eventData.riskScore = results.risk.riskScore;
+          eventData.riskReason = results.risk.reason;
+          eventData.predictedParticipation = results.prediction.level;
+          eventData.predictedParticipationReason = results.prediction.reason;
+          this.sendEventToBackend(eventData);
+        },
+        error: () => {
+          this.sendEventToBackend(eventData);
+        }
+      });
+
+/*
+      this.apiService.analyzeRisk({
+        title: eventData.title,
+        description: eventData.description,
+        location: eventData.location
+      }).subscribe({
+        next: (riskRes) => {
+          eventData.riskScore = riskRes.riskScore;
+          eventData.riskReason = riskRes.reason;
+          this.sendEventToBackend(eventData);
+
+        },
+        error: () => {
+          eventData.riskScore = 0;
+          this.sendEventToBackend(eventData);
+        }
+      });
+
+
+
+
       this.apiService.createEvent(this.eventForm.value).subscribe({
           next: (response: any) => {
             this.isLoading = false;
-            this.translate.get('createevent.approval_message').subscribe(msg => {
+            this.translate.get('createevent.approval_message').subscribe(msg =>
+            {
               this.approvalMessage = msg;
             });
           },
@@ -246,7 +296,7 @@ export class CreateEventModal {
             this.isLoading = false;
           }
         });
-
+*/
     } catch (error) {
       this.translate.get('createevent.error_unexpected').subscribe(msg => {
         this.errorMessage = msg;
@@ -277,25 +327,54 @@ export class CreateEventModal {
     });
   }
 
-generatePoster() {
-  const title       = this.eventForm.get('title')?.value?.trim();
-  const description = this.eventForm.get('description')?.value?.trim();
-  const category    = this.eventForm.get('category')?.value || '';
+  sendEventToBackend(eventData: any) {
+    console.log('Sending event data:', eventData);
+    this.apiService.createEvent(eventData).subscribe({
+      next: (res:any) => {
+        console.log('Event created successfully:', res);
+        this.isLoading = false;
+        this.translate.get('createevent.approval_message').subscribe(msg => {
+          this.approvalMessage = msg;
+        });
+      this.eventCreated.emit();
+      },
 
-  if (!title || title.length < 3) {
-    this.translate.get('createevent.generate_poster_error_no_title').subscribe(msg => {
-      this.generatePosterError = msg;
-      setTimeout(() => this.generatePosterError = '', 3000);
+      error: (error: any) => {
+        console.log('Event creation error:', error);
+        this.isLoading = false;
+
+        if (error.status === 403 && error.error?.error === 'ACCOUNT_NOT_VERIFIED') {
+          this.translate.get('createevent.error_account_not_verified').subscribe(msg => {
+            this.errorMessage = msg;
+          });
+        } else {
+          this.translate.get('createevent.error_create_failed').subscribe(msg => {
+            this.errorMessage = msg;
+          });
+        }
+      }
     });
-    return;
   }
-  if (!description || description.length < 10) {
-    this.translate.get('createevent.generate_poster_error_no_desc').subscribe(msg => {
-      this.generatePosterError = msg;
-      setTimeout(() => this.generatePosterError = '', 3000);
-    });
-    return;
-  }
+
+  generatePoster() {
+    const title       = this.eventForm.get('title')?.value?.trim();
+    const description = this.eventForm.get('description')?.value?.trim();
+    const category    = this.eventForm.get('category')?.value || '';
+
+    if (!title || title.length < 3) {
+      this.translate.get('createevent.generate_poster_error_no_title').subscribe(msg => {
+        this.generatePosterError = msg;
+        setTimeout(() => this.generatePosterError = '', 3000);
+      });
+      return;
+    }
+    if (!description || description.length < 10) {
+      this.translate.get('createevent.generate_poster_error_no_desc').subscribe(msg => {
+        this.generatePosterError = msg;
+        setTimeout(() => this.generatePosterError = '', 3000);
+      });
+      return;
+    }
 
   this.isGeneratingPoster = true;
   this.generatePosterError = '';

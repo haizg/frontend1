@@ -134,7 +134,48 @@
           </thead>
           <tbody>
           <tr *ngFor="let event of filteredPendingEvents" class="pending-row">
-            <td><a [routerLink]="['/events', event.id]" class="event-link">{{ event.title }}</a></td>
+            <td>
+              <a [routerLink]="['/events', event.id]" class="event-link">{{ event.title }}</a>
+
+              <!-- Risk badge -->
+              <span *ngIf="event.riskScore != null"
+                    class="risk-badge"
+                    [class.risk-low]="event.riskScore < 30"
+                    [class.risk-medium]="event.riskScore >= 30 && event.riskScore < 60"
+                    [class.risk-high]="event.riskScore >= 60">
+    <i class="fa-solid fa-shield-halved"></i>
+    {{ event.riskScore }}/100
+  </span>
+
+              <!-- Prediction badge -->
+              <span *ngIf="event.predictedParticipation"
+                    class="pred-badge"
+                    [class.pred-low]="event.predictedParticipation === 'LOW'"
+                    [class.pred-medium]="event.predictedParticipation === 'MEDIUM'"
+                    [class.pred-high]="event.predictedParticipation === 'HIGH'">
+    <i class="fa-solid fa-chart-line"></i>
+    {{ event.predictedParticipation === 'LOW' ? 'Faible affluence' :
+       event.predictedParticipation === 'MEDIUM' ? 'Affluence moyenne' : 'Forte affluence' }}
+  </span>
+
+              <!-- Risk reason -->
+              <div *ngIf="event.riskScore != null && event.riskScore >= 30"
+                   class="risk-reason-text"
+                   [class.risk-reason-medium]="event.riskScore >= 30 && event.riskScore < 60"
+                   [class.risk-reason-high]="event.riskScore >= 60">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                {{ event.riskReason }}
+              </div>
+
+              <!-- Prediction reason -->
+              <div *ngIf="event.predictedParticipation && event.predictedParticipation !== 'HIGH'"
+                   class="pred-reason-text"
+                   [class.pred-reason-medium]="event.predictedParticipation === 'MEDIUM'"
+                   [class.pred-reason-low]="event.predictedParticipation === 'LOW'">
+                <i class="fa-solid fa-circle-info"></i>
+                {{ event.predictedParticipationReason }}
+              </div>
+            </td>
             <td><span class="category-badge">{{ event.category }}</span></td>
             <td>{{ event.date }}</td>
             <td>{{ event.location }}</td>
@@ -183,7 +224,18 @@
           </thead>
           <tbody>
           <tr *ngFor="let event of filteredApprovedEvents">
-            <td><a [routerLink]="['/events', event.id]" class="event-link">{{ event.title }}</a></td>
+            <td>
+              <a [routerLink]="['/events', event.id]" class="event-link">{{ event.title }}</a>
+              <span *ngIf="event.predictedParticipation"
+                    class="pred-badge"
+                    [class.pred-low]="event.predictedParticipation === 'LOW'"
+                    [class.pred-medium]="event.predictedParticipation === 'MEDIUM'"
+                    [class.pred-high]="event.predictedParticipation === 'HIGH'">
+                <i class="fa-solid fa-chart-line"></i>
+                {{ event.predictedParticipation === 'LOW' ? 'Faible' :
+                   event.predictedParticipation === 'MEDIUM' ? 'Moyenne' : 'Forte' }}
+              </span>
+            </td>
             <td><span class="category-badge">{{ event.category }}</span></td>
             <td>{{ event.date }}</td>
             <td>{{ event.location }}</td>

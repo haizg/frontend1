@@ -1,7 +1,11 @@
 .about-page {
   background: #fff;
 }
-
+.page-blur {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
 /* HERO */
 .about-hero {
   background: #A53A6B;

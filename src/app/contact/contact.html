@@ -1,140 +1,129 @@
-<app-navbar></app-navbar>
+<div [class.page-blur]="showLoginModal || showSignupModal">
+  <app-navbar></app-navbar>
 
-<div class="contact-page">
+  <div class="contact-page">
 
-  <!-- HERO -->
-  <section class="contact-hero">
-    <span class="contact-tag">{{ 'contact.contactheadertag' | translate }}</span>
-    <h1>{{ 'contact.contactheadertitle' | translate }}</h1>
-    <p>{{ 'contact.contactheadertext' | translate }}</p>
-  </section>
+    <!-- HERO -->
+    <section class="contact-hero">
+      <span class="contact-tag">{{ 'contact.contactheadertag' | translate }}</span>
+      <h1>{{ 'contact.contactheadertitle' | translate }}</h1>
+      <p>{{ 'contact.contactheadertext' | translate }}</p>
+    </section>
 
-  <section class="contact-body">
-    <div class="contact-inner">
+    <section class="contact-body">
+      <div class="contact-inner">
 
-      <!-- INFO CARDS -->
-      <div class="contact-info">
-        <h2>{{ 'contact.contactinfo' | translate }}</h2>
+        <div class="contact-info">
+          <h2>{{ 'contact.contactinfo' | translate }}</h2>
 
-        <div class="info-block">
-          <div class="info-icon">
-            <i class="fa-solid fa-envelope"></i>
-          </div>
-          <div>
-            <span class="info-label">{{ 'contact.contactemail' | translate }}</span>
-            <span class="info-value">support@invitini.tn</span>
-          </div>
-        </div>
-
-        <div class="info-block">
-          <div class="info-icon">
-            <i class="fa-solid fa-clock"></i>
-          </div>
-          <div>
-            <span class="info-label">{{ 'contact.contactdispo' | translate }}</span>
-            <span class="info-value">{{ 'contact.days' | translate }} , 9h – 18h</span>
-          </div>
-        </div>
-
-        <div class="info-block">
-          <div class="info-icon">
-            <i class="fa-solid fa-location-dot"></i>
-          </div>
-          <div>
-            <span class="info-label">{{ 'contact.contactlocation' | translate }}</span>
-            <span class="info-value">Tunis, {{ 'contact.tunisia' | translate }} </span>
-          </div>
-        </div>
-
-        <div class="info-block">
-          <div class="info-icon">
-            <i class="fa-brands fa-instagram"></i>
-          </div>
-          <div>
-            <span class="info-label">{{ 'contact.contactinsta' | translate }}</span>
-            <span class="info-value">@invitini.tn</span>
-          </div>
-        </div>
-
-        <!-- FAQ MINI -->
-        <div class="contact-faq">
-          <h3>{{ 'contact.faqtitle' | translate }}</h3>
-          <div class="faq-item" *ngFor="let faq of faqs" (click)="faq.open = !faq.open">
-            <div class="faq-question">
-              <span>{{ faq.q | translate }}</span>
-              <i class="fa-solid" [class.fa-chevron-down]="!faq.open" [class.fa-chevron-up]="faq.open"></i>
+          <div class="info-block">
+            <div class="info-icon"><i class="fa-solid fa-envelope"></i></div>
+            <div>
+              <span class="info-label">{{ 'contact.contactemail' | translate }}</span>
+              <span class="info-value">support@invitini.tn</span>
             </div>
-            <div class="faq-answer" *ngIf="faq.open">{{ faq.a | translate }}</div>
           </div>
+
+          <div class="info-block">
+            <div class="info-icon"><i class="fa-solid fa-clock"></i></div>
+            <div>
+              <span class="info-label">{{ 'contact.contactdispo' | translate }}</span>
+              <span class="info-value">{{ 'contact.days' | translate }} , 9h – 18h</span>
+            </div>
+          </div>
+
+          <div class="info-block">
+            <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div>
+              <span class="info-label">{{ 'contact.contactlocation' | translate }}</span>
+              <span class="info-value">Tunis, {{ 'contact.tunisia' | translate }}</span>
+            </div>
+          </div>
+
+          <div class="info-block">
+            <div class="info-icon"><i class="fa-brands fa-instagram"></i></div>
+            <div>
+              <span class="info-label">{{ 'contact.contactinsta' | translate }}</span>
+              <span class="info-value">@invitini.tn</span>
+            </div>
+          </div>
+
+          <div class="contact-faq">
+            <h3>{{ 'contact.faqtitle' | translate }}</h3>
+            <div class="faq-item" *ngFor="let faq of faqs" (click)="faq.open = !faq.open">
+              <div class="faq-question">
+                <span>{{ faq.q | translate }}</span>
+                <i class="fa-solid" [class.fa-chevron-down]="!faq.open" [class.fa-chevron-up]="faq.open"></i>
+              </div>
+              <div class="faq-answer" *ngIf="faq.open">{{ faq.a | translate }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-wrap">
+          <h2>{{ 'contact.contactsendmsg' | translate }}</h2>
+
+          <div *ngIf="showSuccessMessage" class="success-banner">
+            <i class="fa-solid fa-circle-check"></i>
+            {{ 'contact.successmsg' | translate }}
+          </div>
+
+          <div *ngIf="errorMessage" class="error-banner">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            {{ errorMessage }}
+          </div>
+
+          <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>{{ 'contact.prenom' | translate }}</label>
+                <input type="text" [(ngModel)]="form.prenom" name="prenom" required class="form-input">
+              </div>
+              <div class="form-group">
+                <label>{{ 'contact.nom' | translate }}</label>
+                <input type="text" [(ngModel)]="form.nom" name="nom" required class="form-input">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>{{ 'contact.email' | translate }}</label>
+              <input type="email" email [(ngModel)]="form.email" name="email" required placeholder="email@gmail.com" class="form-input">
+            </div>
+
+            <div class="form-group">
+              <label>{{ 'contact.sujet' | translate }}</label>
+              <select [(ngModel)]="form.sujet" name="sujet" required class="form-input">
+                <option value="">{{ 'contact.choixsjt' | translate }}</option>
+                <option value="question">{{ 'contact.choixsjt1' | translate }}</option>
+                <option value="organisateur">{{ 'contact.choixsjt2' | translate }}</option>
+                <option value="bug">{{ 'contact.choixsjt3' | translate }}</option>
+                <option value="partenariat">{{ 'contact.choixsjt4' | translate }}</option>
+                <option value="autre">{{ 'contact.choixsjt5' | translate }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>{{ 'contact.msg' | translate }}</label>
+              <textarea [(ngModel)]="form.message" name="message" required rows="5" class="form-input"></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn" [disabled]="contactForm.invalid || sending">
+              <span *ngIf="!sending">
+                <i class="fa-solid fa-paper-plane"></i> {{ 'contact.sendmsg' | translate }}
+              </span>
+              <span *ngIf="sending">{{ 'contact.sendloading' | translate }}</span>
+            </button>
+          </form>
         </div>
 
       </div>
+    </section>
 
-      <!-- CONTACT FORM -->
-      <div class="contact-form-wrap">
-        <h2>{{ 'contact.contactsendmsg' | translate }}</h2>
+  </div>
 
-        <!-- success message -->
-        <div *ngIf="showSuccessMessage" class="success-banner">
-          <i class="fa-solid fa-circle-check"></i>
-          {{ 'contact.successmsg' | translate }}
-        <br>
-        </div>
-
-        <!-- error message -->
-        <div *ngIf="errorMessage" class="error-banner">
-          <i class="fa-solid fa-triangle-exclamation"></i>
-          {{ errorMessage }}
-        </div>
-
-        <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
-          <div class="form-row">
-            <div class="form-group">
-              <label>{{ 'contact.prenom' | translate }} </label>
-              <input type="text" [(ngModel)]="form.prenom" name="prenom" required placeholder="" class="form-input">
-            </div>
-            <div class="form-group">
-              <label>{{ 'contact.nom' | translate }} </label>
-              <input type="text" [(ngModel)]="form.nom" name="nom" required placeholder="" class="form-input">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>{{ 'contact.email' | translate }} </label>
-            <input type="email" email [(ngModel)]="form.email" name="email" required placeholder="email@gmail.com" class="form-input">
-          </div>
-
-          <div class="form-group">
-            <label>{{ 'contact.sujet' | translate }} </label>
-            <select [(ngModel)]="form.sujet" name="sujet" required class="form-input">
-              <option value="">{{ 'contact.choixsjt' | translate }}</option>
-              <option value="question">{{ 'contact.choixsjt1' | translate }}</option>
-              <option value="organisateur">{{ 'contact.choixsjt2' | translate }}</option>
-              <option value="bug">{{ 'contact.choixsjt3' | translate }}</option>
-              <option value="partenariat">{{ 'contact.choixsjt4' | translate }}</option>
-              <option value="autre">{{ 'contact.choixsjt5' | translate }}</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>{{ 'contact.msg' | translate }} </label>
-            <textarea [(ngModel)]="form.message" name="message" required rows="5"
-                      placeholder="" class="form-input"></textarea>
-          </div>
-
-          <button type="submit" class="submit-btn" [disabled]="contactForm.invalid || sending">
-            <span *ngIf="!sending">
-              <i class="fa-solid fa-paper-plane"></i> {{ 'contact.sendmsg' | translate }}
-            </span>
-            <span *ngIf="sending">{{ 'contact.sendloading' | translate }}</span>
-          </button>
-
-        </form>
-      </div>
-
-    </div>
-  </section>
+  <app-footer></app-footer>
 
 </div>
 
-<app-footer></app-footer>
+<app-login *ngIf="showLoginModal"></app-login>
+<app-sign-up-org *ngIf="showSignupModal"></app-sign-up-org>

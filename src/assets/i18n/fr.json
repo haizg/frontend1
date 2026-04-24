@@ -143,7 +143,21 @@
     "alreadyparticipated":"Vous participez déja à cet événement",
     "program_image_expand":   "Agrandir",
     "program_image_collapse": "Réduire",
-    "vieworganizer": "Voir le profil de l'organisateur"
+    "vieworganizer": "Voir le profil de l'organisateur",
+    "organisedby": "Organisé par",
+    "reviews": "Avis des participants",
+    "reviewscount": "avis",
+    "leavereview": "Laisser un avis",
+    "reviewplaceholder": "Partagez votre expérience…",
+    "sending": "Envoi…",
+    "publishreview": "Publier l'avis",
+    "reviewsuccess": "Merci pour votre avis !",
+    "alreadyreviewed": "Vous avez déjà laissé un avis pour cet événement.",
+    "noreviews": "Aucun avis pour le moment.",
+    "eventpast": "Cet événement est terminé.",
+    "reviewstats": "Avis reçus",
+    "averagerating": "Note moyenne",
+    "totalreviews": "Total avis"
   },
   "createevent": {
     "title": " Créer un Événement",

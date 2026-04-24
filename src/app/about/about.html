@@ -1,148 +1,143 @@
-<app-navbar></app-navbar>
+<div [class.page-blur]="showLoginModal || showSignupModal">
+  <app-navbar></app-navbar>
 
-<div class="about-page">
+  <div class="about-page">
 
-  <!-- header -->
-  <section class="about-hero">
-    <div class="about-hero-inner">
-      <span class="about-tag">{{ 'about.notrehistoire' | translate }}</span>
-      <h1>{{ 'about.header1' | translate }}<br>{{ 'about.header2' | translate }}</h1>
-      <p>{{ 'about.headerline' | translate }}</p>
-    </div>
-  </section>
-
-  <!-- stats -->
-  <section class="about-stats">
-    <div class="stat-item">
-      <span class="stat-num">5+</span>
-      <span class="stat-desc">{{ 'about.stat1' | translate }}</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num">100%</span>
-      <span class="stat-desc">{{ 'about.stat2' | translate }}</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num">24h</span>
-      <span class="stat-desc">{{ 'about.stat3' | translate }}</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num">🇹🇳</span>
-      <span class="stat-desc">{{ 'about.stat4' | translate }}</span>
-    </div>
-  </section>
-
-  <!-- our mission -->
-  <section class="about-section">
-    <div class="about-section-inner">
-      <div class="about-text">
-        <span class="about-tag">{{ 'about.notremission' | translate }}</span>
-        <h2>{{ 'about.mission1' | translate }}</h2>
-        <p>{{ 'about.mission2' | translate }}</p>
-        <p>{{ 'about.mission3' | translate }}</p>
+    <!-- header -->
+    <section class="about-hero">
+      <div class="about-hero-inner">
+        <span class="about-tag">{{ 'about.notrehistoire' | translate }}</span>
+        <h1>{{ 'about.header1' | translate }}<br>{{ 'about.header2' | translate }}</h1>
+        <p>{{ 'about.headerline' | translate }}</p>
       </div>
-      <div class="about-visual">
-        <div class="visual-card vc-1">
-          <i class="fa-solid fa-calendar-check"></i>
-          <span>{{ 'about.abouticon1' | translate }}</span>
-        </div>
-        <div class="visual-card vc-2">
-          <i class="fa-solid fa-envelope-circle-check"></i>
-          <span>{{ 'about.abouticon2' | translate }}</span>
-        </div>
-        <div class="visual-card vc-3">
-          <i class="fa-solid fa-shield-halved"></i>
-          <span>{{ 'about.abouticon3' | translate }}</span>
-        </div>
-        <div class="visual-card vc-4">
-          <i class="fa-solid fa-users"></i>
-          <span> {{ 'about.abouticon4' | translate }}</span>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- our values  -->
-  <section class="about-values">
-    <div class="values-inner">
-      <span class="about-tag centered">{{ 'about.valuestag' | translate }}</span>
-      <h2 class="centered">{{ 'about.valuestitle' | translate }}</h2>
-      <div class="values-grid">
-        <div class="value-card">
-          <div class="value-icon">
-            <i class="fa-solid fa-lock-open"></i>
-          </div>
-          <h3>{{ 'about.valuestitle1' | translate }}</h3>
-          <p>{{ 'about.valuestext1' | translate }}</p>
-        </div>
-        <div class="value-card">
-          <div class="value-icon">
-            <i class="fa-solid fa-handshake"></i>
-          </div>
-          <h3>{{ 'about.valuestitle2' | translate }}</h3>
-          <p>{{ 'about.valuestext2' | translate }}</p>
-        </div>
-        <div class="value-card">
-          <div class="value-icon">
-            <i class="fa-solid fa-paintbrush"></i>
-          </div>
-          <h3>{{ 'about.valuestitle3' | translate }}</h3>
-          <p>{{ 'about.valuestext3' | translate }}</p>
-        </div>
-        <div class="value-card">
-          <div class="value-icon">
-            <i class="fa-solid fa-leaf"></i>
-          </div>
-          <h3>{{ 'about.valuestitle4' | translate }}</h3>
-          <p>{{ 'about.valuestext4' | translate }}</p>
-        </div>
+    <!-- stats -->
+    <section class="about-stats">
+      <div class="stat-item">
+        <span class="stat-num">5+</span>
+        <span class="stat-desc">{{ 'about.stat1' | translate }}</span>
       </div>
-    </div>
-  </section>
+      <div class="stat-item">
+        <span class="stat-num">100%</span>
+        <span class="stat-desc">{{ 'about.stat2' | translate }}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">24h</span>
+        <span class="stat-desc">{{ 'about.stat3' | translate }}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">🇹🇳</span>
+        <span class="stat-desc">{{ 'about.stat4' | translate }}</span>
+      </div>
+    </section>
 
-  <!-- how it works -->
-  <section class="about-section how-section">
-    <div class="how-inner">
-      <span class="about-tag centered">{{ 'about.howitworkstag' | translate }} Comment ça marche</span>
-      <h2 class="centered">{{ 'about.howitworkstitle' | translate }} Simple, rapide, fiable</h2>
-      <div class="how-steps">
-        <div class="how-step">
-          <div class="step-number">01</div>
-          <div class="step-content">
-            <h3>{{ 'about.howitworks1title' | translate }}</h3>
-            <p>{{ 'about.howitworks1text' | translate }}</p>
-          </div>
+    <!-- our mission -->
+    <section class="about-section">
+      <div class="about-section-inner">
+        <div class="about-text">
+          <span class="about-tag">{{ 'about.notremission' | translate }}</span>
+          <h2>{{ 'about.mission1' | translate }}</h2>
+          <p>{{ 'about.mission2' | translate }}</p>
+          <p>{{ 'about.mission3' | translate }}</p>
         </div>
-        <div class="how-connector"></div>
-        <div class="how-step">
-          <div class="step-number">02</div>
-          <div class="step-content">
-            <h3>{{ 'about.howitworks2title' | translate }}</h3>
-            <p>{{ 'about.howitworks2text' | translate }}</p>
+        <div class="about-visual">
+          <div class="visual-card vc-1">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span>{{ 'about.abouticon1' | translate }}</span>
           </div>
-        </div>
-        <div class="how-connector"></div>
-        <div class="how-step">
-          <div class="step-number">03</div>
-          <div class="step-content">
-            <h3>{{ 'about.howitworks3title' | translate }}</h3>
-            <p>{{ 'about.howitworks3text' | translate }}</p>
+          <div class="visual-card vc-2">
+            <i class="fa-solid fa-envelope-circle-check"></i>
+            <span>{{ 'about.abouticon2' | translate }}</span>
+          </div>
+          <div class="visual-card vc-3">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>{{ 'about.abouticon3' | translate }}</span>
+          </div>
+          <div class="visual-card vc-4">
+            <i class="fa-solid fa-users"></i>
+            <span> {{ 'about.abouticon4' | translate }}</span>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- cta -->
-  <section class="about-cta">
-    <h2>{{ 'about.aboutctatitle' | translate }}</h2>
-    <p>{{ 'about.aboutctatext' | translate }}</p>
-    <div class="cta-buttons">
-      <a routerLink="/events" class="cta-btn-primary">{{ 'about.aboutctabtn1' | translate }}</a>
-      <a routerLink="/contact" class="cta-btn-secondary">{{ 'about.aboutctabtn2' | translate }}</a>
-    </div>
-  </section>
-  <app-footer></app-footer>
+    <!-- our values -->
+    <section class="about-values">
+      <div class="values-inner">
+        <span class="about-tag centered">{{ 'about.valuestag' | translate }}</span>
+        <h2 class="centered">{{ 'about.valuestitle' | translate }}</h2>
+        <div class="values-grid">
+          <div class="value-card">
+            <div class="value-icon"><i class="fa-solid fa-lock-open"></i></div>
+            <h3>{{ 'about.valuestitle1' | translate }}</h3>
+            <p>{{ 'about.valuestext1' | translate }}</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><i class="fa-solid fa-handshake"></i></div>
+            <h3>{{ 'about.valuestitle2' | translate }}</h3>
+            <p>{{ 'about.valuestext2' | translate }}</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><i class="fa-solid fa-paintbrush"></i></div>
+            <h3>{{ 'about.valuestitle3' | translate }}</h3>
+            <p>{{ 'about.valuestext3' | translate }}</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><i class="fa-solid fa-leaf"></i></div>
+            <h3>{{ 'about.valuestitle4' | translate }}</h3>
+            <p>{{ 'about.valuestext4' | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- how it works -->
+    <section class="about-section how-section">
+      <div class="how-inner">
+        <span class="about-tag centered">{{ 'about.howitworkstag' | translate }}</span>
+        <h2 class="centered">{{ 'about.howitworkstitle' | translate }}</h2>
+        <div class="how-steps">
+          <div class="how-step">
+            <div class="step-number">01</div>
+            <div class="step-content">
+              <h3>{{ 'about.howitworks1title' | translate }}</h3>
+              <p>{{ 'about.howitworks1text' | translate }}</p>
+            </div>
+          </div>
+          <div class="how-connector"></div>
+          <div class="how-step">
+            <div class="step-number">02</div>
+            <div class="step-content">
+              <h3>{{ 'about.howitworks2title' | translate }}</h3>
+              <p>{{ 'about.howitworks2text' | translate }}</p>
+            </div>
+          </div>
+          <div class="how-connector"></div>
+          <div class="how-step">
+            <div class="step-number">03</div>
+            <div class="step-content">
+              <h3>{{ 'about.howitworks3title' | translate }}</h3>
+              <p>{{ 'about.howitworks3text' | translate }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- cta -->
+    <section class="about-cta">
+      <h2>{{ 'about.aboutctatitle' | translate }}</h2>
+      <p>{{ 'about.aboutctatext' | translate }}</p>
+      <div class="cta-buttons">
+        <a routerLink="/events" class="cta-btn-primary">{{ 'about.aboutctabtn1' | translate }}</a>
+        <a routerLink="/contact" class="cta-btn-secondary">{{ 'about.aboutctabtn2' | translate }}</a>
+      </div>
+    </section>
+
+    <app-footer></app-footer>
+  </div>
 </div>
 
-
+<app-login *ngIf="showLoginModal"></app-login>
+<app-sign-up-org *ngIf="showSignupModal"></app-sign-up-org>

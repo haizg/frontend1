@@ -279,6 +279,15 @@ export class EventDetail implements OnInit {
       error: () => {}
     });
   }
+  get isEventPast(): boolean {
+    if (!this.event) return false;
+    const eventDate = new Date(this.event.date);
+    eventDate.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return eventDate < today;
+  }
+
 
   checkCanReview(eventId: number) {
     if (!this.isLoggedIn || this.userRole !== 'ROLE_USER') return;

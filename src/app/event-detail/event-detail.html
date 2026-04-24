@@ -11,14 +11,27 @@
       </div>
     </div>
 
-    <p class="event-meta"
-       [routerLink]="event.organisateurId ? ['/organizer', event.organisateurId] : null"
-       [class.org-link-clickable]="event.organisateurId"
-       style="cursor:pointer; width:fit-content;">
-      <i class="fa-solid fa-circle-user"></i>
-      {{ event.organisateurEmail }}
-      <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
-    </p>
+    <!-- ORGANIZER LINK -->
+    <div class="organizer-link-card"
+         [routerLink]="event.organisateurId ? ['/organizer', event.organisateurId] : null"
+         [class.clickable]="event.organisateurId">
+      <div class="organizer-link-left">
+        <div class="organizer-link-avatar">
+          {{ event.organisateurEmail?.charAt(0)?.toUpperCase() }}
+        </div>
+        <div class="organizer-link-info">
+          <span class="organizer-link-label">{{ 'eventdetail.organisedby' | translate }}</span>
+          <span class="organizer-link-email">
+            {{ event.organisateurEmail }}
+            <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
+          </span>
+        </div>
+      </div>
+      <div class="organizer-link-right" *ngIf="event.organisateurId">
+        <span class="organizer-link-cta">{{ 'eventdetail.vieworganizer' | translate }}</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </div>
+    </div>
 
     <div class="event-body">
 
@@ -63,21 +76,13 @@
       <!-- PROGRAMME -->
       <div class="event-program" *ngIf="event!.program && event!.program.trim() !== ''">
         <h2>{{ 'eventdetail.program' | translate }}</h2>
-
-        <!-- Image mode -->
         <div class="program-image-wrapper" *ngIf="isProgramImage" [class.expanded]="programImageExpanded">
-          <img
-            [src]="event!.program"
-            alt="Programme"
-            class="program-image"
-            (click)="toggleProgramImageExpand()">
+          <img [src]="event!.program" alt="Programme" class="program-image" (click)="toggleProgramImageExpand()">
           <button class="program-image-toggle" (click)="toggleProgramImageExpand()" type="button">
             <i class="fa-solid" [class.fa-expand]="!programImageExpanded" [class.fa-compress]="programImageExpanded"></i>
             {{ programImageExpanded ? ('eventdetail.program_image_collapse' | translate) : ('eventdetail.program_image_expand' | translate) }}
           </button>
         </div>
-
-        <!-- Text mode -->
         <div class="program-content" *ngIf="!isProgramImage">{{ event!.program }}</div>
       </div>
 
@@ -94,10 +99,7 @@
 
       <!-- ADMIN: ORGANIZER INFO -->
       <div *ngIf="isAdmin" class="organizer-info">
-        <span class="info-label">
-          <i class="fa-solid fa-circle-user"></i>
-          Organisateur
-        </span>
+        <span class="info-label"><i class="fa-solid fa-circle-user"></i> Organisateur</span>
         <span class="info-value">{{ event!.organisateurEmail }}</span>
       </div>
 
@@ -135,6 +137,32 @@
             </div>
           </div>
         </div>
+
+        <!-- REVIEW STATS  -->
+        <div class="review-stats-block" *ngIf="isEventPast && reviews.length > 0">
+          <h3 class="review-stats-title">
+            <i class="fa-solid fa-star"></i>
+            {{ 'eventdetail.reviewstats' | translate }}
+          </h3>
+          <div class="review-stats-row">
+            <div class="review-stat-item">
+              <span class="review-stat-num">{{ averageRating }}</span>
+              <div class="review-stat-stars">
+                <i *ngFor="let s of starsArray"
+                   class="fa-solid fa-star"
+                   [class.star-on]="s <= roundedAvg"
+                   [class.star-off]="s > roundedAvg">
+                </i>
+              </div>
+              <span class="review-stat-label">{{ 'eventdetail.averagerating' | translate }}</span>
+            </div>
+            <div class="review-stat-divider"></div>
+            <div class="review-stat-item">
+              <span class="review-stat-num">{{ reviews.length }}</span>
+              <span class="review-stat-label">{{ 'eventdetail.totalreviews' | translate }}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- PARTICIPANTS TABLE -->
@@ -165,8 +193,8 @@
         </table>
       </div>
 
-      <!-- PARTICIPATE BUTTON -->
-      <ng-container *ngIf="!isMyEvent && !isAdmin">
+      <!-- PARTICIPATE BUTTON-->
+      <ng-container *ngIf="!isMyEvent && !isAdmin && !isEventPast">
         <button *ngIf="hasAlreadyParticipated" class="btn-already-participated" disabled>
           {{ 'eventdetail.alreadyparticipated' | translate }}
         </button>
@@ -174,11 +202,18 @@
           {{ 'eventdetail.participate' | translate }}
         </button>
       </ng-container>
-      <!-- REVIEWS SECTION -->
-      <div class="reviews-section">
+
+      <!-- PAST EVENT BANNER -->
+      <div *ngIf="!isMyEvent && !isAdmin && isEventPast" class="event-past-banner">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>{{ 'eventdetail.eventpast' | translate }}</span>
+      </div>
+
+      <!-- REVIEWS SECTION  -->
+      <div class="reviews-section" *ngIf="isEventPast">
         <h2 class="reviews-title">
           <i class="fa-solid fa-star"></i>
-          Avis des participants
+          {{ 'eventdetail.reviews' | translate }}
           <span class="reviews-count" *ngIf="reviews.length > 0">({{ reviews.length }})</span>
         </h2>
 
@@ -191,11 +226,11 @@
                [class.star-off]="s > roundedAvg">
             </i>
           </div>
-          <span class="reviews-total">{{ reviews.length }} avis</span>
+          <span class="reviews-total">{{ reviews.length }} {{ 'eventdetail.reviewscount' | translate }}</span>
         </div>
 
         <div class="review-form-wrapper" *ngIf="canReview">
-          <h3 class="review-form-title">Laisser un avis</h3>
+          <h3 class="review-form-title">{{ 'eventdetail.leavereview' | translate }}</h3>
           <div class="star-picker">
             <i *ngFor="let s of starsArray"
                class="fa-solid fa-star picker-star"
@@ -208,26 +243,26 @@
           <textarea
             class="review-textarea"
             [(ngModel)]="reviewComment"
-            placeholder="Partagez votre expérience…"
+            [placeholder]="'eventdetail.reviewplaceholder' | translate"
             rows="3">
-    </textarea>
+          </textarea>
           <div class="review-form-actions">
             <button class="btn-submit-review"
                     (click)="submitReview()"
                     [disabled]="reviewRating === 0 || isSubmittingReview">
               <i class="fa-solid fa-paper-plane"></i>
-              {{ isSubmittingReview ? 'Envoi…' : 'Publier l\'avis' }}
+              {{ isSubmittingReview ? ('eventdetail.sending' | translate) : ('eventdetail.publishreview' | translate) }}
             </button>
           </div>
           <p class="review-success" *ngIf="reviewSuccess">
-            <i class="fa-solid fa-circle-check"></i> Merci pour votre avis !
+            <i class="fa-solid fa-circle-check"></i> {{ 'eventdetail.reviewsuccess' | translate }}
           </p>
           <p class="review-error" *ngIf="reviewError">{{ reviewError }}</p>
         </div>
 
         <div class="review-already" *ngIf="alreadyReviewed">
           <i class="fa-solid fa-circle-check"></i>
-          Vous avez déjà laissé un avis pour cet événement.
+          {{ 'eventdetail.alreadyreviewed' | translate }}
         </div>
 
         <div class="reviews-list" *ngIf="reviews.length > 0">
@@ -252,10 +287,9 @@
 
         <div class="reviews-empty" *ngIf="reviews.length === 0 && !canReview && !alreadyReviewed">
           <i class="fa-regular fa-star"></i>
-          <p>Aucun avis pour le moment.</p>
+          <p>{{ 'eventdetail.noreviews' | translate }}</p>
         </div>
       </div>
-
 
     </div>
   </div>
@@ -267,7 +301,6 @@
   <app-footer></app-footer>
 </div>
 
-<!-- Lightbox overlay for expanded program image -->
 <div class="program-image-lightbox" *ngIf="programImageExpanded" (click)="toggleProgramImageExpand()">
   <button class="lightbox-close" (click)="toggleProgramImageExpand()" type="button">
     <i class="fa-solid fa-xmark"></i>

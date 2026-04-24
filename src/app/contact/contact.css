@@ -1,8 +1,13 @@
+.page-blur {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
+
 .contact-page {
   background: #fff;
   min-height: 100vh;
 }
-
 /* HERO */
 .contact-hero {
   background:  #A53A6B;

@@ -2,7 +2,11 @@
   min-height: 100vh;
   background: #fdf8fa;
 }
-
+.page-blur {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
 .org-loading {
   display: flex;
   flex-direction: column;

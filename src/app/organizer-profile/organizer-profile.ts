@@ -12,11 +12,15 @@ import { Navbar } from '../navbar/navbar';
 import { Footer } from '../shared/footer/footer';
 import { ApiService } from '../services/api.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { Login } from '../login/login';
+import { SignUpOrg } from '../sign-up/sign-up-org';
+import { ModalService } from '../services/modal.service';
+
 @Component({
   selector: 'app-organizer-profile',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, Navbar, Footer, RouterModule, TranslateModule],
+  imports: [CommonModule, Navbar, Footer, RouterModule, TranslateModule, Login, SignUpOrg],
   templateUrl: './organizer-profile.html',
   styleUrls: ['./organizer-profile.css']
 })
@@ -26,16 +30,30 @@ export class OrganizerProfile implements OnInit {
   upcomingEvents: any[] = [];
   isLoading = true;
   notFound = false;
+  showLoginModal = false;
+  showSignupModal = false;
 
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
+    private modalService: ModalService,
     private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
     if (!isPlatformBrowser(this.platformId)) return;
+
+    this.modalService.loginModal$.subscribe(state => {
+      this.showLoginModal = state;
+      this.cdr.markForCheck();
+    });
+
+    this.modalService.signupModal$.subscribe(state => {
+      this.showSignupModal = state;
+      this.cdr.markForCheck();
+    });
+
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (!id) { this.notFound = true; return; }
 
@@ -68,9 +86,7 @@ export class OrganizerProfile implements OnInit {
     });
   }
 
-  get starsArray(): number[] {
-    return [1, 2, 3, 4, 5];
-  }
+  get starsArray(): number[] { return [1, 2, 3, 4, 5]; }
 
   isStarFilled(star: number): boolean {
     return star <= Math.round(this.organizer?.averageRating || 0);

@@ -142,7 +142,21 @@
     "alreadyparticipated": "You already participated in this event",
     "program_image_expand":   "Expand",
     "program_image_collapse": "Collapse",
-    "vieworganizer": "View organizer profile"
+    "vieworganizer": "View organizer profile",
+    "organisedby": "Organised by",
+    "reviews": "Participant reviews",
+    "reviewscount": "reviews",
+    "leavereview": "Leave a review",
+    "reviewplaceholder": "Share your experience…",
+    "sending": "Sending…",
+    "publishreview": "Publish review",
+    "reviewsuccess": "Thank you for your review!",
+    "alreadyreviewed": "You have already reviewed this event.",
+    "noreviews": "No reviews yet.",
+    "eventpast": "This event has ended.",
+    "reviewstats": "Reviews received",
+    "averagerating": "Average rating",
+    "totalreviews": "Total reviews"
   },
   "createevent": {
     "title": " Create Event",

@@ -59,6 +59,15 @@ export class EventDetail implements OnInit {
   hasAlreadyParticipated = false;
   newCapacity: number | null = null;
   programImageExpanded = false;
+  reviews: any[] = [];
+  canReview = false;
+  alreadyReviewed = false;
+  reviewRating = 0;
+  hoverRating = 0;
+  reviewComment = '';
+  isSubmittingReview = false;
+  reviewSuccess = false;
+  reviewError = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -101,6 +110,7 @@ export class EventDetail implements OnInit {
           this.cdr.markForCheck();
           if (this.isMyEvent || this.isAdmin) this.loadParticipants(id);
           if (this.isLoggedIn) this.checkIfParticipated();
+          this.loadReviews(id);
         },
         error: (err) => console.error('Failed to load event', err)
       });
@@ -122,12 +132,12 @@ export class EventDetail implements OnInit {
 
   loadParticipants(eventId: number) {
     this.apiService.getEventParticipants(eventId).subscribe({
-        next: (data) => {
-          this.participants = data;
-          this.cdr.markForCheck();
-        },
-        error: (err) => console.error('Failed to load participants', err)
-      });
+      next: (data) => {
+        this.participants = data;
+        this.cdr.markForCheck();
+      },
+      error: (err) => console.error('Failed to load participants', err)
+    });
   }
 
   updateCapacity() {
@@ -136,7 +146,7 @@ export class EventDetail implements OnInit {
       alert(`La capacité ne peut pas être inférieure au nombre de participants confirmés (${this.verifiedParticipants.length})`);
       return;
     }
-    this.apiService.updateCapacity(this.event.id,this.newCapacity).subscribe({
+    this.apiService.updateCapacity(this.event.id, this.newCapacity).subscribe({
       next: () => {
         this.event!.maxParticipants = this.newCapacity!;
         this.newCapacity = null;
@@ -180,13 +190,14 @@ export class EventDetail implements OnInit {
 
   checkIfParticipated() {
     this.apiService.getMyParticipationsIds().subscribe({
-        next: (ids) => {
-          const eventId = this.event?.id;
-          this.hasAlreadyParticipated = eventId ? ids.includes(eventId) : false;
-          this.cdr.markForCheck();
-        },
-        error: (err) => console.error('Failed to check participation', err)
-      });
+      next: (ids) => {
+        const eventId = this.event?.id;
+        this.hasAlreadyParticipated = eventId ? ids.includes(eventId) : false;
+        this.cdr.markForCheck();
+        if (this.event) this.checkCanReview(this.event.id);
+      },
+      error: (err) => console.error('Failed to check participation', err)
+    });
   }
 
   toggleProgramImageExpand() {
@@ -211,7 +222,6 @@ export class EventDetail implements OnInit {
       this.editEventModal.open(this.event, shouldLock, confirmedCount, this.isAdmin);
     }
   }
-
 
   get unconfirmedParticipants(): any[] {
     return this.participants.filter(p => !p.verified);
@@ -250,5 +260,71 @@ export class EventDetail implements OnInit {
     return p.startsWith('http') && /\.(png|jpg|jpeg|webp|gif)(\?.*)?$/i.test(p);
   }
 
+  get starsArray(): number[] { return [1, 2, 3, 4, 5]; }
 
+  get averageRating(): string {
+    if (this.reviews.length === 0) return '0.0';
+    const avg = this.reviews.reduce((sum, r) => sum + r.rating, 0) / this.reviews.length;
+    return avg.toFixed(1);
+  }
+
+  get roundedAvg(): number { return Math.round(parseFloat(this.averageRating)); }
+
+  loadReviews(eventId: number) {
+    this.apiService.getEventReviews(eventId).subscribe({
+      next: (data: any[]) => {
+        this.reviews = data;
+        this.cdr.markForCheck();
+      },
+      error: () => {}
+    });
+  }
+
+  checkCanReview(eventId: number) {
+    if (!this.isLoggedIn || this.userRole !== 'ROLE_USER') return;
+    this.apiService.canReviewEvent(eventId).subscribe({
+      next: (res: any) => {
+        if (res.canReview) {
+          this.canReview = true;
+          this.alreadyReviewed = false;
+        } else {
+          this.canReview = false;
+          const userStr = localStorage.getItem('user');
+          const currentUser = userStr ? JSON.parse(userStr) : null;
+          if (currentUser) {
+            this.alreadyReviewed = this.reviews.some(
+              r => r.userPrenom === currentUser.prenom && r.userNom === currentUser.nom
+            );
+          } else {
+            this.alreadyReviewed = false;
+          }
+        }
+        this.cdr.markForCheck();
+      },
+      error: () => {}
+    });
+  }
+
+  setReviewRating(rating: number) { this.reviewRating = rating; }
+
+  submitReview() {
+    if (this.reviewRating === 0 || !this.event) return;
+    this.isSubmittingReview = true;
+    this.reviewError = '';
+    this.apiService.submitReview(this.event.id, this.reviewRating, this.reviewComment).subscribe({
+      next: () => {
+        this.reviewSuccess = true;
+        this.canReview = false;
+        this.alreadyReviewed = true;
+        this.isSubmittingReview = false;
+        this.loadReviews(this.event!.id);
+        this.cdr.markForCheck();
+      },
+      error: (err: any) => {
+        this.isSubmittingReview = false;
+        this.reviewError = err.error?.error || 'Erreur lors de la soumission.';
+        this.cdr.markForCheck();
+      }
+    });
+  }
 }

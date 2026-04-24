@@ -13,24 +13,23 @@ import { AdminGuard } from './guards/admin.guard';
 import { AdminDashboard } from './admin-dashboard/admin-dashboard';
 import { About} from './about/about';
 import {Contact} from './contact/contact';
+import { OrganizerProfile } from './organizer-profile/organizer-profile';
 
 export const routes: Routes = [
-  {path:'login', component:Login},
-  {path:'home',component: Home},
-  {path: 'home', redirectTo: 'home', pathMatch: 'full' },
-  {path:'signuporg', component:SignUpOrg},
-  {path:'joinevent', component:Popup},
-  {path:'profile', component:Profile},
-  {path:'events', component:EventsPage},
-  {path:'events/:id', component:EventDetail},
-  {path:'confirm', component: Confirmation},
-    {path:'about', component:About},
-    {path:'contact', component:Contact},
+  { path: 'login', component: Login },
+  { path: 'home', component: Home },
+  { path: 'signuporg', component: SignUpOrg },
+  { path: 'joinevent', component: Popup },
+  { path: 'profile', component: Profile },
+  { path: 'events', component: EventsPage },
+  { path: 'events/:id', component: EventDetail },
+  { path: 'confirm', component: Confirmation },
+  { path: 'about', component: About },
+  { path: 'contact', component: Contact },
   { path: 'verify-account', component: VerifyAccount },
   { path: 'reset-password', component: ResetPassword },
   { path: 'admin/dashboard', component: AdminDashboard, canActivate: [AdminGuard] },
+  { path: 'organizer/:id', component: OrganizerProfile },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' }
-
-
 ];

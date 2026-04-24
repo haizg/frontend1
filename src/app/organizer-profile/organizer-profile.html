@@ -1,0 +1,125 @@
+<app-navbar></app-navbar>
+
+<div class="org-profile-page">
+
+  <div *ngIf="isLoading" class="org-loading">
+    <div class="org-loading-spinner"></div>
+    <p>{{ 'organizerprofile.loading' | translate }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && notFound" class="org-not-found">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <p>{{ 'organizerprofile.notfound' | translate }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && organizer">
+
+    <div class="org-hero">
+      <div class="org-hero-inner">
+        <div class="org-avatar">{{ initials }}</div>
+        <div class="org-hero-info">
+          <div class="org-name-row">
+            <h1>{{ organizer.prenom }} {{ organizer.nom }}</h1>
+            <span *ngIf="organizer.adminVerified" class="org-verified-badge">
+              <i class="fa-solid fa-circle-check"></i> {{ 'organizerprofile.verified' | translate }}
+            </span>
+          </div>
+          <p *ngIf="organizer.nomOrganisation" class="org-organisation">
+            <i class="fa-solid fa-building"></i> {{ organizer.nomOrganisation }}
+          </p>
+          <p class="org-email-display">
+            <i class="fa-solid fa-envelope"></i> {{ organizer.email }}
+          </p>
+          <div class="org-rating-row" *ngIf="organizer.totalReviews > 0">
+            <div class="org-stars">
+              <i *ngFor="let s of starsArray"
+                 class="fa-solid fa-star"
+                 [class.star-filled]="isStarFilled(s)"
+                 [class.star-empty]="!isStarFilled(s)">
+              </i>
+            </div>
+            <span class="org-rating-value">{{ organizer.averageRating }}</span>
+            <span class="org-rating-count">({{ organizer.totalReviews }} {{ 'organizerprofile.reviews' | translate }})</span>
+          </div>
+          <p *ngIf="organizer.totalReviews === 0" class="org-no-rating">
+            {{ 'organizerprofile.norating' | translate }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="org-stats-bar">
+      <div class="org-stat">
+        <span class="org-stat-num">{{ organizer.events?.length || 0 }}</span>
+        <span class="org-stat-label">{{ 'organizerprofile.events' | translate }}</span>
+      </div>
+      <div class="org-stat-divider"></div>
+      <div class="org-stat">
+        <span class="org-stat-num">{{ upcomingEvents.length }}</span>
+        <span class="org-stat-label">{{ 'organizerprofile.upcoming' | translate }}</span>
+      </div>
+      <div class="org-stat-divider"></div>
+      <div class="org-stat">
+        <span class="org-stat-num">{{ pastEvents.length }}</span>
+        <span class="org-stat-label">{{ 'organizerprofile.past' | translate }}</span>
+      </div>
+      <div class="org-stat-divider"></div>
+      <div class="org-stat">
+        <span class="org-stat-num">{{ organizer.totalReviews }}</span>
+        <span class="org-stat-label">{{ 'organizerprofile.totalreviews' | translate }}</span>
+      </div>
+    </div>
+
+    <section class="org-section" *ngIf="upcomingEvents.length > 0">
+      <h2 class="org-section-title">
+        <i class="fa-regular fa-calendar-days"></i>
+        {{ 'organizerprofile.upcomingevents' | translate }}
+      </h2>
+      <div class="org-events-grid">
+        <div class="org-event-card" *ngFor="let event of upcomingEvents"
+             [routerLink]="['/events', event.id]" style="cursor:pointer;">
+          <div class="org-event-image">
+            <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
+            <span class="org-event-badge upcoming-badge">{{ 'organizerprofile.upcoming' | translate }}</span>
+          </div>
+          <div class="org-event-body">
+            <span class="org-event-category">{{ event.category }}</span>
+            <h3>{{ event.title }}</h3>
+            <p class="org-event-meta"><i class="fa-regular fa-calendar-days"></i> {{ event.date }} &nbsp; {{ event.time }}</p>
+            <p class="org-event-meta"><i class="fa-solid fa-location-dot"></i> {{ event.location }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="org-section" *ngIf="pastEvents.length > 0">
+      <h2 class="org-section-title">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        {{ 'organizerprofile.pastevents' | translate }}
+      </h2>
+      <div class="org-events-grid">
+        <div class="org-event-card past-card" *ngFor="let event of pastEvents"
+             [routerLink]="['/events', event.id]" style="cursor:pointer;">
+          <div class="org-event-image">
+            <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
+            <span class="org-event-badge past-badge">{{ 'organizerprofile.past' | translate }}</span>
+          </div>
+          <div class="org-event-body">
+            <span class="org-event-category">{{ event.category }}</span>
+            <h3>{{ event.title }}</h3>
+            <p class="org-event-meta"><i class="fa-regular fa-calendar-days"></i> {{ event.date }}</p>
+            <p class="org-event-meta"><i class="fa-solid fa-location-dot"></i> {{ event.location }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div *ngIf="organizer.events?.length === 0" class="org-empty">
+      <i class="fa-solid fa-calendar-xmark"></i>
+      <p>{{ 'organizerprofile.noevent' | translate }}</p>
+    </div>
+
+  </div>
+</div>
+
+<app-footer></app-footer>

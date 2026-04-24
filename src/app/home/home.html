@@ -143,8 +143,11 @@
           <img [src]="event.imageUrl || 'assets/placeholder.png'" [alt]="event.title">
         </div>
 
-        <p class="event-meta" class="org-email">
-            {{ event.organisateurEmail }}
+        <p class="event-meta org-email"
+           (click)="$event.stopPropagation()"
+           [routerLink]="event.organisateurId ? ['/organizer', event.organisateurId] : null"
+           [class.org-email-link]="event.organisateurId">
+          {{ event.organisateurEmail }}
           <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
         </p>
 

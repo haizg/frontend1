@@ -24,7 +24,8 @@
     "modifier": "Modifier",
     "supprimer": "Supprimer",
     "alreadyparticipated": "Déjà inscrit",
-    "consulter": "Consulter mon événement"
+    "consulter": "Consulter mon événement",
+    "past": "Passé"
 
   },
   "home": {
@@ -141,7 +142,8 @@
     "loading": "Chargement...",
     "alreadyparticipated":"Vous participez déja à cet événement",
     "program_image_expand":   "Agrandir",
-    "program_image_collapse": "Réduire"
+    "program_image_collapse": "Réduire",
+    "vieworganizer": "Voir le profil de l'organisateur"
   },
   "createevent": {
     "title": " Créer un Événement",
@@ -381,6 +383,19 @@
     "title": "Explorez tous les événements",
     "text": "Découvrez l'ensemble des événements culturels et éducatifs disponibles sur Invitini.",
     "btn": "Voir tous les événements"
+  },
+  "organizerprofile": {
+    "loading": "Chargement du profil…",
+    "notfound": "Organisateur introuvable.",
+    "verified": "Vérifié",
+    "norating": "Aucun avis pour le moment",
+    "reviews": "avis",
+    "events": "Événements",
+    "upcoming": "À venir",
+    "past": "Passés",
+    "totalreviews": "Avis",
+    "upcomingevents": "Événements à venir",
+    "pastevents": "Événements passés",
+    "noevent": "Cet organisateur n'a pas encore d'événements."
   }
-
 }

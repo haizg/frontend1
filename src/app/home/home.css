@@ -233,6 +233,9 @@
   max-width: 260px;
   flex-shrink: 0;
 }
+.org-email-link { cursor: pointer; color: #A53A6B !important; text-decoration: underline; }
+
+.org-email-link:hover { color: #8E2A5A !important; }
 
 .event-card:hover {
   transform: translateY(-4px);

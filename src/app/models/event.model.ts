@@ -19,4 +19,5 @@ export interface EventModel {
   riskReason?: string;
   predictedParticipation?: string;
   predictedParticipationReason?: string;
+  organisateurId?: number;
 }

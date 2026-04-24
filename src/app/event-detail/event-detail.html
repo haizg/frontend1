@@ -11,7 +11,10 @@
       </div>
     </div>
 
-    <p class="event-meta">
+    <p class="event-meta"
+       [routerLink]="event.organisateurId ? ['/organizer', event.organisateurId] : null"
+       [class.org-link-clickable]="event.organisateurId"
+       style="cursor:pointer; width:fit-content;">
       <i class="fa-solid fa-circle-user"></i>
       {{ event.organisateurEmail }}
       <span *ngIf="event.organisateurVerified" class="verified-badge" title="Organisateur vérifié">✓</span>
@@ -171,6 +174,88 @@
           {{ 'eventdetail.participate' | translate }}
         </button>
       </ng-container>
+      <!-- REVIEWS SECTION -->
+      <div class="reviews-section">
+        <h2 class="reviews-title">
+          <i class="fa-solid fa-star"></i>
+          Avis des participants
+          <span class="reviews-count" *ngIf="reviews.length > 0">({{ reviews.length }})</span>
+        </h2>
+
+        <div class="reviews-summary" *ngIf="reviews.length > 0">
+          <span class="reviews-avg">{{ averageRating }}</span>
+          <div class="reviews-stars">
+            <i *ngFor="let s of starsArray"
+               class="fa-solid fa-star"
+               [class.star-on]="s <= roundedAvg"
+               [class.star-off]="s > roundedAvg">
+            </i>
+          </div>
+          <span class="reviews-total">{{ reviews.length }} avis</span>
+        </div>
+
+        <div class="review-form-wrapper" *ngIf="canReview">
+          <h3 class="review-form-title">Laisser un avis</h3>
+          <div class="star-picker">
+            <i *ngFor="let s of starsArray"
+               class="fa-solid fa-star picker-star"
+               [class.picker-star-on]="s <= reviewRating || s <= hoverRating"
+               (click)="setReviewRating(s)"
+               (mouseenter)="hoverRating = s"
+               (mouseleave)="hoverRating = 0">
+            </i>
+          </div>
+          <textarea
+            class="review-textarea"
+            [(ngModel)]="reviewComment"
+            placeholder="Partagez votre expérience…"
+            rows="3">
+    </textarea>
+          <div class="review-form-actions">
+            <button class="btn-submit-review"
+                    (click)="submitReview()"
+                    [disabled]="reviewRating === 0 || isSubmittingReview">
+              <i class="fa-solid fa-paper-plane"></i>
+              {{ isSubmittingReview ? 'Envoi…' : 'Publier l\'avis' }}
+            </button>
+          </div>
+          <p class="review-success" *ngIf="reviewSuccess">
+            <i class="fa-solid fa-circle-check"></i> Merci pour votre avis !
+          </p>
+          <p class="review-error" *ngIf="reviewError">{{ reviewError }}</p>
+        </div>
+
+        <div class="review-already" *ngIf="alreadyReviewed">
+          <i class="fa-solid fa-circle-check"></i>
+          Vous avez déjà laissé un avis pour cet événement.
+        </div>
+
+        <div class="reviews-list" *ngIf="reviews.length > 0">
+          <div class="review-card" *ngFor="let review of reviews">
+            <div class="review-header">
+              <div class="review-avatar">{{ review.userPrenom?.charAt(0) }}{{ review.userNom?.charAt(0) }}</div>
+              <div class="review-meta">
+                <span class="review-author">{{ review.userPrenom }} {{ review.userNom }}</span>
+                <div class="review-stars-row">
+                  <i *ngFor="let s of starsArray"
+                     class="fa-solid fa-star review-star"
+                     [class.review-star-on]="s <= review.rating"
+                     [class.review-star-off]="s > review.rating">
+                  </i>
+                </div>
+              </div>
+              <span class="review-date">{{ review.createdAt | date:'d MMM yyyy' }}</span>
+            </div>
+            <p class="review-comment" *ngIf="review.comment">{{ review.comment }}</p>
+          </div>
+        </div>
+
+        <div class="reviews-empty" *ngIf="reviews.length === 0 && !canReview && !alreadyReviewed">
+          <i class="fa-regular fa-star"></i>
+          <p>Aucun avis pour le moment.</p>
+        </div>
+      </div>
+
 
     </div>
   </div>

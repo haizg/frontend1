@@ -406,6 +406,28 @@ export class ApiService {
       { headers: this.getHeaders() }
     );
   }
+getOrganizerProfile(orgId: number): Observable<any> {
+  return this.http.get<any>(`${this.base}/api/organizers/${orgId}`);
+}
+
+getEventReviews(eventId: number): Observable<any[]> {
+  return this.http.get<any[]>(`${this.base}/api/events/${eventId}/reviews`);
+}
+
+canReviewEvent(eventId: number): Observable<{ canReview: boolean }> {
+  return this.http.get<{ canReview: boolean }>(
+    `${this.base}/api/events/${eventId}/reviews/can-review`,
+    { headers: this.getHeaders() }
+  );
+}
+
+submitReview(eventId: number, rating: number, comment: string): Observable<any> {
+  return this.http.post<any>(
+    `${this.base}/api/events/${eventId}/reviews`,
+    { rating, comment },
+    { headers: this.getHeaders() }
+  );
+}
 
 
 }

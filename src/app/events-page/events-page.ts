@@ -118,12 +118,18 @@ export class EventsPage {
 
 
   applyFilters() {
-    this.filteredEvents = this.allEvents.filter(event => {
-      const matchesCategory = this.selectedCategory === 'all' || event.category === this.selectedCategory;
-      const matchesDate = !this.selectedDate || event.date === this.selectedDate;
-      return matchesCategory && matchesDate;
-    });
-  }
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      this.filteredEvents = this.allEvents.filter(event => {
+        const eventDate = new Date(event.date);
+        eventDate.setHours(0, 0, 0, 0);
+        const matchesCategory = this.selectedCategory === 'all' || event.category === this.selectedCategory;
+        const matchesDate = !this.selectedDate || event.date === this.selectedDate;
+        const isUpcoming = eventDate >= today;
+        return matchesCategory && matchesDate && isUpcoming;
+      });
+    }
 
   loadEvents() {
     this.isLoadingEvents = true;

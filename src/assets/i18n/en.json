@@ -24,7 +24,8 @@
     "modifier": "Modify",
     "supprimer": "Delete",
     "alreadyparticipated": "Already participated",
-    "consulter": "View my event"
+    "consulter": "View my event",
+    "past": "Past"
 
   },
   "home": {
@@ -140,7 +141,8 @@
     "loading": "Loading...",
     "alreadyparticipated": "You already participated in this event",
     "program_image_expand":   "Expand",
-    "program_image_collapse": "Collapse"
+    "program_image_collapse": "Collapse",
+    "vieworganizer": "View organizer profile"
   },
   "createevent": {
     "title": " Create Event",
@@ -381,6 +383,19 @@
     "title": "Explore all events",
     "text": "Discover all the cultural and educational events available on Invitini.",
     "btn": "View all events"
+  },
+  "organizerprofile": {
+    "loading": "Loading profile…",
+    "notfound": "Organizer not found.",
+    "verified": "Verified",
+    "norating": "No reviews yet",
+    "reviews": "reviews",
+    "events": "Events",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "totalreviews": "Reviews",
+    "upcomingevents": "Upcoming Events",
+    "pastevents": "Past Events",
+    "noevent": "This organizer has no events yet."
   }
-
 }

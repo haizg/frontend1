@@ -17,6 +17,7 @@ import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { TranslateLangService } from '../services/translate-lang.service';
 import { ConfirmDelete } from '../confirm-delete/confirm-delete';
 import { ApiService } from '../services/api.service';
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -49,7 +50,6 @@ export class Home implements AfterViewInit {
   isAdminVerified = false;
   participatedEventIds: Set<number> = new Set();
 
-  /*ai part*/
   recommendations: { event: EventModel; reason: string }[] = [];
   isLoadingRecommendations = false;
   eventsLoaded = false;
@@ -69,7 +69,7 @@ export class Home implements AfterViewInit {
     private eventService: EventService,
     private modalService: ModalService,
     private userService: UserService,
-    private apiService : ApiService,
+    private apiService: ApiService,
     private cdr: ChangeDetectorRef,
     private router: Router,
     private translateLang: TranslateLangService,
@@ -120,7 +120,9 @@ export class Home implements AfterViewInit {
         }
         this.cdr.detectChanges();
       });
+
       this.loadEvents();
+
       setInterval(() => {
         this.currentSlide = (this.currentSlide + 1) % this.slides.length;
         this.cdr.detectChanges();
@@ -150,6 +152,7 @@ export class Home implements AfterViewInit {
     this.events = [];
     this.availableEvents = [];
     this.eventsLoaded = false;
+
     const slowConnectionTimeout = setTimeout(() => {
       if (this.isLoadingEvents) {
         console.log('Loading is taking longer than expected...');
@@ -160,9 +163,18 @@ export class Home implements AfterViewInit {
     this.apiService.getEvents().subscribe({
       next: (data) => {
         clearTimeout(slowConnectionTimeout);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
         const sortedData = this.sortEventsByClosestToToday(data);
         this.events = sortedData;
-        this.availableEvents = sortedData.filter(event => !event.isFull);
+
+        this.availableEvents = sortedData.filter(event => {
+          const eventDate = new Date(event.date);
+          eventDate.setHours(0, 0, 0, 0);
+          return !event.isFull && eventDate >= today;
+        });
+
         this.isLoadingEvents = false;
         this.eventsLoaded = true;
         this.tryLoadRecommendations();
@@ -179,22 +191,22 @@ export class Home implements AfterViewInit {
   deleteEvent(eventModel: EventModel, $event: MouseEvent) {
     $event.stopPropagation();
     this.modalService.openDeleteModal(
-        'Supprimer l\'événement',
-        `Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`,
-        () => {
-            this.isDeleting = true;
-            this.apiService.deleteEvent(eventModel.id).subscribe({
-              next: () => {
-                this.isDeleting = false;
-                this.loadEvents();
-              },
-              error: (error : any) => {
-                this.isDeleting = false;
-              }
-            });
-        }
-      );
-    }
+      'Supprimer l\'événement',
+      `Êtes-vous sûr de vouloir supprimer "${eventModel.title}" ?`,
+      () => {
+        this.isDeleting = true;
+        this.apiService.deleteEvent(eventModel.id).subscribe({
+          next: () => {
+            this.isDeleting = false;
+            this.loadEvents();
+          },
+          error: (error: any) => {
+            this.isDeleting = false;
+          }
+        });
+      }
+    );
+  }
 
   loadMyParticipations() {
     this.participationsLoaded = false;
@@ -206,7 +218,7 @@ export class Home implements AfterViewInit {
         this.cdr.detectChanges();
       },
       error: (err: any) => {
-        console.error('Failed to load participations', err)
+        console.error('Failed to load participations', err);
         this.participationsLoaded = true;
         this.tryLoadRecommendations();
         this.cdr.detectChanges();
@@ -217,47 +229,45 @@ export class Home implements AfterViewInit {
   private tryLoadRecommendations() {
     if (!this.eventsLoaded || !this.participationsLoaded) return;
     if (!this.isLoggedIn || (!this.isParticipant && !this.isOrganisateur)) return;
-    if (this.recommendationsRequested) return; // ← add this
+    if (this.recommendationsRequested) return;
     this.recommendationsRequested = true;
     this.loadRecommendations();
   }
 
-    loadRecommendations() {
-      if (!this.isLoggedIn || (!this.isParticipant && !this.isOrganisateur)) return;
-      if (this.events.length === 0) return;
+  loadRecommendations() {
+    if (!this.isLoggedIn || (!this.isParticipant && !this.isOrganisateur)) return;
+    if (this.events.length === 0) return;
 
-      this.isLoadingRecommendations = true;
+    this.isLoadingRecommendations = true;
 
-      const notJoined = this.events.filter(e => !this.participatedEventIds.has(e.id));
-      if (notJoined.length === 0) { this.isLoadingRecommendations = false; return; }
+    const notJoined = this.events.filter(e => !this.participatedEventIds.has(e.id));
+    if (notJoined.length === 0) { this.isLoadingRecommendations = false; return; }
 
-      const history = this.events
-        .filter(e => this.participatedEventIds.has(e.id))
-        .map(e => ({ title: e.title, category: e.category }));
+    const history = this.events
+      .filter(e => this.participatedEventIds.has(e.id))
+      .map(e => ({ title: e.title, category: e.category }));
 
-      this.apiService.getRecommendations(history, notJoined).subscribe({
-        next: (res) => {
-          this.recommendations = res.recommendations
-            .map(r => ({
-              event: this.events.find(e => e.id === r.id)!,
-              reason: r.reason
-            }))
-            .filter(r => r.event != null);
-          this.isLoadingRecommendations = false;
-          this.cdr.detectChanges();
-        },
-        error: (err: any) => {
-          console.error('Recommendations failed', err);
-          this.isLoadingRecommendations = false;
-          this.cdr.detectChanges();
-        }
-      });
-    }
+    this.apiService.getRecommendations(history, notJoined).subscribe({
+      next: (res) => {
+        this.recommendations = res.recommendations
+          .map(r => ({
+            event: this.events.find(e => e.id === r.id)!,
+            reason: r.reason
+          }))
+          .filter(r => r.event != null);
+        this.isLoadingRecommendations = false;
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        console.error('Recommendations failed', err);
+        this.isLoadingRecommendations = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
   canModifyEvent(event: EventModel): boolean {
-    if (!this.isOrganisateur) {
-      return false;
-    }
+    if (!this.isOrganisateur) return false;
     return event.organisateurEmail === this.userEmail;
   }
 
@@ -279,35 +289,13 @@ export class Home implements AfterViewInit {
     return this.participatedEventIds.has(eventId);
   }
 
-  get isOrganisateur(): boolean {
-    return this.userRole === 'ROLE_ORGANISATEUR';
-  }
+  get isOrganisateur(): boolean { return this.userRole === 'ROLE_ORGANISATEUR'; }
+  get isParticipant(): boolean { return this.userRole === 'ROLE_USER'; }
+  get isAdmin(): boolean { return this.userRole === 'ROLE_ADMIN'; }
+  get fullName(): string { return `${this.userPrenom} ${this.userName}`; }
 
-  get isParticipant(): boolean {
-    return this.userRole === 'ROLE_USER';
-  }
-  get isAdmin(): boolean {
-      return this.userRole === 'ROLE_ADMIN';
-  }
-
-  get fullName(): string {
-    return `${this.userPrenom} ${this.userName}`;
-  }
-
-  goToSlide(index: number) {
-    this.currentSlide = index;
-  }
-
-  openCreateEventModal() {
-    this.createEventModal.open();
-  }
-
-  onEventCreated() {
-    this.loadEvents();
-  }
-
-  onEventUpdated() {
-    this.loadEvents();
-  }
-
+  goToSlide(index: number) { this.currentSlide = index; }
+  openCreateEventModal() { this.createEventModal.open(); }
+  onEventCreated() { this.loadEvents(); }
+  onEventUpdated() { this.loadEvents(); }
 }

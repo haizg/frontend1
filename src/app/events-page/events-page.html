@@ -107,17 +107,7 @@
     </div>
   </div>
 
-  <div class="events-summary" *ngIf="!isLoadingEvents">
-    <p class="summary-text">
-      {{ filteredEvents.length }}
-      {{ filteredEvents.length > 1 ? ('events.summaryplural' | translate) : ('events.summary' | translate) }}
-      {{ 'events.total' | translate }}
-      <span *ngIf="fullEventsCount > 0" class="full-count">
-        ({{ fullEventsCount }}
-        {{ fullEventsCount > 1 ? ('events.complets' | translate) : ('events.complet' | translate) }})
-      </span>
-    </p>
-  </div>
+
 
   <app-footer></app-footer>
 </div>

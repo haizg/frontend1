@@ -133,68 +133,82 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let event of filteredPendingEvents" class="pending-row">
-            <td>
-              <a [routerLink]="['/events', event.id]" class="event-link">{{ event.title }}</a>
-
-              <!-- Risk badge -->
-              <span *ngIf="event.riskScore != null"
-                    class="risk-badge"
-                    [class.risk-low]="event.riskScore < 30"
-                    [class.risk-medium]="event.riskScore >= 30 && event.riskScore < 60"
-                    [class.risk-high]="event.riskScore >= 60">
-    <i class="fa-solid fa-shield-halved"></i>
-    {{ event.riskScore }}/100
-  </span>
-
-              <!-- Prediction badge -->
-              <span *ngIf="event.predictedParticipation"
-                    class="pred-badge"
-                    [class.pred-low]="event.predictedParticipation === 'LOW'"
-                    [class.pred-medium]="event.predictedParticipation === 'MEDIUM'"
-                    [class.pred-high]="event.predictedParticipation === 'HIGH'">
-    <i class="fa-solid fa-chart-line"></i>
-    {{ event.predictedParticipation === 'LOW' ? 'Faible affluence' :
-       event.predictedParticipation === 'MEDIUM' ? 'Affluence moyenne' : 'Forte affluence' }}
-  </span>
-
-              <!-- Risk reason -->
-              <div *ngIf="event.riskScore != null && event.riskScore >= 30"
-                   class="risk-reason-text"
-                   [class.risk-reason-medium]="event.riskScore >= 30 && event.riskScore < 60"
-                   [class.risk-reason-high]="event.riskScore >= 60">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                {{ event.riskReason }}
-              </div>
-
-              <!-- Prediction reason -->
-              <div *ngIf="event.predictedParticipation && event.predictedParticipation !== 'HIGH'"
-                   class="pred-reason-text"
-                   [class.pred-reason-medium]="event.predictedParticipation === 'MEDIUM'"
-                   [class.pred-reason-low]="event.predictedParticipation === 'LOW'">
-                <i class="fa-solid fa-circle-info"></i>
-                {{ event.predictedParticipationReason }}
-              </div>
-            </td>
-            <td><span class="category-badge">{{ event.category }}</span></td>
-            <td>{{ event.date }}</td>
-            <td>{{ event.location }}</td>
-            <td><span [class.full]="event.isFull">{{ event.participantCount }}/{{ event.maxParticipants }}</span></td>
-            <td class="email-cell">{{ event.organisateurEmail }}</td>
-            <td>
-              <div class="action-buttons-cell">
-                <button (click)="openEditEvent(event)" class="btn-edit-sm">
-                  <i class="fa-solid fa-pen"></i> Modifier
+          <ng-container *ngFor="let event of filteredPendingEvents">
+            <tr class="pending-row">
+              <td>
+                <a [routerLink]="['/events', event.id]" class="event-link">{{ event.title }}</a>
+                <button class="ai-toggle-btn"
+                        (click)="toggleAiPanel(event.id)"
+                        *ngIf="event.riskScore != null || event.predictedParticipation">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                  {{ expandedAiRow === event.id ? 'Masquer' : 'Analyse IA' }}
                 </button>
-                <button (click)="deleteEvent(event.id)" class="btn-delete-sm">
-                  <i class="fa-solid fa-trash"></i> Supprimer
-                </button>
-                <button (click)="approveEvent(event)" class="toggle-btn pending">
-                  <i class="fa-solid fa-check"></i> Approuver
-                </button>
-              </div>
-            </td>
-          </tr>
+              </td>
+              <td><span class="category-badge">{{ event.category }}</span></td>
+              <td>{{ event.date }}</td>
+              <td>{{ event.location }}</td>
+              <td><span [class.full]="event.isFull">{{ event.participantCount }}/{{ event.maxParticipants }}</span></td>
+              <td class="email-cell">{{ event.organisateurEmail }}</td>
+              <td>
+                <div class="action-buttons-cell">
+                  <button (click)="openEditEvent(event)" class="btn-edit-sm">
+                    <i class="fa-solid fa-pen"></i> Modifier
+                  </button>
+                  <button (click)="deleteEvent(event.id)" class="btn-delete-sm">
+                    <i class="fa-solid fa-trash"></i> Supprimer
+                  </button>
+                  <button (click)="approveEvent(event)" class="toggle-btn pending">
+                    <i class="fa-solid fa-check"></i> Approuver
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- AI expandable panel row -->
+            <tr *ngIf="expandedAiRow === event.id" class="ai-panel-row">
+              <td colspan="7">
+                <div class="ai-panel">
+                  <div class="ai-panel-card"
+                       [class.ai-card-low]="event.riskScore != null && event.riskScore < 30"
+                       [class.ai-card-medium]="event.riskScore != null && event.riskScore >= 30 && event.riskScore < 60"
+                       [class.ai-card-high]="event.riskScore != null && event.riskScore >= 60"
+                       *ngIf="event.riskScore != null">
+                    <div class="ai-card-header">
+                      <i class="fa-solid fa-shield-halved"></i>
+                      <span>Risque de fraude</span>
+                      <span class="ai-card-score"
+                            [class.risk-low]="event.riskScore < 30"
+                            [class.risk-medium]="event.riskScore >= 30 && event.riskScore < 60"
+                            [class.risk-high]="event.riskScore >= 60">
+              {{ event.riskScore }}/100
+            </span>
+                    </div>
+                    <p class="ai-card-reason">{{ event.riskReason }}</p>
+                  </div>
+
+                  <div class="ai-panel-card"
+                       [class.ai-card-pred-low]="event.predictedParticipation === 'LOW'"
+                       [class.ai-card-pred-medium]="event.predictedParticipation === 'MEDIUM'"
+                       [class.ai-card-pred-high]="event.predictedParticipation === 'HIGH'"
+                       *ngIf="event.predictedParticipation">
+                    <div class="ai-card-header">
+                      <i class="fa-solid fa-chart-line"></i>
+                      <span>Affluence prévue</span>
+                      <span class="ai-card-score"
+                            [class.pred-low]="event.predictedParticipation === 'LOW'"
+                            [class.pred-medium]="event.predictedParticipation === 'MEDIUM'"
+                            [class.pred-high]="event.predictedParticipation === 'HIGH'">
+              {{ event.predictedParticipation === 'LOW' ? 'Faible' :
+                 event.predictedParticipation === 'MEDIUM' ? 'Moyenne' : 'Forte' }}
+            </span>
+                    </div>
+                    <p class="ai-card-reason">{{ event.predictedParticipationReason }}</p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+
           </tbody>
         </table>
         <div *ngIf="filteredPendingEvents.length === 0" class="empty-state">

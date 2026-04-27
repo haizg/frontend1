@@ -33,6 +33,7 @@ export class AdminDashboard implements OnInit{
   isLoadingDetails = false;
   eventSearch: string = '';
   deactivationRequests: any[] = [];
+  expandedAiRow: number | null = null;
 
   // Detail panel
   selectedUser: any = null;
@@ -140,6 +141,10 @@ export class AdminDashboard implements OnInit{
 
   onEventUpdated() {
     this.loadEvents();
+  }
+
+  toggleAiPanel(eventId: number) {
+    this.expandedAiRow = this.expandedAiRow === eventId ? null : eventId;
   }
 
   loadStats() {

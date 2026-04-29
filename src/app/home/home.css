@@ -519,9 +519,11 @@
 }
 
 .recommendations-section {
-  padding: 2rem;
+  padding: 40px 60px;
   max-width: 1200px;
-  margin: 0 auto 2rem;
+  /*margin: 0 auto 0rem;
+  margin-left:3px;
+  padding: 2rem;*/
 }
 
 .recommendations-title {
@@ -543,7 +545,7 @@
 .recommendations-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.2rem;
+  gap: 1px;
 }
 
 .reco-card {
@@ -553,6 +555,9 @@
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   background: #fff;
+  min-width: 260px;
+  max-width: 260px;
+  flex-shrink: 0;
 }
 
 .reco-card:hover {
@@ -661,7 +666,6 @@
 
 .how-it-works {
   padding: 60px 40px;
-  /*background: linear-gradient(135deg, #A53A6B 89%, #8E2A5A 10%);*/
   background: #A53A6B;
   text-align: center;
 }

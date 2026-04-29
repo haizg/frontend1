@@ -10,6 +10,7 @@ import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { ConfirmLogout } from '../confirm-logout/confirm-logout';
 import { ModalService } from '../services/modal.service';
 import { ConfirmDelete } from '../confirm-delete/confirm-delete';
+import { TranslateLangService } from '../services/translate-lang.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -56,6 +57,7 @@ export class AdminDashboard implements OnInit{
     private userService: UserService,
     private cdr: ChangeDetectorRef,
     public modalService: ModalService,
+    private translateLang: TranslateLangService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -141,6 +143,7 @@ export class AdminDashboard implements OnInit{
 
   onEventUpdated() {
     this.loadEvents();
+    this.cdr.detectChanges();
   }
 
   toggleAiPanel(eventId: number) {

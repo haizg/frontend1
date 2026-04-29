@@ -26,7 +26,7 @@ export class EditEventModal {
   isAdmin  = false;
   minCapacity = 1;
 
-  // program image state
+
   programType: 'text' | 'image' = 'text';
   selectedProgramFile: File | null = null;
   programImagePreview: string | null = null;
@@ -169,10 +169,6 @@ export class EditEventModal {
     this.isUploadingProgramImage = true;
     this.cdr.markForCheck();
     try {
-      //const formData = new FormData();
-      //formData.append('file', this.selectedProgramFile);
-      //const response: any = await this.http
-        //.post('http://localhost:8081/api/upload', formData).toPromise();
       const response = await this.apiService.uploadImage(this.selectedProgramFile).toPromise() as { url: string };
       this.uploadedProgramImageUrl = response.url;
       this.isUploadingProgramImage = false;
@@ -243,6 +239,11 @@ export class EditEventModal {
       });
       return;
     }
+
+    this.apiService.updateEventAdmin(id, raw).subscribe({
+        next: () => this.handleSuccess(),
+        error: (err: any) => this.handleError(err)
+      });
   }
 
   private handleSuccess(msg?: string) {

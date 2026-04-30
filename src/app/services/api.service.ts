@@ -406,28 +406,34 @@ export class ApiService {
       { headers: this.getHeaders() }
     );
   }
-getOrganizerProfile(orgId: number): Observable<any> {
-  return this.http.get<any>(`${this.base}/api/organizers/${orgId}`);
-}
 
-getEventReviews(eventId: number): Observable<any[]> {
-  return this.http.get<any[]>(`${this.base}/api/events/${eventId}/reviews`);
-}
+  getOrganizerProfile(orgId: number): Observable<any> {
+    return this.http.get<any>(`${this.base}/api/organizers/${orgId}`);
+  }
 
-canReviewEvent(eventId: number): Observable<{ canReview: boolean }> {
-  return this.http.get<{ canReview: boolean }>(
-    `${this.base}/api/events/${eventId}/reviews/can-review`,
-    { headers: this.getHeaders() }
-  );
-}
+  getEventReviews(eventId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.base}/api/events/${eventId}/reviews`);
+  }
 
-submitReview(eventId: number, rating: number, comment: string): Observable<any> {
-  return this.http.post<any>(
-    `${this.base}/api/events/${eventId}/reviews`,
-    { rating, comment },
-    { headers: this.getHeaders() }
-  );
-}
+  canReviewEvent(eventId: number): Observable<{ canReview: boolean }> {
+    return this.http.get<{ canReview: boolean }>(
+      `${this.base}/api/events/${eventId}/reviews/can-review`,
+      { headers: this.getHeaders() }
+    );
+  }
 
+  submitReview(eventId: number, rating: number, comment: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.base}/api/events/${eventId}/reviews`,
+      { rating, comment },
+      { headers: this.getHeaders() }
+    );
+  }
 
+  unregisterFromEvent(eventId: number): Observable<any> {
+    return this.http.delete(
+      `${this.base}/api/events/${eventId}/unregister`,
+      { headers: this.getHeaders() }
+    );
+  }
 }

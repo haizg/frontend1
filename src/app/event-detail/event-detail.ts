@@ -68,6 +68,10 @@ export class EventDetail implements OnInit {
   isSubmittingReview = false;
   reviewSuccess = false;
   reviewError = '';
+  isUnregistering = false;
+  unregisterError = '';
+  unregisterSuccess = '';
+
 
   constructor(
     private route: ActivatedRoute,
@@ -223,6 +227,26 @@ export class EventDetail implements OnInit {
     }
   }
 
+  isEventWithin24h(dateStr: string): boolean {
+    try {
+      const eventDate = new Date(dateStr);
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+      return eventDate <= tomorrow;
+    } catch {
+      return false;
+    }
+  }
+
+  openUnregisterConfirm(eventId: number) {
+    this.modalService.openDeleteModal(
+      'Confirmer la désinscription',
+      'Êtes-vous sûr de vouloir vous désinscrire de cet événement ? Cette action est irréversible.',
+      () => this.unregister(eventId)
+    );
+  }
+
   get unconfirmedParticipants(): any[] {
     return this.participants.filter(p => !p.verified);
   }
@@ -333,6 +357,33 @@ export class EventDetail implements OnInit {
         this.isSubmittingReview = false;
         this.reviewError = err.error?.error || 'Erreur lors de la soumission.';
         this.cdr.markForCheck();
+      }
+    });
+  }
+
+  unregister(eventId: number) {
+    this.isUnregistering = true;
+    this.unregisterError = '';
+    this.unregisterSuccess = '';
+
+    this.apiService.unregisterFromEvent(eventId).subscribe({
+      next: () => {
+        this.isUnregistering = false;
+        this.unregisterSuccess = 'Désinscription réussie.';
+        // Remove from participatedEventIds so button updates
+        this.hasAlreadyParticipated = false;
+        this.cdr.detectChanges();
+        // Reload event to update participant count
+        this.onEventUpdated();
+      },
+      error: (err: any) => {
+        this.isUnregistering = false;
+        if (err.error?.error === 'DEADLINE_PASSED') {
+          this.unregisterError = 'Désinscription impossible — l\'événement est dans moins de 24h.';
+        } else {
+          this.unregisterError = 'Erreur lors de la désinscription. Réessayez.';
+        }
+        this.cdr.detectChanges();
       }
     });
   }

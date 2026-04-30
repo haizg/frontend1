@@ -193,7 +193,7 @@
         </table>
       </div>
 
-      <!-- PARTICIPATE BUTTON-->
+      <!-- PARTICIPATE BUTTON
       <ng-container *ngIf="!isMyEvent && !isAdmin && !isEventPast">
         <button *ngIf="hasAlreadyParticipated" class="btn-already-participated" disabled>
           {{ 'eventdetail.alreadyparticipated' | translate }}
@@ -201,7 +201,41 @@
         <button *ngIf="!hasAlreadyParticipated" class="btn-participer" (click)="openJoinModal(event!.id)">
           {{ 'eventdetail.participate' | translate }}
         </button>
+      </ng-container>-->
+
+      <ng-container *ngIf="hasAlreadyParticipated">
+        <button class="btn btn-already-participated"
+                disabled
+                *ngIf="isEventWithin24h(event.date)">
+          <i class="fa-solid fa-circle-check"></i>
+          {{ 'events.alreadyparticipated' | translate }}
+        </button>
+
+        <div *ngIf="!isEventWithin24h(event.date)" class="unregister-section">
+          <button class="btn btn-already-participated" disabled>
+            <i class="fa-solid fa-circle-check"></i>
+            {{ 'events.alreadyparticipated' | translate }}
+          </button>
+          <button class="btn btn-unregister"
+                  (click)="openUnregisterConfirm(event.id)"
+                  [disabled]="isUnregistering">
+            <i class="fa-solid fa-circle-xmark"></i>
+            {{ isUnregistering ? 'Désinscription...' : 'Se désinscrire' }}
+          </button>
+        </div>
+
+        <div *ngIf="unregisterError" class="unregister-error">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          {{ unregisterError }}
+        </div>
+        <div *ngIf="unregisterSuccess" class="unregister-success">
+          <i class="fa-solid fa-circle-check"></i>
+          {{ unregisterSuccess }}
+        </div>
       </ng-container>
+      <button *ngIf="!hasAlreadyParticipated" class="btn-participer" (click)="openJoinModal(event!.id)">
+        {{ 'eventdetail.participate' | translate }}
+      </button>
 
       <!-- PAST EVENT BANNER -->
       <div *ngIf="!isMyEvent && !isAdmin && isEventPast" class="event-past-banner">

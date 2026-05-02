@@ -1,6 +1,6 @@
 import { Component, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from "@angular/common";
-import { Router, RouterLink } from "@angular/router";
+import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ModalService } from '../services/modal.service';
@@ -14,6 +14,7 @@ import { ConfirmLogout } from '../confirm-logout/confirm-logout';
   imports: [
     CommonModule,
     RouterLink,
+    RouterLinkActive,
     FormsModule,
     TranslateModule,
     ConfirmLogout

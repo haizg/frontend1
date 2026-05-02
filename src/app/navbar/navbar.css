@@ -50,6 +50,11 @@
   color:#A53A6B ;
 }
 
+.nav-links a.active{
+  color:#A53A6B ;
+}
+
+
 .nav-buttons{
   display: flex;
   gap: 15px;

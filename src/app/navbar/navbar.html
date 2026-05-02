@@ -4,13 +4,15 @@
       <div class="Invitini">Invitini</div>
 
       <nav class="nav-links">
-        <a routerLink="/home">{{ 'navbar.home' | translate }}</a>
-        <a routerLink="/events">{{ 'navbar.events' | translate }}</a>
-        <a routerLink="/about">{{ 'navbar.about' | translate }}</a>
-        <a routerLink="/contact">{{ 'navbar.contact' | translate }}</a>
+        <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" >{{ 'navbar.home' | translate }}</a>
+        <a routerLink="/events" routerLinkActive="active">{{ 'navbar.events' | translate }}</a>
+        <a routerLink="/about" routerLinkActive="active">{{ 'navbar.about' | translate }}</a>
+        <a routerLink="/contact" routerLinkActive="active">{{ 'navbar.contact' | translate }}</a>
       </nav>
     </div>
 
+
+    <!--
     <div class="custom-select-wrapper">
       <select
         [(ngModel)]="currentLang"
@@ -21,7 +23,7 @@
         <option value="en">EN</option>
       </select>
     </div>
-
+-->
     <div class="nav-buttons">
       <ng-container *ngIf="!isLoggedIn">
         <button (click)="logIn()" class="btn btn-outline">{{ 'navbar.login' | translate }}</button>

@@ -4,7 +4,17 @@
   padding: 60px 20px 0;
   font-size: 14px;
 }
-
+.footer-logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.footer-logo-img {
+  height: 35px;
+  width: 35px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
 .footer-container {
   max-width: 1100px;
   margin: 0 auto;

@@ -36,8 +36,9 @@
 
 
     <p class="switch-auth">
-      Vous n’avez pas encore de compte ?
-      <span (click)="goToSignup()">S’inscrire</span>
+      {{ 'login.noaccount' | translate }}
+      <span (click)="goToSignup()">{{ 'navbar.signup' | translate }}
+</span>
     </p>
 
   </form>

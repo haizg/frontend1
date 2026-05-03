@@ -166,3 +166,33 @@ div[name="nomOrganisation"] {
   content: "✖ ";
   color: red;
 }
+.role {
+  display: flex;
+  gap: 0;
+  margin: 5px 0;
+  background: #f0f0f0;
+  border-radius: 30px;
+  padding: 4px;
+}
+
+.role button {
+  padding: 8px 24px;
+  border-radius: 26px;
+  border: none;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.25s ease;
+}
+
+.role button.active {
+  background: white;
+  color: #A53A6B;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.role button:hover:not(.active) {
+  color: #A53A6B;
+}

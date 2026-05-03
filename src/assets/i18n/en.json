@@ -54,7 +54,8 @@
   },
   "login": {
     "mdp": "Password:",
-    "forgotpsw": "Forgot password ?"
+    "forgotpsw": "Forgot password?",
+    "noaccount": "Don't have an account yet?"
   },
   "signup": {
     "nom": "Last Name",

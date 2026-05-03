@@ -79,13 +79,17 @@
     <small *ngIf="confirmMdpRef.errors?.['required'] && confirmMdpRef.touched">* Champs obligatoire</small>
     <small *ngIf="mdp !== confirmMdp && confirmMdpRef.touched" class="error-text">* Les mots de passe ne correspondent pas</small>
     <br>
-
     <div class="role">
-      <input type="radio" name="role" value="ROLE_ORGANISATEUR" [(ngModel)]="role" required>
-      {{ 'signup.org' | translate }}
-
-      <input type="radio" name="role" value="ROLE_USER" [(ngModel)]="role" required>
-      Participant
+      <button type="button"
+              [class.active]="role === 'ROLE_ORGANISATEUR'"
+              (click)="role = 'ROLE_ORGANISATEUR'">
+        {{ 'signup.org' | translate }}
+      </button>
+      <button type="button"
+              [class.active]="role === 'ROLE_USER'"
+              (click)="role = 'ROLE_USER'">
+        Participant
+      </button>
     </div>
     <br>
 

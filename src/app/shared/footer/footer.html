@@ -2,8 +2,10 @@
   <div class="footer-container">
 
     <div class="footer-brand">
-      <h2 class="footer-logo">Invitini</h2>
-      <p class="footer-tagline">{{ 'footer.tagline' | translate }}</p>
+      <div class="footer-logo-wrapper">
+        <img src="assets/invitini_logo.png" alt="Invitini Logo" class="footer-logo-img" />
+        <h2 class="footer-logo">Invitini</h2>
+      </div>      <p class="footer-tagline">{{ 'footer.tagline' | translate }}</p>
       <a [href]="'mailto:' + supportEmail" class="footer-email-link">
         <i class="fa-solid fa-envelope"></i>
         {{ supportEmail }}

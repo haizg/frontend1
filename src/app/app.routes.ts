@@ -14,7 +14,7 @@ import { AdminDashboard } from './admin-dashboard/admin-dashboard';
 import { About} from './about/about';
 import {Contact} from './contact/contact';
 import { OrganizerProfile } from './organizer-profile/organizer-profile';
-
+import {ScanEvent} from './scan-event/scan-event';
 export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'home', component: Home },
@@ -30,6 +30,7 @@ export const routes: Routes = [
   { path: 'reset-password', component: ResetPassword },
   { path: 'admin/dashboard', component: AdminDashboard, canActivate: [AdminGuard] },
   { path: 'organizer/:id', component: OrganizerProfile },
+  { path: 'events/:id/scan', component: ScanEvent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' }
 ];

@@ -328,11 +328,9 @@ export class CreateEventModal {
   }
 
   sendEventToBackend(eventData: any) {
-    console.log('Sending event data:', eventData);
     this.apiService.createEvent(eventData).subscribe({
       next: (res:any) => {
-        console.log('Event created successfully:', res);
-        this.isLoading = false;
+         this.isLoading = false;
         this.translate.get('createevent.approval_message').subscribe(msg => {
           this.approvalMessage = msg;
         });

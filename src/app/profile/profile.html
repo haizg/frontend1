@@ -11,11 +11,20 @@
         {{ isOrganisateur ? ('profile.organisateur' | translate) : ('profile.participant' | translate) }}
       </span>
     </div>
+
+    <a *ngIf="isOrganisateur "
+       [routerLink]="['/organizer', organisateurId]"
+       class="btn-public-profile">
+      {{ 'profile.viewpublic' | translate }}
+    </a>
   </div>
 
   <div class="tabs">
     <button [class.active]="activeTab === 'events'" (click)="activeTab = 'events'">
       {{ isOrganisateur ? ('profile.myevents' | translate) : ('profile.myparticipations' | translate) }}
+    </button>
+    <button *ngIf="isOrganisateur" [class.active]="activeTab === 'reviews'" (click)="activeTab = 'reviews'; loadMyReviews()">
+      {{ 'profile.myreviews' | translate }}
     </button>
     <button [class.active]="activeTab === 'edit'" (click)="activeTab = 'edit'">
       {{ 'profile.editprofile' | translate }}
@@ -85,9 +94,53 @@
     <ng-template #noParticipated>
       <p class="no-events">{{ 'profile.noparticipated' | translate }}</p>
     </ng-template>
-
   </div>
 
+
+  <!-- REVIEWS TAB — organizer only -->
+  <div *ngIf="activeTab === 'reviews' && isOrganisateur" class="reviews-section">
+    <div class="reviews-summary" *ngIf="myReviews.length > 0">
+      <div class="reviews-avg">
+        <span class="avg-number">{{ averageRating }}</span>
+        <div class="avg-stars">
+          <i *ngFor="let s of [1,2,3,4,5]"
+             class="fa-solid fa-star"
+             [class.star-filled]="s <= roundedAvg"
+             [class.star-empty]="s > roundedAvg"></i>
+        </div>
+        <span class="avg-count">{{ myReviews.length }} {{ 'profile.reviews_count' | translate }}</span>
+      </div>
+    </div>
+
+    <div *ngIf="myReviews.length === 0" class="no-reviews">
+      <i class="fa-regular fa-star"></i>
+      <p>{{ 'profile.noreviews' | translate }}</p>
+    </div>
+
+    <div class="reviews-list" *ngIf="myReviews.length > 0">
+      <div class="review-card" *ngFor="let review of myReviews">
+        <div class="review-header">
+          <div class="review-event-title">
+            <i class="fa-solid fa-calendar-days"></i>
+            {{ review.eventTitle }}
+          </div>
+          <div class="review-stars">
+            <i *ngFor="let s of [1,2,3,4,5]"
+               class="fa-solid fa-star"
+               [class.star-filled]="s <= review.rating"
+               [class.star-empty]="s > review.rating"></i>
+          </div>
+        </div>
+        <p class="review-comment" *ngIf="review.comment">{{ review.comment }}</p>
+        <p class="review-author">
+          <i class="fa-solid fa-user"></i>
+          {{ review.userPrenom }} {{ review.userNom }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!--update user data-->
   <div *ngIf="activeTab === 'edit'" class="form-section">
     <h2>{{ 'profile.editprofile' | translate }}</h2>
     <div class="form-group">
@@ -112,7 +165,7 @@
   </div>
 
 
-
+<!--change password-->
   <div *ngIf="activeTab === 'password'" class="form-section">
     <h2> {{ 'profile.changepassword' | translate }}</h2>
     <div class="form-group">
@@ -132,6 +185,9 @@
     <button class="btn-save" (click)="changePassword()">{{ 'profile.modify' | translate }}</button>
   </div>
 
+
+
+  <!--deactivating modal-->
   <div class="modal-overlay" *ngIf="showDeactivateModal" (click)="showDeactivateModal = false">
     <div class="confirm-box" (click)="$event.stopPropagation()">
       <button class="close-btn" (click)="showDeactivateModal = false" type="button">&times;</button>
@@ -156,6 +212,9 @@
     </div>
   </div>
 
+
+
+  <!--deactivate account-->
   <div class="deactivation-section" *ngIf="user">
     <div class="deactivation-inner">
 

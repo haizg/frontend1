@@ -47,10 +47,6 @@ export class ApiService {
 
 
 
-
-
-
-
   /*  LOAD DATA */
   /*get all events*/
   getEvents(): Observable<EventModel[]> {
@@ -230,6 +226,23 @@ export class ApiService {
     return this.http.put<void>(
       `${this.base}/api/events/${eventId}/capacity-and-program`,
       data,
+      { headers: this.getHeaders() }
+    );
+  }
+
+
+  /*get organizer reviews*/
+  getOrganizerReviews(): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.base}/api/user/my-reviews`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  /*get org id*/
+  getMyOrganisateurId(): Observable<{ id: number }> {
+    return this.http.get<{ id: number }>(
+      `${this.base}/api/user/my-organizer-id`,
       { headers: this.getHeaders() }
     );
   }
@@ -433,6 +446,45 @@ export class ApiService {
   unregisterFromEvent(eventId: number): Observable<any> {
     return this.http.delete(
       `${this.base}/api/events/${eventId}/unregister`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+/*QR CODE*/
+  // Get participant's own QR token for an event
+  getMyParticipantToken(eventId: number): Observable<any> {
+    return this.http.get(
+      `${this.base}/api/events/${eventId}/my-ticket`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  // Scan a QR code token (used by organizer)
+  scanQrToken(token: string): Observable<any> {
+    return this.http.get(
+      `${this.base}/api/events/scan?token=${token}`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  flagReview(reviewId: number): Observable<any> {
+    return this.http.put(
+      `${this.base}/api/reviews/${reviewId}/flag`,
+      {},
+      { headers: this.getHeaders() }
+    );
+  }
+
+  getFlaggedReviews(): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.base}/api/admin/reviews/flagged`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  deleteReview(reviewId: number): Observable<any> {
+    return this.http.delete(
+      `${this.base}/api/admin/reviews/${reviewId}`,
       { headers: this.getHeaders() }
     );
   }

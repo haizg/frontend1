@@ -61,7 +61,7 @@ export class Home implements AfterViewInit {
     { image: 'assets/slide1.jpg' },
     { image: 'assets/slide2.jpg' },
     { image: 'assets/slide3.jpg' },
-    { image: 'assets/slide4.jpg' },
+    { image: 'assets/slide6.jpg' },
     { image: 'assets/slide5.jpg' },
   ];
 

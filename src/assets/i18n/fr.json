@@ -98,6 +98,10 @@
     "confirmpassword": "Confirmer le mot de passe",
     "modify": "Modifier",
     "loginrequired": "Veuillez vous connecter pour voir votre profil.",
+    "myreviews": "Avis reçus",
+    "reviews_count": "avis",
+    "noreviews": "Aucun avis reçu pour vos événements pour l'instant.",
+    "viewpublic": "Vue publique",
     "deactivate": {
       "title": "Désactiver mon compte",
       "zone": "Zone de danger",
@@ -158,7 +162,10 @@
     "eventpast": "Cet événement est terminé.",
     "reviewstats": "Avis reçus",
     "averagerating": "Note moyenne",
-    "totalreviews": "Total avis"
+    "totalreviews": "Total avis",
+    "unregistering": "Désinscription...",
+    "unregister": "Se désinscrire",
+    "yourticket": "Votre ticket"
   },
   "createevent": {
     "title": " Créer un Événement",

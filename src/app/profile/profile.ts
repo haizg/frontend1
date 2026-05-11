@@ -22,7 +22,7 @@ export class Profile {
   user: any = null;
   events: EventModel[] = [];
   isOrganisateur = false;
-
+  organisateurId: number | null = null;
 
   editNom = '';
   editPrenom = '';
@@ -45,6 +45,9 @@ export class Profile {
 
   deactivating = false;
   deactivationStatus: 'idle' | 'pending' | 'done' = 'idle';
+
+  myReviews: any[] = [];
+  reviewsLoaded = false;
 
   constructor(
     private userService: UserService,
@@ -71,6 +74,14 @@ export class Profile {
           this.editNomOrganisation = u.nomOrganisation;
           if (this.isOrganisateur) {
             this.checkDeactivationStatus();
+            this.apiService.getMyOrganisateurId().subscribe({
+                next: (res) => {
+                  this.organisateurId = res.id;
+                  console.log("aaaaaaaaaaaaaaaaaaaaaaad");
+                  this.cdr.detectChanges();
+                },
+                error: () => {}
+              });
           }
           this.loadEvents(u.email);
           this.cdr.detectChanges();
@@ -220,6 +231,27 @@ export class Profile {
       });
   }
 
+  get averageRating(): string {
+    if (this.myReviews.length === 0) return '0.0';
+    const avg = this.myReviews.reduce((sum, r) => sum + r.rating, 0) / this.myReviews.length;
+    return avg.toFixed(1);
+  }
+
+  get roundedAvg(): number {
+    return Math.round(parseFloat(this.averageRating));
+  }
+
+  loadMyReviews() {
+    if (this.reviewsLoaded) return;
+    this.apiService.getOrganizerReviews().subscribe({
+      next: (data: any[]) => {
+        this.myReviews = data;
+        this.reviewsLoaded = true;
+        this.cdr.detectChanges();
+      },
+      error: () => {}
+    });
+  }
 
 
 }

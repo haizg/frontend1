@@ -35,6 +35,8 @@ export class AdminDashboard implements OnInit{
   eventSearch: string = '';
   deactivationRequests: any[] = [];
   expandedAiRow: number | null = null;
+  flaggedReviews: any[] = [];
+  flaggedReviewsLoaded = false;
 
   // Detail panel
   selectedUser: any = null;
@@ -312,5 +314,31 @@ export class AdminDashboard implements OnInit{
   rejectDeactivation(org: any) {
     this.apiService.rejectDeactivation(org.id).subscribe({
       next: () => this.loadDeactivationRequests() });
+  }
+
+  loadFlaggedReviews() {
+    if (this.flaggedReviewsLoaded) return;
+    this.apiService.getFlaggedReviews().subscribe({
+      next: (data) => {
+        this.flaggedReviews = data;
+        this.flaggedReviewsLoaded = true;
+        this.cdr.detectChanges();
+      },
+      error: () => {}
+    });
+  }
+
+  deleteReview(review: any) {
+    this.modalService.openDeleteModal(
+      'Supprimer l\'avis',
+      `Supprimer l'avis de ${review.userPrenom} ${review.userNom} ?`,
+      () => this.apiService.deleteReview(review.id).subscribe({
+        next: () => {
+          // Remove from list without re-fetching
+          this.flaggedReviews = this.flaggedReviews.filter(r => r.id !== review.id);
+          this.cdr.detectChanges();
+        }
+      })
+    );
   }
 }

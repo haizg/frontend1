@@ -71,6 +71,8 @@ export class EventDetail implements OnInit {
   isUnregistering = false;
   unregisterError = '';
   unregisterSuccess = '';
+  myParticipantToken: string | null = null;
+  myAttendanceStatus: 'NOT_ATTENDED' | 'ATTENDED' | null = null;
 
 
   constructor(
@@ -144,6 +146,18 @@ export class EventDetail implements OnInit {
     });
   }
 
+  // New method: fetch the participant's own token
+  loadMyParticipantToken(eventId: number) {
+    this.apiService.getMyParticipantToken(eventId).subscribe({
+      next: (res: any) => {
+        this.myParticipantToken = res.token;
+        this.myAttendanceStatus = res.attended ? 'ATTENDED' : 'NOT_ATTENDED';
+        this.cdr.markForCheck();
+      },
+      error: () => {}
+    });
+  }
+
   updateCapacity() {
     if (!this.newCapacity || !this.event) return;
     if (this.newCapacity < this.verifiedParticipants.length) {
@@ -192,18 +206,6 @@ export class EventDetail implements OnInit {
     });
   }
 
-  checkIfParticipated() {
-    this.apiService.getMyParticipationsIds().subscribe({
-      next: (ids) => {
-        const eventId = this.event?.id;
-        this.hasAlreadyParticipated = eventId ? ids.includes(eventId) : false;
-        this.cdr.markForCheck();
-        if (this.event) this.checkCanReview(this.event.id);
-      },
-      error: (err) => console.error('Failed to check participation', err)
-    });
-  }
-
   toggleProgramImageExpand() {
     this.programImageExpanded = !this.programImageExpanded;
     this.cdr.markForCheck();
@@ -245,6 +247,10 @@ export class EventDetail implements OnInit {
       'Êtes-vous sûr de vouloir vous désinscrire de cet événement ? Cette action est irréversible.',
       () => this.unregister(eventId)
     );
+  }
+
+  get attendedParticipants(): any[] {
+    return this.participants.filter(p => p.attended);
   }
 
   get unconfirmedParticipants(): any[] {
@@ -303,6 +309,7 @@ export class EventDetail implements OnInit {
       error: () => {}
     });
   }
+
   get isEventPast(): boolean {
     if (!this.event) return false;
     const eventDate = new Date(this.event.date);
@@ -312,6 +319,21 @@ export class EventDetail implements OnInit {
     return eventDate < today;
   }
 
+  checkIfParticipated() {
+    this.apiService.getMyParticipationsIds().subscribe({
+      next: (ids) => {
+        const eventId = this.event?.id;
+        this.hasAlreadyParticipated = eventId ? ids.includes(eventId) : false;
+        this.cdr.markForCheck();
+        if (this.event) this.checkCanReview(this.event.id);
+        // If participant, fetch their token for the QR code
+        if (this.hasAlreadyParticipated && this.event) {
+          this.loadMyParticipantToken(this.event.id);
+        }
+      },
+      error: (err) => console.error('Failed to check participation', err)
+    });
+  }
 
   checkCanReview(eventId: number) {
     if (!this.isLoggedIn || this.userRole !== 'ROLE_USER') return;
@@ -370,10 +392,8 @@ export class EventDetail implements OnInit {
       next: () => {
         this.isUnregistering = false;
         this.unregisterSuccess = 'Désinscription réussie.';
-        // Remove from participatedEventIds so button updates
         this.hasAlreadyParticipated = false;
         this.cdr.detectChanges();
-        // Reload event to update participant count
         this.onEventUpdated();
       },
       error: (err: any) => {
@@ -384,6 +404,23 @@ export class EventDetail implements OnInit {
           this.unregisterError = 'Erreur lors de la désinscription. Réessayez.';
         }
         this.cdr.detectChanges();
+      }
+    });
+  }
+
+  flagReview(review: any) {
+    // Optimistic UI — show flagged immediately without waiting for server
+    review.justFlagged = true;
+    this.cdr.markForCheck();
+
+    this.apiService.flagReview(review.id).subscribe({
+      next: () => {
+        // Already updated optimistically
+      },
+      error: () => {
+        // Revert if failed
+        review.justFlagged = false;
+        this.cdr.markForCheck();
       }
     });
   }

@@ -1,0 +1,64 @@
+<app-navbar></app-navbar>
+
+<div class="scan-page">
+  <div class="scan-header">
+    <a [routerLink]="['/events', eventId]" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i>
+      Retour à l'événement
+    </a>
+    <h1><i class="fa-solid fa-qrcode"></i> Scanner les QR codes</h1>
+    <p class="scan-subtitle">Pointez la caméra sur le QR code du participant</p>
+  </div>
+
+  <div class="scan-container">
+
+    <!-- Camera view -->
+    <div class="camera-wrapper">
+      <video id="qr-video" class="camera-feed"></video>
+      <div class="scan-overlay">
+        <div class="scan-frame"></div>
+      </div>
+    </div>
+
+    <!-- Result panel -->
+    <div class="scan-result" *ngIf="scanResult">
+
+      <!-- Success -->
+      <div class="result-card result-success" *ngIf="scanResult.status === 'SUCCESS'">
+        <i class="fa-solid fa-circle-check"></i>
+        <h3>Présence enregistrée !</h3>
+        <p>{{ scanResult.email }}</p>
+        <button class="btn-next-scan" (click)="resetScan()">
+          <i class="fa-solid fa-qrcode"></i>
+          Scanner le suivant
+        </button>
+      </div>
+
+      <!-- Already scanned -->
+      <div class="result-card result-warning" *ngIf="scanResult.status === 'ALREADY_SCANNED'">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <h3>Déjà enregistré</h3>
+        <p>{{ scanResult.email }}</p>
+        <button class="btn-next-scan" (click)="resetScan()">
+          Scanner le suivant
+        </button>
+      </div>
+
+      <!-- Error -->
+      <div class="result-card result-error" *ngIf="scanResult.status === 'ERROR'">
+        <i class="fa-solid fa-circle-xmark"></i>
+        <h3>QR code invalide</h3>
+        <p>{{ scanResult.message }}</p>
+        <button class="btn-next-scan" (click)="resetScan()">
+          Réessayer
+        </button>
+      </div>
+    </div>
+
+    <div class="scan-error" *ngIf="scanError">
+      <i class="fa-solid fa-camera-slash"></i>
+      <p>{{ scanError }}</p>
+    </div>
+
+  </div>
+</div>

@@ -509,3 +509,127 @@
   color: #555;
   background: #f5f5f5;
 }
+
+.btn-public-profile {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  padding: 10px 20px;
+  background: transparent;
+  color: #A53A6B;
+  border: 1.5px solid #A53A6B;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-public-profile:hover {
+  background: #A53A6B;
+  color: white;
+}
+
+.reviews-summary {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.reviews-avg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: #fdf5f8;
+  border: 1px solid #f0dde7;
+  border-radius: 16px;
+  padding: 24px 40px;
+}
+
+.avg-number {
+  font-size: 48px;
+  font-weight: 800;
+  color: #A53A6B;
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.avg-stars { display: flex; gap: 4px; }
+
+.avg-count {
+  font-size: 13px;
+  color: #888;
+}
+
+.star-filled { color: #f59e0b; }
+.star-empty  { color: #d1d5db; }
+
+.no-reviews {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+}
+
+.no-reviews i {
+  font-size: 32px;
+  color: #ddd;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review-card {
+  background: #fff;
+  border: 1px solid #f0dde7;
+  border-radius: 12px;
+  padding: 18px 20px;
+  transition: box-shadow 0.2s;
+}
+
+.review-card:hover {
+  box-shadow: 0 4px 16px rgba(165, 58, 107, 0.08);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.review-event-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #A53A6B;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.review-stars { display: flex; gap: 3px; font-size: 13px; }
+
+.review-comment {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.6;
+  margin: 0 0 10px;
+  font-style: italic;
+}
+
+.review-author {
+  font-size: 12px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}

@@ -10,6 +10,11 @@
       <button [class.active]="activeTab === 'events'" (click)="activeTab = 'events'">Evénements</button>
       <button [class.active]="activeTab === 'users'" (click)="activeTab = 'users'">Participants</button>
       <button [class.active]="activeTab === 'organisateurs'" (click)="activeTab = 'organisateurs'">Organisateurs</button>
+      <button [class.active]="activeTab === 'flagged-reviews'" (click)="activeTab = 'flagged-reviews'; loadFlaggedReviews()">Avis signalés
+        <span class="tab-badge" *ngIf="flaggedReviews.length > 0">
+          {{ flaggedReviews.length }}
+        </span>
+      </button>
     </nav>
     <div class="sidebar-footer">
       <p class="admin-name">ADMIN INVITINI</p>
@@ -444,7 +449,55 @@
       <div *ngIf="organisateurs.length === 0" class="empty-state">Aucun organisateur.</div>
     </div>
 
+
+    <!-- FLAGGED REVIEWS -->
+    <div *ngIf="activeTab === 'flagged-reviews'" class="tab-content">
+      <h2><i class="fa-solid fa-flag"></i> Avis signalés</h2>
+
+      <div *ngIf="flaggedReviews.length === 0" class="empty-state">
+        <i class="fa-regular fa-flag"></i>
+        <p>Aucun avis signalé pour le moment.</p>
+      </div>
+
+      <table *ngIf="flaggedReviews.length > 0" class="admin-table">
+        <thead>
+        <tr>
+          <th>Événement</th>
+          <th>Auteur</th>
+          <th>Note</th>
+          <th>Commentaire</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let review of flaggedReviews">
+          <td>
+            <a [routerLink]="['/events', review.eventId]" class="event-link">
+              {{ review.eventTitle }}
+            </a>
+          </td>
+          <td>{{ review.userPrenom }} {{ review.userNom }}</td>
+          <td>
+          <span class="stars-inline">
+            <i *ngFor="let s of [1,2,3,4,5]" class="fa-solid fa-star"
+               [class.star-on]="s <= review.rating"
+               [class.star-off]="s > review.rating"></i>
+          </span>
+          </td>
+          <td class="review-comment-cell">{{ review.comment || '—' }}</td>
+          <td>
+            <button class="btn btn-delete" (click)="deleteReview(review)">
+              <i class="fa-solid fa-trash btn-delete-sm"></i> Supprimer
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </main>
+
+
+
 
   <!-- DETAIL SIDE PANEL -->
   <div class="detail-panel" *ngIf="showDetailPanel">

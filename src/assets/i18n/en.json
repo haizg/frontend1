@@ -97,6 +97,10 @@
     "confirmpassword": "Confirm Password",
     "modify": "Update",
     "loginrequired": "Please log in to view your profile.",
+    "myreviews": "Reviews received",
+    "reviews_count": "reviews",
+    "noreviews": "No reviews received for your events yet.",
+    "viewpublic": "Public view",
     "deactivate": {
       "title": "Deactivate my account",
       "zone": "Danger zone",
@@ -157,7 +161,10 @@
     "eventpast": "This event has ended.",
     "reviewstats": "Reviews received",
     "averagerating": "Average rating",
-    "totalreviews": "Total reviews"
+    "totalreviews": "Total reviews",
+    "unregistering": "Canceling..",
+    "unregister": "Cancel participation",
+    "yourticket": "Your ticket"
   },
   "createevent": {
     "title": " Create Event",

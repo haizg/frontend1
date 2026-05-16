@@ -5,12 +5,32 @@
     <h1 class="page-title">{{ 'events.allevents' | translate }}</h1>
 
     <div class="events-filters">
+      <div class="search-wrapper">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input
+          type="text"
+          class="search-input"
+          [placeholder]="'events.searchplaceholder' | translate"
+          [value]="searchQuery"
+          (input)="onSearchChange($any($event.target).value)"
+          [disabled]="isLoadingEvents">
+        <button *ngIf="searchQuery" class="search-clear" (click)="clearSearch()" type="button">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
       <select #categorySelect (change)="onCategoryChange(categorySelect.value)" [disabled]="isLoadingEvents">
         <option value="all">{{ 'events.ttcategories' | translate }}</option>
         <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
       </select>
+
       <input type="date" #dateInput (change)="onDateChange(dateInput.value)" [disabled]="isLoadingEvents">
     </div>
+
+    <!-- Results count -->
+    <p class="results-count" *ngIf="!isLoadingEvents && searchQuery">
+      {{ filteredEvents.length }} résultat(s) pour "{{ searchQuery }}"
+    </p>
 
     <div *ngIf="isLoadingEvents" class="skeleton-grid">
       <div class="skeleton-card" *ngFor="let item of [1,2,3,4,5,6,7,8]">

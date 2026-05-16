@@ -135,9 +135,9 @@
           </div>
         </div>
         <div class="capacity-bar-container">
-          <div class="capacity-bar-label">
-            <span>{{ 'eventdetail.filling' | translate }}</span>
-            <span>{{ totalPeople }}/{{ event!.maxParticipants }}</span>
+          <div class="stat-card">
+            <span class="stat-number">{{ capacityPercentage }}%</span>
+            <span class="stat-label">{{ 'eventdetail.fillrate' | translate }}</span>
           </div>
           <div class="capacity-bar">
             <div class="capacity-bar-fill"

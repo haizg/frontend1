@@ -11,7 +11,7 @@
       <div class="form-grid">
 
         <div class="form-group full-width">
-          <label>{{ 'createevent.event_title' | translate }} *</label>
+          <label>{{ 'createevent.event_title' | translate }} </label>
           <input
             type="text"
             formControlName="title"
@@ -24,7 +24,7 @@
         </div>
 
         <div class="form-group full-width">
-          <label>{{ 'createevent.description' | translate }} *</label>
+          <label>{{ 'createevent.description' | translate }} </label>
           <textarea
             formControlName="description"
             [placeholder]="'createevent.description_placeholder' | translate"
@@ -127,7 +127,7 @@
         </div>
 
         <div class="form-group">
-          <label>{{ 'createevent.category' | translate }} *</label>
+          <label>{{ 'createevent.category' | translate }} </label>
           <select formControlName="category" class="form-input" [disabled]="isLoading">
             <option value="">{{ 'createevent.select_category' | translate }}</option>
             <option value="SPORT">{{ 'createevent.category_sport' | translate }}</option>
@@ -140,7 +140,7 @@
         </div>
 
         <div class="form-group">
-          <label>{{ 'createevent.date' | translate }} *</label>
+          <label>{{ 'createevent.date' | translate }} </label>
           <input
             type="date"
             formControlName="date"
@@ -150,7 +150,7 @@
         </div>
 
         <div class="form-group">
-          <label>{{ 'createevent.time' | translate }} *</label>
+          <label>{{ 'createevent.time' | translate }} </label>
           <input
             type="time"
             formControlName="time"
@@ -159,7 +159,7 @@
         </div>
 
         <div class="form-group">
-          <label>{{ 'createevent.location' | translate }} *</label>
+          <label>{{ 'createevent.location' | translate }} </label>
           <input
             type="text"
             formControlName="location"

@@ -46,6 +46,7 @@ export class EventsPage {
   categories: string[] = [];
   selectedCategory: string = 'all';
   selectedDate: string = '';
+  searchQuery: string = '';
 
   constructor(
     private eventService: EventService,
@@ -117,19 +118,35 @@ export class EventsPage {
   }
 
 
-  applyFilters() {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
 
-      this.filteredEvents = this.allEvents.filter(event => {
-        const eventDate = new Date(event.date);
-        eventDate.setHours(0, 0, 0, 0);
-        const matchesCategory = this.selectedCategory === 'all' || event.category === this.selectedCategory;
-        const matchesDate = !this.selectedDate || event.date === this.selectedDate;
-        const isUpcoming = eventDate >= today;
-        return matchesCategory && matchesDate && isUpcoming;
-      });
-    }
+  applyFilters() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const q = this.searchQuery.trim().toLowerCase();
+
+    this.filteredEvents = this.allEvents.filter(event => {
+      const eventDate = new Date(event.date);
+      eventDate.setHours(0, 0, 0, 0);
+      const matchesCategory = this.selectedCategory === 'all' || event.category === this.selectedCategory;
+      const matchesDate = !this.selectedDate || event.date === this.selectedDate;
+      const isUpcoming = eventDate >= today;
+      const matchesSearch = !q ||
+        event.title?.toLowerCase().includes(q) ||
+        event.location?.toLowerCase().includes(q) ||
+        event.organisateurEmail?.toLowerCase().includes(q);
+      return matchesCategory && matchesDate && isUpcoming && matchesSearch;
+    });
+  }
+
+  onSearchChange(value: string) {
+    this.searchQuery = value;
+    this.applyFilters();
+  }
+
+  clearSearch() {
+    this.searchQuery = '';
+    this.applyFilters();
+  }
 
   loadEvents() {
     this.isLoadingEvents = true;
@@ -228,4 +245,6 @@ export class EventsPage {
     this.selectedDate = date;
     this.applyFilters();
   }
+
+
 }

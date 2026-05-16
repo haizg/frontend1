@@ -20,23 +20,25 @@ form div {
   display: flex;
   align-items: center;
   margin-bottom: 15px;
-  width: 75%;
+  width: 80%;
 }
 
 form label {
-  width: 160px;
+  width: 80px;
   flex-shrink: 0;
   text-align: left;
 }
 
 form input, form select {
   flex: 1;
-  padding: 8px;
+  padding: 8px 12px;
   border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 14px;
   box-sizing: border-box;
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 form button {

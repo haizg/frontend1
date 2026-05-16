@@ -25,7 +25,8 @@
     "supprimer": "Delete",
     "alreadyparticipated": "Already participated",
     "consulter": "View my event",
-    "past": "Past"
+    "past": "Past",
+    "searchplaceholder": "Search by title, location, organizer..."
 
   },
   "home": {

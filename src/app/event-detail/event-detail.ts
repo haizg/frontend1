@@ -146,7 +146,6 @@ export class EventDetail implements OnInit {
     });
   }
 
-  // New method: fetch the participant's own token
   loadMyParticipantToken(eventId: number) {
     this.apiService.getMyParticipantToken(eventId).subscribe({
       next: (res: any) => {
@@ -275,9 +274,8 @@ export class EventDetail implements OnInit {
 
   get capacityPercentage(): number {
     if (!this.event?.maxParticipants) return 0;
-    return Math.min(100, Math.round(
-      (this.verifiedParticipants.length / this.event.maxParticipants) * 100
-    ));
+    const pct = (this.verifiedParticipants.length / this.event.maxParticipants) * 100;
+    return Math.min(100, parseFloat(pct.toFixed(1)));
   }
 
   get isAdmin(): boolean {

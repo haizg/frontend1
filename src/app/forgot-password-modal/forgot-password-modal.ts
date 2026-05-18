@@ -2,11 +2,11 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../services/api.service';
-
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-forgot-password-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './forgot-password-modal.html',
   styleUrls: ['./forgot-password-modal.css']
 })
@@ -18,7 +18,7 @@ export class ForgotPasswordModal {
   successMessage = '';
   email = '';
 
-  constructor(private apiService : ApiService) {}
+  constructor(private apiService : ApiService, private translate: TranslateService) {}
 
   open() {
     this.isVisible = true;
@@ -35,19 +35,18 @@ export class ForgotPasswordModal {
     this.successMessage = '';
     this.closeModal.emit();
   }
-
-  onSubmit() {
+onSubmit() {
     this.errorMessage = '';
     this.successMessage = '';
 
     if (!this.email || this.email.trim() === '') {
-      this.errorMessage = 'Veuillez entrer votre email';
+      this.errorMessage = this.translate.instant('forgotpassword.error_empty');
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(this.email)) {
-      this.errorMessage = 'Format email invalide';
+      this.errorMessage = this.translate.instant('forgotpassword.error_format');
       return;
     }
 
@@ -55,27 +54,16 @@ export class ForgotPasswordModal {
 
     this.apiService.forgotPassword(this.email).subscribe({
       next: (response: any) => {
-        console.log('Password reset email sent:', response);
-
-        this.successMessage = response.message || 'Un email de réinitialisation a été envoyé';
+        this.successMessage = response.message || this.translate.instant('forgotpassword.success');
         this.isLoading = false;
-
         this.email = '';
-
         setTimeout(() => {
           this.close();
         }, 3000);
       },
-
       error: (error) => {
-        console.error('Error sending password reset:', error);
         this.isLoading = false;
-
-        if (error.error?.error) {
-          this.errorMessage = error.error.error;
-        } else {
-          this.errorMessage = 'Erreur lors de l\'envoi de l\'email';
-        }
+        this.errorMessage = error.error?.error || this.translate.instant('forgotpassword.error_generic');
       }
     });
   }

@@ -402,7 +402,17 @@
   cursor: pointer;
   font-weight: 600;
 }
+.toggle-btn.reject {
+  background: #fdecea;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+  margin-left: 4px;
+}
 
+.toggle-btn.reject:hover {
+  background: #c62828;
+  color: white;
+}
 .btn-cancel {
   background: #f0f0f0;
   color: #333;

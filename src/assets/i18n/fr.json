@@ -167,7 +167,8 @@
     "unregistering": "Désinscription...",
     "unregister": "Se désinscrire",
     "yourticket": "Votre ticket",
-    "scanattendance": "Scanner les présences"
+    "scanattendance": "Scanner les présences",
+    "attendedParticipants": "Présents"
   },
   "createevent": {
     "title": " Créer un Événement",
@@ -391,7 +392,10 @@
     "mdpcorrespondent": "Les mots de passe correspondent",
     "redirecthome": "Redirection vers la page d'accueil...",
     "returnacceuil": "← Retour à l'accueil",
-    "loading": "Réinitialisation..."
+    "loading": "Réinitialisation...",
+    "minchars": "Au moins 6 caractères",
+    "placeholder_new": "Minimum 6 caractères",
+    "placeholder_confirm": "Re-entrez le mot de passe"
   },
   "howitworks": {
     "tag": "Simple & rapide",
@@ -421,5 +425,19 @@
     "upcomingevents": "Événements à venir",
     "pastevents": "Événements passés",
     "noevent": "Cet organisateur n'a pas encore d'événements."
+  },
+  "forgotpassword": {
+    "title": "Mot de passe oublié",
+    "infotext": "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+    "email": "Email",
+    "placeholder": "votre@email.com",
+    "cancel": "Annuler",
+    "send": "Envoyer le lien",
+    "sending": "Envoi...",
+    "error_empty": "Veuillez entrer votre email",
+    "error_format": "Format email invalide",
+    "error_generic": "Erreur lors de l'envoi de l'email",
+    "success": "Un email de réinitialisation a été envoyé"
   }
+
 }

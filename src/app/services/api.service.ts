@@ -159,6 +159,12 @@ export class ApiService {
       { headers: this.getHeaders() }
     );
   }
+rejectEvent(eventId: number): Observable<any> {
+  return this.http.delete(
+    `${this.base}/api/admin/events/${eventId}/reject`,
+    { headers: this.getHeaders() }
+  );
+}
 
   toggleVerifyOrganisateur(id: number): Observable<any> {
     return this.http.put(

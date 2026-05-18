@@ -166,7 +166,8 @@
     "unregistering": "Canceling..",
     "unregister": "Cancel participation",
     "yourticket": "Your ticket",
-    "scanattendance": "Scan attendance"
+    "scanattendance": "Scan attendance",
+    "attendedParticipants": "Attended"
   },
   "createevent": {
     "title": " Create Event",
@@ -391,7 +392,10 @@
     "mdpcorrespondent": "Passwords match",
     "redirecthome": "Redirecting to the home page...",
     "returnacceuil": "← Back to home",
-    "loading": "Resetting..."
+    "loading": "Resetting...",
+    "minchars": "At least 6 characters",
+    "placeholder_new": "Minimum 6 characters",
+    "placeholder_confirm": "Re-enter your password"
   },
   "howitworks": {
     "tag": "Simple & fast",
@@ -421,5 +425,18 @@
     "upcomingevents": "Upcoming Events",
     "pastevents": "Past Events",
     "noevent": "This organizer has no events yet."
+  },
+  "forgotpassword": {
+    "title": "Forgot password",
+    "infotext": "Enter your email address and we will send you a link to reset your password.",
+    "email": "Email",
+    "placeholder": "your@email.com",
+    "cancel": "Cancel",
+    "send": "Send link",
+    "sending": "Sending...",
+    "error_empty": "Please enter your email",
+    "error_format": "Invalid email format",
+    "error_generic": "Error sending the email",
+    "success": "A password reset email has been sent"
   }
 }

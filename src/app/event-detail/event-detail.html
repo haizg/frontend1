@@ -97,7 +97,7 @@
         <button (click)="openEditEventModal()" class="btn-edit">{{ 'eventdetail.modifier' | translate }}</button>
         <a [routerLink]="['/events', event.id, 'scan']" class="btn-scan">
           <i class="fa-solid fa-qrcode"></i>
-          Scanner les présences
+          {{ 'eventdetail.scanattendance' | translate }}
         </a>
       </div>
 

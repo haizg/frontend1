@@ -166,7 +166,8 @@
     "totalreviews": "Total avis",
     "unregistering": "Désinscription...",
     "unregister": "Se désinscrire",
-    "yourticket": "Votre ticket"
+    "yourticket": "Votre ticket",
+    "scanattendance": "Scanner les présences"
   },
   "createevent": {
     "title": " Créer un Événement",

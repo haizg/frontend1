@@ -165,7 +165,8 @@
     "totalreviews": "Total reviews",
     "unregistering": "Canceling..",
     "unregister": "Cancel participation",
-    "yourticket": "Your ticket"
+    "yourticket": "Your ticket",
+    "scanattendance": "Scan attendance"
   },
   "createevent": {
     "title": " Create Event",

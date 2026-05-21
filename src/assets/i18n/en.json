@@ -438,5 +438,23 @@
     "error_format": "Invalid email format",
     "error_generic": "Error sending the email",
     "success": "A password reset email has been sent"
+  },
+  "confirmation": {
+    "loading_title": "Verifying…",
+    "loading_text": "Please wait.",
+    "success_title": "Participation confirmed!",
+    "success_text": "Your registration has been successfully confirmed. See you soon on Invitini!",
+    "error_title": "Invalid link",
+    "error_text": "This confirmation link is invalid or has already been used.",
+    "backhome": "Back to home"
+  },
+  "popup": {
+    "title": "Event Registration",
+    "email": "Email",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "cancel": "Cancel",
+    "success": "Registration recorded! Please confirm your participation by clicking the link sent to your email.",
+    "error": "Something went wrong. Please try again."
   }
 }

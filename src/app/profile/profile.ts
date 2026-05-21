@@ -62,8 +62,30 @@ export class Profile {
     if (isPlatformBrowser(this.platformId)) {
       const userStr = localStorage.getItem('user');
       if (userStr) {
-        this.userService.setUser(JSON.parse(userStr));
+        const parsed = JSON.parse(userStr);
+        this.user = parsed;
+        this.isOrganisateur = parsed.role === 'ROLE_ORGANISATEUR';
+        this.editNom = parsed.nom;
+        this.editPrenom = parsed.prenom;
+        this.editEmail = parsed.email;
+        this.editNomOrganisation = parsed.nomOrganisation;
+        this.cdr.detectChanges();
+
+        // start loading immediately, don't wait for observable
+        this.loadEvents(parsed.email);
+
+        if (this.isOrganisateur) {
+          this.checkDeactivationStatus();
+          this.apiService.getMyOrganisateurId().subscribe({
+            next: (res) => { this.organisateurId = res.id; this.cdr.detectChanges(); },
+            error: () => {}
+          });
+        this.loadMyReviews();
+        }
+
+        this.userService.setUser(parsed);
       }
+
       this.userService.currentUser$.subscribe(u => {
         if (u) {
           this.user = u;
@@ -72,18 +94,6 @@ export class Profile {
           this.editPrenom = u.prenom;
           this.editEmail = u.email;
           this.editNomOrganisation = u.nomOrganisation;
-          if (this.isOrganisateur) {
-            this.checkDeactivationStatus();
-            this.apiService.getMyOrganisateurId().subscribe({
-                next: (res) => {
-                  this.organisateurId = res.id;
-                  console.log("aaaaaaaaaaaaaaaaaaaaaaad");
-                  this.cdr.detectChanges();
-                },
-                error: () => {}
-              });
-          }
-          this.loadEvents(u.email);
           this.cdr.detectChanges();
         }
       });
@@ -242,7 +252,6 @@ export class Profile {
   }
 
   loadMyReviews() {
-    if (this.reviewsLoaded) return;
     this.apiService.getOrganizerReviews().subscribe({
       next: (data: any[]) => {
         this.myReviews = data;

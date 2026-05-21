@@ -86,3 +86,12 @@ form button:hover {
 .error-message {
   color: #c0392b;
 }
+form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+form button.cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

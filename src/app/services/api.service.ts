@@ -240,7 +240,7 @@ rejectEvent(eventId: number): Observable<any> {
   /*get organizer reviews*/
   getOrganizerReviews(): Observable<any[]> {
     return this.http.get<any[]>(
-      `${this.base}/api/user/my-reviews`,
+      `${this.base}/api/events/my-reviews`,
       { headers: this.getHeaders() }
     );
   }

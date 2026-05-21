@@ -255,12 +255,12 @@
     "cancel": "Annuler",
     "save": "Enregistrer",
     "updating": "Mise à jour...",
-    "error_image_format": "Unsupported format. Use JPEG, PNG, WebP or GIF.",
-    "error_image_size": "Image too large (max 5 MB).",
-    "error_upload_failed": "Upload failed. Please check your connection.",
-    "error_form_invalid": "Please fill all required fields correctly.",
-    "error_update": "Failed to update event.",
-    "success": "Event updated successfully!",
+    "error_image_format": "Format non supporté. Utilisez JPEG, PNG, WebP ou GIF.",
+    "error_image_size": "Image trop grande (max 5 Mo).",
+    "error_upload_failed": "Échec de l'envoi. Vérifiez votre connexion.",
+    "error_form_invalid": "Veuillez remplir correctement tous les champs obligatoires.",
+    "error_update": "Échec de la mise à jour de l'événement.",
+    "success": "Événement mis à jour avec succès !",
     "program_type_text":             "Texte",
     "program_type_image":            "Image",
     "program_image_choose":          "Choisir une image de programme",
@@ -438,6 +438,24 @@
     "error_format": "Format email invalide",
     "error_generic": "Erreur lors de l'envoi de l'email",
     "success": "Un email de réinitialisation a été envoyé"
+  },
+  "confirmation": {
+    "loading_title": "Vérification en cours…",
+    "loading_text": "Veuillez patienter.",
+    "success_title": "Participation confirmée !",
+    "success_text": "Votre inscription a été confirmée avec succès. À bientôt sur Invitini !",
+    "error_title": "Lien invalide",
+    "error_text": "Ce lien de confirmation est invalide ou a déjà été utilisé.",
+    "backhome": "Retour à l'accueil"
+  },
+  "popup": {
+    "title": "Inscription à l'événement",
+    "email": "Email",
+    "submit": "Soumettre",
+    "submitting": "Envoi en cours...",
+    "cancel": "Annuler",
+    "success": "Inscription enregistrée ! Veuillez confirmer votre participation en cliquant sur le lien envoyé à votre email.",
+    "error": "Une erreur est survenue. Veuillez réessayer."
   }
 
 }

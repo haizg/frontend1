@@ -91,7 +91,13 @@ export class EventDetail implements OnInit {
     if (!isPlatformBrowser(this.platformId)) return;
 
     const userStr = localStorage.getItem('user');
-    if (userStr) this.userService.setUser(JSON.parse(userStr));
+     if (userStr) {
+        const parsed = JSON.parse(userStr);
+        this.isLoggedIn = true;
+        this.userRole   = parsed.role;
+        this.userEmail  = parsed.email;
+        this.userService.setUser(parsed);
+      }
 
     this.userService.currentUser$.subscribe(user => {
       if (user) {
@@ -110,6 +116,7 @@ export class EventDetail implements OnInit {
     const rawId = this.route.snapshot.paramMap.get('id');
     if (rawId) {
       const id = Number(rawId);
+       if (this.isLoggedIn) this.checkIfParticipated();
       this.eventService.getEventById(id).subscribe({
         next: (data) => {
           this.event = data;

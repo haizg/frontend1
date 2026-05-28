@@ -28,7 +28,8 @@ export class Login {
 
   message = 'Loading...';
   errorMessage='';
-
+  email="";
+  password="";
 
   constructor(private http: HttpClient,
               private router :Router,
@@ -37,12 +38,11 @@ export class Login {
               private userService: UserService,
               private apiService: ApiService) {}
 
-  email="";
-  password="";
 
   close(){
     this.modalService.closeLoginModal();
   }
+
   openForgotPassword() {
       this.forgotPasswordModal.open();
   }
@@ -53,6 +53,7 @@ export class Login {
       email:this.email,
       password:this.password,
     };
+
     this.apiService.login(this.email, this.password).subscribe({
         next:(token)=> {
           localStorage.setItem('token',token);
@@ -95,13 +96,13 @@ export class Login {
                   if (err.error?.error === 'ACCOUNT_DEACTIVATED') {
                       this.errorMessage = 'Ce compte a été désactivé. Contactez support@invitini.tn pour le réactiver.';
                   }
-                }
-              });
-          }
+        }
+      });
+    }
 
 
-      goToSignup() {
-        this.modalService.closeLoginModal();
-        this.modalService.openSignupModal();
-      }
+    goToSignup() {
+      this.modalService.closeLoginModal();
+      this.modalService.openSignupModal();
+    }
 }

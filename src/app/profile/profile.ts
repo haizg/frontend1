@@ -70,10 +70,7 @@ export class Profile {
         this.editEmail = parsed.email;
         this.editNomOrganisation = parsed.nomOrganisation;
         this.cdr.detectChanges();
-
-        // start loading immediately, don't wait for observable
         this.loadEvents(parsed.email);
-
         if (this.isOrganisateur) {
           this.checkDeactivationStatus();
           this.apiService.getMyOrganisateurId().subscribe({
@@ -126,6 +123,17 @@ export class Profile {
           error: (err) => console.error('Failed to load events', err)
         });
     }
+  }
+
+  loadMyReviews() {
+    this.apiService.getOrganizerReviews().subscribe({
+      next: (data: any[]) => {
+        this.myReviews = data;
+        this.reviewsLoaded = true;
+        this.cdr.detectChanges();
+      },
+      error: () => {}
+    });
   }
 
   updateProfile() {
@@ -250,17 +258,5 @@ export class Profile {
   get roundedAvg(): number {
     return Math.round(parseFloat(this.averageRating));
   }
-
-  loadMyReviews() {
-    this.apiService.getOrganizerReviews().subscribe({
-      next: (data: any[]) => {
-        this.myReviews = data;
-        this.reviewsLoaded = true;
-        this.cdr.detectChanges();
-      },
-      error: () => {}
-    });
-  }
-
 
 }

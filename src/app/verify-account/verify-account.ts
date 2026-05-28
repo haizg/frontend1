@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 
-
 @Component({
   selector: 'app-verify-account',
   standalone: true,
@@ -35,7 +34,6 @@ export class VerifyAccount implements OnInit {
       this.verifyToken(token);
     });
   }
-
 
   verifyToken(token: string) {
     this.isVerifying = true;

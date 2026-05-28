@@ -74,7 +74,6 @@ export class EventDetail implements OnInit {
   myParticipantToken: string | null = null;
   myAttendanceStatus: 'NOT_ATTENDED' | 'ATTENDED' | null = null;
 
-
   constructor(
     private route: ActivatedRoute,
     private eventService: EventService,
@@ -97,7 +96,7 @@ export class EventDetail implements OnInit {
         this.userRole   = parsed.role;
         this.userEmail  = parsed.email;
         this.userService.setUser(parsed);
-      }
+     }
 
     this.userService.currentUser$.subscribe(user => {
       if (user) {
@@ -164,6 +163,16 @@ export class EventDetail implements OnInit {
     });
   }
 
+  loadReviews(eventId: number) {
+      this.apiService.getEventReviews(eventId).subscribe({
+        next: (data: any[]) => {
+          this.reviews = data;
+          this.cdr.markForCheck();
+        },
+        error: () => {}
+      });
+    }
+
   updateCapacity() {
     if (!this.newCapacity || !this.event) return;
     if (this.newCapacity < this.verifiedParticipants.length) {
@@ -228,9 +237,9 @@ export class EventDetail implements OnInit {
 
   openEditEventModal() {
     if (this.event) {
-      const isApproved     = !!(this.event as any).approved;
+      const isApproved = !!(this.event as any).approved;
       const confirmedCount = this.verifiedParticipants.length;
-      const shouldLock     = isApproved && this.isMyEvent && !this.isAdmin;
+      const shouldLock = isApproved && this.isMyEvent && !this.isAdmin;
       this.editEventModal.open(this.event, shouldLock, confirmedCount, this.isAdmin);
     }
   }
@@ -245,6 +254,15 @@ export class EventDetail implements OnInit {
     } catch {
       return false;
     }
+  }
+
+  get isEventToday(): boolean {
+    if (!this.event) return false;
+    const eventDate = new Date(this.event.date);
+    eventDate.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return eventDate.getTime() === today.getTime();
   }
 
   openUnregisterConfirm(eventId: number) {
@@ -305,16 +323,6 @@ export class EventDetail implements OnInit {
 
   get roundedAvg(): number { return Math.round(parseFloat(this.averageRating)); }
 
-  loadReviews(eventId: number) {
-    this.apiService.getEventReviews(eventId).subscribe({
-      next: (data: any[]) => {
-        this.reviews = data;
-        this.cdr.markForCheck();
-      },
-      error: () => {}
-    });
-  }
-
   get isEventPast(): boolean {
     if (!this.event) return false;
     const eventDate = new Date(this.event.date);
@@ -331,7 +339,6 @@ export class EventDetail implements OnInit {
         this.hasAlreadyParticipated = eventId ? ids.includes(eventId) : false;
         this.cdr.markForCheck();
         if (this.event) this.checkCanReview(this.event.id);
-        // If participant, fetch their token for the QR code
         if (this.hasAlreadyParticipated && this.event) {
           this.loadMyParticipantToken(this.event.id);
         }
@@ -414,16 +421,12 @@ export class EventDetail implements OnInit {
   }
 
   flagReview(review: any) {
-    // Optimistic UI — show flagged immediately without waiting for server
     review.justFlagged = true;
     this.cdr.markForCheck();
 
     this.apiService.flagReview(review.id).subscribe({
-      next: () => {
-        // Already updated optimistically
-      },
+      next: () => {},
       error: () => {
-        // Revert if failed
         review.justFlagged = false;
         this.cdr.markForCheck();
       }

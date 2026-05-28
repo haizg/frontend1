@@ -45,15 +45,11 @@ export class ApiService {
   }
 
 
-
-
   /*  LOAD DATA */
-  /*get all events*/
   getEvents(): Observable<EventModel[]> {
     return this.http.get<EventModel[]>(`${this.base}/api/events`);
   }
 
-  /*get list of my participations*/
   getMyParticipationsIds(): Observable<number[]> {
     return this.http.get<number[]>(
       `${this.base}/api/user/my-participations`,
@@ -61,7 +57,6 @@ export class ApiService {
       );
   }
 
-  /*get list of participants in an event*/
   getEventParticipants(eventId: number): Observable<any[]> {
     return this.http.get<any[]>
     (`${this.base}/api/events/${eventId}/participants`,
@@ -69,7 +64,6 @@ export class ApiService {
     );
   }
 
-  /*get event by id*/
   getEventById(id:number): Observable<EventModel>{
     return  this.http.get<EventModel>(`${this.base}/api/events/${id}`,
       {headers: this.getHeaders()}
@@ -81,9 +75,7 @@ export class ApiService {
 
 
 
-
   /*ADMIN ACTIONS*/
-
   deleteEvent(eventId: number) : Observable<void> {
     return this.http.delete<void>(
       `${this.base}/api/admin/${eventId}`,
@@ -159,12 +151,13 @@ export class ApiService {
       { headers: this.getHeaders() }
     );
   }
-rejectEvent(eventId: number): Observable<any> {
-  return this.http.delete(
-    `${this.base}/api/admin/events/${eventId}/reject`,
-    { headers: this.getHeaders() }
-  );
-}
+
+  rejectEvent(eventId: number): Observable<any> {
+    return this.http.delete(
+      `${this.base}/api/admin/events/${eventId}/reject`,
+      { headers: this.getHeaders() }
+    );
+  }
 
   toggleVerifyOrganisateur(id: number): Observable<any> {
     return this.http.put(
@@ -206,10 +199,7 @@ rejectEvent(eventId: number): Observable<any> {
 
 
 
-
   /*ORGANIZER ACTIONS*/
-
-  /* create event */
   createEvent(eventData: any): Observable<any> {
     return this.http.post(
       `${this.base}/api/events`,
@@ -218,7 +208,6 @@ rejectEvent(eventId: number): Observable<any> {
     );
   }
 
-  /*update capacity for organizer*/
   updateCapacity(eventId: number, maxParticipants: number): Observable<void> {
     return this.http.put<void>(
       `${this.base}/api/events/${eventId}/capacity`,
@@ -227,7 +216,6 @@ rejectEvent(eventId: number): Observable<any> {
      );
   }
 
-  /*update capacity and program for organizer*/
   updateEventCapacityAndProgram(eventId: number, data: { maxParticipants: number; program: string }): Observable<void> {
     return this.http.put<void>(
       `${this.base}/api/events/${eventId}/capacity-and-program`,
@@ -236,8 +224,6 @@ rejectEvent(eventId: number): Observable<any> {
     );
   }
 
-
-  /*get organizer reviews*/
   getOrganizerReviews(): Observable<any[]> {
     return this.http.get<any[]>(
       `${this.base}/api/events/my-reviews`,
@@ -245,14 +231,12 @@ rejectEvent(eventId: number): Observable<any> {
     );
   }
 
-  /*get org id*/
   getMyOrganisateurId(): Observable<{ id: number }> {
     return this.http.get<{ id: number }>(
       `${this.base}/api/user/my-organizer-id`,
       { headers: this.getHeaders() }
     );
   }
-
 
 
 
@@ -273,14 +257,13 @@ rejectEvent(eventId: number): Observable<any> {
     ) as Observable<string>;
   }
 
-  /* UPLOAD IMAGE */
   uploadImage(file: File): Observable<{ url: string }> {
     const formData = new FormData();
     formData.append('file', file);
     return this.http.post<{ url: string }>(`${this.base}/api/upload`, formData);
   }
 
-  /* PASSWORD */
+  /*PASSWORD*/
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.base}/api/auth/forgot-password`, { email });
   }
@@ -358,6 +341,7 @@ rejectEvent(eventId: number): Observable<any> {
       { headers: this.getHeaders() }
     );
   }
+
 
 
   /* INTEGRATION D'AI */
@@ -456,8 +440,8 @@ rejectEvent(eventId: number): Observable<any> {
     );
   }
 
-/*QR CODE*/
-  // Get participant's own QR token for an event
+  /*QR CODE*/
+  // Get participant's QR token for an event
   getMyParticipantToken(eventId: number): Observable<any> {
     return this.http.get(
       `${this.base}/api/events/${eventId}/my-ticket`,
@@ -465,7 +449,7 @@ rejectEvent(eventId: number): Observable<any> {
     );
   }
 
-  // Scan a QR code token (used by organizer)
+  // Scan a QR code
   scanQrToken(token: string): Observable<any> {
     return this.http.get(
       `${this.base}/api/events/scan?token=${token}`,
@@ -473,6 +457,7 @@ rejectEvent(eventId: number): Observable<any> {
     );
   }
 
+  /*FLAG REVIEW*/
   flagReview(reviewId: number): Observable<any> {
     return this.http.put(
       `${this.base}/api/reviews/${reviewId}/flag`,

@@ -266,14 +266,13 @@
   gap: 4px;
 }
 
-
 .event-category{
    font-size: 11px;
-     text-transform: uppercase;
-     letter-spacing: 1px;
-     color:#8E2A5A;
-     font-weight: 600;
-     display: block;
+   text-transform: uppercase;
+   letter-spacing: 1px;
+   color:#8E2A5A;
+   font-weight: 600;
+   display: block;
 }
 
 .event-title {
@@ -521,9 +520,6 @@
 .recommendations-section {
   padding: 40px 60px;
   max-width: 1200px;
-  /*margin: 0 auto 0rem;
-  margin-left:3px;
-  padding: 2rem;*/
 }
 
 .recommendations-title {

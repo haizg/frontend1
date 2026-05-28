@@ -28,17 +28,14 @@
       </a>
     </div>
 
-
     <p *ngIf="errorMessage" class="error-message">{{errorMessage}}</p>
     <br>
 
     <button class="login-btn" (click)="login()" type="button">{{ 'navbar.login' | translate }}</button>
 
-
     <p class="switch-auth">
       {{ 'login.noaccount' | translate }}
-      <span (click)="goToSignup()">{{ 'navbar.signup' | translate }}
-</span>
+      <span (click)="goToSignup()">{{ 'navbar.signup' | translate }}</span>
     </p>
 
   </form>

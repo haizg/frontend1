@@ -15,7 +15,6 @@ import { UserService } from '../../services/user.service';
 export class Footer implements OnInit {
   currentYear = new Date().getFullYear();
   supportEmail = 'invitini.events@gmail.com';
-
   isLoggedIn = false;
   userRole = '';
   footerMessage = '';

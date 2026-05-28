@@ -34,7 +34,6 @@ export class CreateEventModal {
   isUploadingProgramImage = false;
   uploadedProgramImageUrl: string | null = null;
 
-  /*INTEGRATION D'AI*/
   isEnhancing = false;
   enhanceError = '';
   isGeneratingPoster = false;
@@ -57,7 +56,6 @@ export class CreateEventModal {
       program:         ['']
     });
   }
-
 
   open() {
     this.isVisible = true;
@@ -100,6 +98,7 @@ export class CreateEventModal {
       });
       return;
     }
+
     if (file.size > 10 * 1024 * 1024) {
       this.translate.get('createevent.error_image_size').subscribe(msg => {
         this.errorMessage = msg;
@@ -176,8 +175,6 @@ export class CreateEventModal {
     if (!this.selectedProgramFile) return null;
     this.isUploadingProgramImage = true;
     try {
-
-
       const response: any = await this.apiService.uploadImage(this.selectedProgramFile).toPromise() as { url: string };
       this.uploadedProgramImageUrl = response.url;
       this.isUploadingProgramImage = false;
@@ -254,49 +251,6 @@ export class CreateEventModal {
         }
       });
 
-/*
-      this.apiService.analyzeRisk({
-        title: eventData.title,
-        description: eventData.description,
-        location: eventData.location
-      }).subscribe({
-        next: (riskRes) => {
-          eventData.riskScore = riskRes.riskScore;
-          eventData.riskReason = riskRes.reason;
-          this.sendEventToBackend(eventData);
-
-        },
-        error: () => {
-          eventData.riskScore = 0;
-          this.sendEventToBackend(eventData);
-        }
-      });
-
-
-
-
-      this.apiService.createEvent(this.eventForm.value).subscribe({
-          next: (response: any) => {
-            this.isLoading = false;
-            this.translate.get('createevent.approval_message').subscribe(msg =>
-            {
-              this.approvalMessage = msg;
-            });
-          },
-          error: (error: any) => {
-            if (error.status === 403 && error.error?.error === 'ACCOUNT_NOT_VERIFIED') {
-              this.translate.get('createevent.error_account_not_verified').subscribe(msg => {
-                this.errorMessage = msg;
-              });
-            } else {
-              this.translate.get('createevent.error_create_failed').subscribe(msg => {
-                this.errorMessage = msg;
-              });
-            }
-            this.isLoading = false;
-          }
-        });
-*/
     } catch (error) {
       this.translate.get('createevent.error_unexpected').subscribe(msg => {
         this.errorMessage = msg;
@@ -390,9 +344,7 @@ export class CreateEventModal {
         this.generatePosterError = msg;
       });
       this.isGeneratingPoster = false;
-    }
-  });
-}
-
-
+       }
+    });
+  }
 }

@@ -14,7 +14,13 @@
 
     <!-- Camera view -->
     <div class="camera-wrapper">
-      <video id="qr-video" class="camera-feed"></video>
+      <video
+        id="qr-video"
+        class="camera-feed"
+        autoplay
+        muted
+        playsinline
+      ></video>
       <div class="scan-overlay">
         <div class="scan-frame"></div>
       </div>
@@ -53,6 +59,14 @@
           Réessayer
         </button>
       </div>
+    </div>
+
+    <!-- Wrong day -->
+    <div class="result-card result-warning" *ngIf="scanResult?.error === 'NOT_TODAY'">
+      <i class="fa-solid fa-calendar-xmark"></i>
+      <h3>Scan non disponible</h3>
+      <p>Le scan des présences n'est possible que le jour de l'événement.</p>
+      <button class="btn-next-scan" (click)="resetScan()">OK</button>
     </div>
 
     <div class="scan-error" *ngIf="scanError">

@@ -56,6 +56,7 @@
   border-radius: 50%;
   transition: background 0.3s;
 }
+
 .close-btn:hover { background: #f0f0f0; }
 
 form { padding: 30px; }
@@ -85,6 +86,7 @@ form { padding: 30px; }
   transition: border-color 0.3s;
   font-family: inherit;
 }
+
 .form-input:focus { outline: none; border-color: #A53A6B; }
 .form-input.ng-invalid.ng-touched { border-color: #dc3545; }
 textarea.form-input { resize: vertical; min-height: 100px; }
@@ -118,6 +120,7 @@ textarea.form-input { resize: vertical; min-height: 100px; }
   text-align: center;
   animation: fadeIn 0.5s ease;
 }
+
 .approval-icon { font-size: 48px; margin-bottom: 10px; }
 .approval-text { color: #856404; font-size: 16px; font-weight: 500; margin-bottom: 10px; }
 .approval-note { color: #856404; font-size: 13px; opacity: 0.8; }
@@ -133,6 +136,7 @@ textarea.form-input { resize: vertical; min-height: 100px; }
   transition: all 0.3s;
   border: none;
 }
+
 .btn-cancel { background: #e0e0e0; color: #333; }
 .btn-cancel:hover { background: #d0d0d0; }
 .btn-submit { background: #A53A6B; color: white; }
@@ -141,6 +145,7 @@ textarea.form-input { resize: vertical; min-height: 100px; }
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(42, 98, 98, 0.3);
 }
+
 .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
 
 .btn-upload {
@@ -155,6 +160,7 @@ textarea.form-input { resize: vertical; min-height: 100px; }
   cursor: pointer;
   transition: all 0.3s;
 }
+
 .btn-upload:hover { font-size: 17px; border-color: #8E2A5A; }
 
 .image-preview-container {
@@ -163,6 +169,7 @@ textarea.form-input { resize: vertical; min-height: 100px; }
   border-radius: 8px;
   overflow: hidden;
 }
+
 .image-preview {
    width: 100%;
     height: auto;
@@ -171,12 +178,14 @@ textarea.form-input { resize: vertical; min-height: 100px; }
     display: block;
     background: #f5f5f5;
 }
+
 .image-actions {
   display: flex;
   gap: 10px;
   padding: 10px;
   background: #f8f9fa;
 }
+
 .btn-change, .btn-remove {
   flex: 1;
   padding: 10px;
@@ -187,6 +196,7 @@ textarea.form-input { resize: vertical; min-height: 100px; }
   cursor: pointer;
   transition: all 0.3s;
 }
+
 .btn-change { background: #2a6262; color: white; }
 .btn-change:hover { background: #306e6e; }
 .btn-remove { background: #dc3545; color: white; }
@@ -216,15 +226,18 @@ textarea.form-input { resize: vertical; min-height: 100px; }
   justify-content: center;
   gap: 6px;
 }
+
 .toggle-btn.active {
   border-color: #A53A6B;
   background: rgba(142, 42, 90, 0.08);
   color: #A53A6B;
 }
+
 .toggle-btn:hover:not(.active):not(:disabled) {
   border-color: #ccc;
   background: #f0f0f0;
 }
+
 .toggle-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .program-upload-loading {
@@ -302,10 +315,12 @@ textarea.form-input { resize: vertical; min-height: 100px; }
   gap: 8px;
   transition: opacity 0.2s, transform 0.2s;
 }
+
 .btn-generate-poster:hover:not(:disabled) {
   opacity: 0.88;
   transform: translateY(-1px);
 }
+
 .btn-generate-poster:disabled { opacity: 0.55; cursor: not-allowed; }
 
 .poster-generating-overlay {

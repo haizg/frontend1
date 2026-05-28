@@ -246,5 +246,4 @@ export class EventsPage {
     this.applyFilters();
   }
 
-
 }

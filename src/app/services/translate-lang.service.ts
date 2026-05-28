@@ -18,10 +18,8 @@ export class TranslateLangService {
   }
 
   private initializeLanguage(): void {
-    // Set supported languages
     this.translateService.addLangs(['fr', 'en']);
 
-    // Get saved language from localStorage (browser only)
     let savedLang: SupportedLanguage = 'fr';
     if (isPlatformBrowser(this.platformId)) {
       const stored = localStorage.getItem('lang') as SupportedLanguage;
@@ -30,7 +28,6 @@ export class TranslateLangService {
       }
     }
 
-    // Set default and current language
     this.translateService.setDefaultLang('fr');
     this.translateService.use(savedLang);
     this.currentLangSubject.next(savedLang);
@@ -51,7 +48,6 @@ export class TranslateLangService {
     return this.currentLangSubject.value;
   }
 
-  // Helper method to get translation (replaces old lang.get())
   get(key: string, params?: object): string {
     return this.translateService.instant(key, params);
   }

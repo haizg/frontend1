@@ -7,10 +7,8 @@ import { EventModel } from '../models/event.model';
 export class EventService{
   private apiUrl='http://localhost:8081/api/events';
 
-
   constructor(private http : HttpClient) {
   }
-
 
   getEvents():Observable<EventModel[]>{
     return this.http.get<EventModel[]>(this.apiUrl);

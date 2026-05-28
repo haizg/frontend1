@@ -35,9 +35,10 @@ export class ForgotPasswordModal {
     this.successMessage = '';
     this.closeModal.emit();
   }
-onSubmit() {
-    this.errorMessage = '';
-    this.successMessage = '';
+
+  onSubmit() {
+      this.errorMessage = '';
+      this.successMessage = '';
 
     if (!this.email || this.email.trim() === '') {
       this.errorMessage = this.translate.instant('forgotpassword.error_empty');

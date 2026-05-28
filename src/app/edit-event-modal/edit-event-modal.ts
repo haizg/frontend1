@@ -26,7 +26,6 @@ export class EditEventModal {
   isAdmin  = false;
   minCapacity = 1;
 
-
   programType: 'text' | 'image' = 'text';
   selectedProgramFile: File | null = null;
   programImagePreview: string | null = null;
@@ -189,7 +188,6 @@ export class EditEventModal {
     this.uploadedProgramImageUrl = null;
     this.cdr.markForCheck();
   }
-
 
   async onSubmit() {
     if (!this.currentEvent) return;

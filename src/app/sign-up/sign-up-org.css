@@ -69,7 +69,8 @@ small{
   text-align: center;
   font-weight: 600;
 }
-/* Small inline spinner for processing message */
+
+/* spinner for processing message */
 .processing-spinner {
   display: inline-block;
   width: 14px;
@@ -86,7 +87,7 @@ small{
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-/* Success Banner - Added */
+
 .success-banner {
   background: #d4edda;
   color: #155724;
@@ -102,7 +103,6 @@ div[name="nomOrganisation"] {
   margin-top: 10px;
 }
 
-
 .close-btn {
   position: absolute;
   top: 10px;
@@ -111,7 +111,7 @@ div[name="nomOrganisation"] {
   border: none;
   font-size: 24px;
   font-weight: bold;
-  color: #888; /* Grey color instead of teal */
+  color: #888;
   cursor: pointer;
   transition: all 0.2s ease;
   width: 30px;
@@ -124,7 +124,7 @@ div[name="nomOrganisation"] {
 }
 
 .close-btn:hover {
-  color: #999; /* Darker grey on hover */
+  color: #999;
   transform: scale(1.1);
 }
 

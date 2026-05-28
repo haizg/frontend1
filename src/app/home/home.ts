@@ -122,7 +122,6 @@ export class Home implements AfterViewInit {
       });
 
       this.loadEvents();
-
       setInterval(() => {
         this.currentSlide = (this.currentSlide + 1) % this.slides.length;
         this.cdr.detectChanges();

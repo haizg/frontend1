@@ -36,9 +36,7 @@
     "createevent": "Créer vos évènements",
     "createeventbtn": "Créer un événement",
     "createeventbtndsc": "Organisez votre prochain événement",
-    "consulter": "Consulter mes événements"
-
-
+    "consulter": "Consulter mon événement"
   },
   "joincta": {
     "join": "Rejoignez Invitini",
@@ -168,7 +166,8 @@
     "unregister": "Se désinscrire",
     "yourticket": "Votre ticket",
     "scanattendance": "Scanner les présences",
-    "attendedParticipants": "Présents"
+    "attendedParticipants": "Présents",
+    "scandispo": "Scan disponible le"
   },
   "createevent": {
     "title": " Créer un Événement",

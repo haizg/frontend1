@@ -167,7 +167,8 @@
     "unregister": "Cancel participation",
     "yourticket": "Your ticket",
     "scanattendance": "Scan attendance",
-    "attendedParticipants": "Attended"
+    "attendedParticipants": "Attended",
+    "scandispo": "Scan available on"
   },
   "createevent": {
     "title": " Create Event",

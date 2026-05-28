@@ -17,7 +17,6 @@ import { ApiService } from '../services/api.service';
   styleUrl: './sign-up-org.css',
 })
 export class SignUpOrg {
-
   nom = '';
   prenom = '';
   email = '';
@@ -158,7 +157,6 @@ export class SignUpOrg {
             this.errorMessage = msg;
           });
         }
-
 
         setTimeout(() => {
           this.errorMessage = '';

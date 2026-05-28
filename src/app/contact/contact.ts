@@ -25,8 +25,6 @@ export class Contact implements OnInit {
   showLoginModal = false;
   showSignupModal = false;
 
-
-
   form = { prenom: '', nom: '', email: '', sujet: '', message: '' };
 
   faqs = [

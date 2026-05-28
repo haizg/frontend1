@@ -42,11 +42,13 @@ form label {
   border-radius: 18px;
   cursor: pointer;
 }
+
 .login-btn:hover{
   font-weight: bold;
   font-size: small;
   background: #B54A7A;
 }
+
 small{
   color: red;
   font-size: 0.85rem;
@@ -119,8 +121,6 @@ small{
   color: #B30059;
 }
 
-
-
 .close-btn {
   position: absolute;
   top: 10px;
@@ -129,7 +129,7 @@ small{
   border: none;
   font-size: 24px;
   font-weight: bold;
-  color: #888; /* Grey color instead of teal */
+  color: #888;
   cursor: pointer;
   transition: all 0.2s ease;
   width: 30px;
@@ -142,8 +142,7 @@ small{
 }
 
 .close-btn:hover {
-  color: #999; /* Darker grey on hover */
+  color: #999;
   transform: scale(1.1);
-
 }
 

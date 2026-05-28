@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { Navbar } from '../navbar/navbar';
 import { TranslateModule } from '@ngx-translate/core';
-import { BrowserQRCodeReader } from '@zxing/browser';
+import jsQR from 'jsqr';
+
 @Component({
   selector: 'app-scan-event',
   standalone: true,
@@ -14,84 +15,110 @@ import { BrowserQRCodeReader } from '@zxing/browser';
 })
 export class ScanEvent implements OnInit, OnDestroy {
   eventId: number | null = null;
-  scanResult: any = null;  // holds the last scan response
+  scanResult: any = null;
   scanError = '';
-  isScanning = false;
-  codeReader: any = null;  // ZXing reader instance
+
+  private stream: MediaStream | null = null;
+  private scanning = false;
+  private processing = false;
 
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
+    private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.eventId = Number(this.route.snapshot.paramMap.get('id'));
     if (isPlatformBrowser(this.platformId)) {
-      this.startCamera();
+      await this.startCamera();
     }
   }
 
   async startCamera() {
-    this.isScanning = true;
-    this.scanError = '';
-    this.scanResult = null;
-
     try {
-      // Dynamically import ZXing to avoid SSR issues
-      const { BrowserQRCodeReader } = await import('@zxing/browser');
-      this.codeReader = new BrowserQRCodeReader();
-
-      const videoElement = document.getElementById('qr-video') as HTMLVideoElement;
-
-      // Start continuous scanning — callback fires every time a QR is detected
-      await this.codeReader.decodeFromVideoDevice(
-        undefined, // undefined = use default camera
-        videoElement,
-        (result: any, error: any) => {
-          if (result) {
-            const token = result.getText();
-            // Only send one scan request at a time
-            if (!this.scanResult || this.scanResult.scannedToken !== token) {
-              this.processScan(token);
-            }
-          }
-        }
-      );
+      const video = document.getElementById('qr-video') as HTMLVideoElement;
+      this.stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'environment' }
+      });
+      video.srcObject = this.stream;
+      await video.play();
+      this.scanning = true;
+      this.scanFrames(video);
     } catch (err) {
-      this.scanError = 'Impossible d\'accéder à la caméra. Vérifiez les permissions.';
-      this.isScanning = false;
+      this.scanError = 'Impossible d\'accéder à la caméra';
+      this.cdr.markForCheck();
     }
   }
 
-  processScan(token: string) {
-    // Prevent duplicate API calls for same token
-    if (this.scanResult?.scannedToken === token) return;
+  scanFrames(video: HTMLVideoElement) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
+    const scan = () => {
+      if (!this.scanning) return;
+
+      if (this.scanResult) {
+        requestAnimationFrame(scan);
+        return;
+      }
+
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const qrCode = (jsQR as any)(imageData.data, imageData.width, imageData.height);
+
+        if (qrCode && qrCode.data && !this.processing) {
+          this.processing = true;
+          this.processScan(qrCode.data);
+        }
+      }
+      requestAnimationFrame(scan);
+    };
+    scan();
+  }
+
+  processScan(token: string) {
     this.apiService.scanQrToken(token).subscribe({
       next: (res: any) => {
-        // Store result with the scanned token to prevent duplicate scans
         this.scanResult = { ...res, scannedToken: token };
+        this.cdr.markForCheck();
       },
       error: (err: any) => {
-        this.scanResult = {
-          status: 'ERROR',
-          message: err.error?.message || 'QR code invalide.',
-          scannedToken: token
-        };
+        const error = err.error?.error;
+        const message = err.error?.message || 'QR invalide';
+
+        if (error === 'NOT_TODAY') {
+          this.scanError = message;
+          this.processing = false;
+          this.cdr.markForCheck();
+
+          setTimeout(() => {
+            this.scanError = '';
+            this.cdr.markForCheck();
+          }, 3000);
+        } else {
+          this.scanResult = { status: 'ERROR', message };
+          this.cdr.markForCheck();
+        }
       }
     });
   }
 
   resetScan() {
-    // Clear result so organizer can scan next participant
     this.scanResult = null;
+    this.processing = false;
+    this.cdr.markForCheck();
   }
 
   ngOnDestroy() {
-    // Stop camera when leaving page to free resources
-    if (this.codeReader) {
-      BrowserQRCodeReader.releaseAllStreams();
+    this.scanning = false;
+    if (this.stream) {
+      this.stream.getTracks().forEach(track => track.stop());
     }
   }
 }

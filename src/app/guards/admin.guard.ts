@@ -11,7 +11,7 @@ export class AdminGuard implements CanActivate {
 
   canActivate(): boolean {
     if (!isPlatformBrowser(this.platformId)) {
-      return true; // ← let SSR pass, browser will re-check
+      return true;
     }
     const user = localStorage.getItem('user');
     if (user) {

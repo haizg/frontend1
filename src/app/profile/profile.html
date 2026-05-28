@@ -35,8 +35,6 @@
   </div>
 
 
-
-
   <div class="events-section" *ngIf="activeTab==='events'">
 
     <!-- Organizer: created events -->
@@ -165,7 +163,7 @@
   </div>
 
 
-<!--change password-->
+  <!--change password-->
   <div *ngIf="activeTab === 'password'" class="form-section">
     <h2> {{ 'profile.changepassword' | translate }}</h2>
     <div class="form-group">
@@ -184,7 +182,6 @@
     <p class="error-msg" *ngIf="passwordError">{{ passwordError }}</p>
     <button class="btn-save" (click)="changePassword()">{{ 'profile.modify' | translate }}</button>
   </div>
-
 
 
   <!--deactivating modal-->
@@ -211,7 +208,6 @@
       </div>
     </div>
   </div>
-
 
 
   <!--deactivate account-->

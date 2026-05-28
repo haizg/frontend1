@@ -8,6 +8,7 @@
   background: #fff;
   min-height: 100vh;
 }
+
 /* HERO */
 .contact-hero {
   background:  #A53A6B;
@@ -230,7 +231,7 @@ textarea.form-input { resize: vertical; }
 
 .success-banner i { font-size: 22px; }
 
-/* RESPONSIVE */
+
 @media (max-width: 900px) {
   .contact-inner {
     grid-template-columns: 1fr;

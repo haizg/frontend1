@@ -45,11 +45,9 @@ export class AdminDashboard implements OnInit{
   orgEvents: any[] = [];
   showDetailPanel = false;
 
-  // Edit User
   showEditUser = false;
   editingUser: any = null;
 
-  // Edit Org
   showEditOrg = false;
   editingOrg: any = null;
 
@@ -210,7 +208,7 @@ export class AdminDashboard implements OnInit{
         next: () => this.loadEvents()
       })
     );
-}
+  }
 
   approveEvent(event: any) {
     if (event.approved) return;
@@ -223,20 +221,21 @@ export class AdminDashboard implements OnInit{
       error: (err: any) => console.error('Failed to approve event', err)
     });
   }
-rejectEvent(event: any) {
-  this.modalService.openDeleteModal(
-    'Refuser l\'événement',
-    `L'organisateur sera notifié par email du refus de "${event.title}".`,
-    () => this.apiService.rejectEvent(event.id).subscribe({
-      next: () => {
-        this.loadEvents();
-        this.loadStats();
-        this.cdr.detectChanges();
-      },
-      error: (err: any) => console.error('Failed to reject event', err)
-    })
-  );
-}
+
+  rejectEvent(event: any) {
+    this.modalService.openDeleteModal(
+      'Refuser l\'événement',
+      `L'organisateur sera notifié par email du refus de "${event.title}".`,
+      () => this.apiService.rejectEvent(event.id).subscribe({
+        next: () => {
+          this.loadEvents();
+          this.loadStats();
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => console.error('Failed to reject event', err)
+      })
+    );
+  }
 
   saveEditUser() {
     this.apiService.updateAdminUser(this.editingUser.id, this.editingUser).subscribe({

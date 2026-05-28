@@ -6,7 +6,7 @@
   pointer-events: none;
   user-select: none;
 }
-/* HERO */
+/*Hero*/
 .about-hero {
   background: #A53A6B;
   padding: 100px 20px 80px;
@@ -58,7 +58,7 @@
   color: #A53A6B;
 }
 
-/* STATS */
+/* Stats*/
 .about-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -86,7 +86,7 @@
   color: #888;
 }
 
-/* SECTIONS */
+/* Sections */
 .about-section {
   padding: 80px 20px;
 }
@@ -121,7 +121,7 @@
   margin-bottom: 16px;
 }
 
-/* VISUAL CARDS GRID */
+/* Visual cards grid*/
 .about-visual {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -164,7 +164,7 @@
 .vc-3 i { color: #e65100; }
 .vc-4 i { color: #6a1b9a; }
 
-/* VALUES */
+/* Values */
 .about-values {
   background: #f8fafa;
   padding: 80px 20px;

@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@700&display=swap');
 
-
 *{
   margin: 0;
   padding: 0;
@@ -29,7 +28,6 @@
   gap:10px;
 }
 
-
 .Invitini{
   font-family:  'Abhaya Libre ExtraBold',  serif;
   font-size: 30px;
@@ -38,11 +36,11 @@
   cursor: pointer;
   line-height: 1;
 }
+
 .nav-links{
   display: flex;
   gap: 35px;
   margin-left: 20px;
-
 }
 
 .nav-links a{
@@ -60,7 +58,6 @@
   color:#A53A6B ;
 }
 
-
 .nav-buttons{
   display: flex;
   gap: 15px;
@@ -74,6 +71,7 @@
   border: none;
   transition: all 0.3s ease;
 }
+
 .btn-outline{
   border: 1px solid grey;
   background: transparent;
@@ -93,7 +91,6 @@
 .btn-primary:hover{
   background-color: #A53A6B;
 }
-
 
 .user-info{
   display:flex;
@@ -116,13 +113,10 @@
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-
-
   padding: 8px 36px 8px 14px;
   border-radius: 20px;
   border: 2px solid #8E2A5A;;
   background: white;
-
   font-weight: 600;
   color: #8E2A5A;;
   cursor: pointer;

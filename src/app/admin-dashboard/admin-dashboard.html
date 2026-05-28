@@ -172,7 +172,7 @@
               </td>
             </tr>
 
-            <!-- AI expandable panel row -->
+            <!-- AI analyze -->
             <tr *ngIf="expandedAiRow === event.id" class="ai-panel-row">
               <td colspan="7">
                 <div class="ai-panel">
@@ -294,8 +294,6 @@
     </div>
 
 
-
-
     <!-- USERS -->
     <div *ngIf="activeTab === 'users'">
       <div class="tab-header">
@@ -356,6 +354,7 @@
 
 
     <!-- ORGANISATEURS -->
+    <!-- deactivation requests-->
     <div *ngIf="deactivationRequests.length > 0" class="deactivation-requests-block">
       <h3 class="section-subtitle" style="color:#c62828">
         <i class="fa-solid fa-user-slash"></i>
@@ -391,7 +390,7 @@
       </table>
     </div>
 
-    <!--Second Table-->
+    <!--Organizers Table-->
     <div *ngIf="activeTab === 'organisateurs'">
       <div class="tab-header">
         <h1 class="page-title">Gestion des organisateurs</h1>

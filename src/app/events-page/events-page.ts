@@ -17,16 +17,20 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TranslateLangService } from '../services/translate-lang.service';
 import { ConfirmDelete } from '../confirm-delete/confirm-delete';
 import { ApiService } from '../services/api.service';
+import { EventsCacheService } from '../services/events-cache.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-events-page',
   imports: [Popup, Login, SignUpOrg, Footer, Navbar, RouterLink,
-    CommonModule, EditEventModal, TranslateModule, ConfirmDelete ],
+            CommonModule, EditEventModal, TranslateModule, ConfirmDelete ],
   templateUrl: './events-page.html',
   styleUrl: './events-page.css',
 })
 export class EventsPage {
   @ViewChild(EditEventModal) editEventModal!: EditEventModal;
+
+  private eventsSub: Subscription | null = null;
 
   events: EventModel[]=[];
   isModalOpen = false;
@@ -56,6 +60,7 @@ export class EventsPage {
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private translateLang: TranslateLangService,
+    private eventsCache: EventsCacheService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -148,6 +153,7 @@ export class EventsPage {
     this.applyFilters();
   }
 
+/*
   loadEvents() {
     this.isLoadingEvents = true;
     this.allEvents = [];
@@ -164,6 +170,29 @@ export class EventsPage {
       },
       error: (err) => {
         console.error('Failed to load events', err);
+        this.isLoadingEvents = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }*/
+
+  loadEvents() {
+    this.isLoadingEvents = true;
+    this.allEvents = [];
+    this.filteredEvents = [];
+
+    this.eventsSub?.unsubscribe();
+
+    this.eventsSub = this.eventsCache.getEvents().subscribe({
+      next: (data) => {
+        const sortedData = this.sortEventsByClosestToToday(data);
+        this.allEvents = sortedData;
+        this.categories = Array.from(new Set(sortedData.map(e => e.category)));
+        this.applyFilters();
+        this.isLoadingEvents = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
         this.isLoadingEvents = false;
         this.cdr.detectChanges();
       }
@@ -232,7 +261,17 @@ export class EventsPage {
     return this.participatedEventIds.has(eventId);
   }
 
+/*
   onEventUpdated() {
+    this.loadEvents();
+  }*/
+
+  ngOnDestroy() {
+    this.eventsSub?.unsubscribe();
+  }
+
+  onEventUpdated() {
+    this.eventsCache.invalidate();
     this.loadEvents();
   }
 

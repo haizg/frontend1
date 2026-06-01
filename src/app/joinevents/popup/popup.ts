@@ -53,7 +53,7 @@ export class Popup {
         setTimeout(() => {
           this.canClose = true;
           this.close();
-        }, 5000);
+        }, 10000);
       },
       error: () => {
         this.isLoading = false;

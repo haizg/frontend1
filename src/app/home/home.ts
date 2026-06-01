@@ -17,6 +17,8 @@ import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { TranslateLangService } from '../services/translate-lang.service';
 import { ConfirmDelete } from '../confirm-delete/confirm-delete';
 import { ApiService } from '../services/api.service';
+import { EventsCacheService } from '../services/events-cache.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -32,6 +34,8 @@ import { ApiService } from '../services/api.service';
 export class Home implements AfterViewInit {
   @ViewChild(CreateEventModal) createEventModal!: CreateEventModal;
   @ViewChild(EditEventModal) editEventModal!: EditEventModal;
+
+  private eventsSub: Subscription | null = null;
 
   events: EventModel[] = [];
   userRole: string | null = null;
@@ -73,6 +77,7 @@ export class Home implements AfterViewInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private translateLang: TranslateLangService,
+    private eventsCache: EventsCacheService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -146,6 +151,7 @@ export class Home implements AfterViewInit {
     });
   }
 
+/*
   loadEvents() {
     this.isLoadingEvents = true;
     this.events = [];
@@ -185,7 +191,35 @@ export class Home implements AfterViewInit {
         this.cdr.detectChanges();
       }
     });
+  }*/
+
+  loadEvents() {
+    this.isLoadingEvents = true;
+    this.eventsSub?.unsubscribe();
+
+    this.eventsSub = this.eventsCache.getEvents().subscribe({
+      next: (data) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const sortedData = this.sortEventsByClosestToToday(data);
+        this.events = sortedData;
+        this.availableEvents = sortedData.filter(event => {
+          const eventDate = new Date(event.date);
+          eventDate.setHours(0, 0, 0, 0);
+          return !event.isFull && eventDate >= today;
+        });
+        this.isLoadingEvents = false;
+        this.eventsLoaded = true;
+        this.tryLoadRecommendations();
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.isLoadingEvents = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
+
 
   deleteEvent(eventModel: EventModel, $event: MouseEvent) {
     $event.stopPropagation();
@@ -295,6 +329,21 @@ export class Home implements AfterViewInit {
 
   goToSlide(index: number) { this.currentSlide = index; }
   openCreateEventModal() { this.createEventModal.open(); }
+
+  ngOnDestroy() {
+    this.eventsSub?.unsubscribe();
+  }
+
+  onEventCreated() {
+    this.eventsCache.invalidate();
+    this.loadEvents();
+  }
+
+  onEventUpdated() {
+    this.eventsCache.invalidate();
+    this.loadEvents();
+  }
+/*
   onEventCreated() { this.loadEvents(); }
-  onEventUpdated() { this.loadEvents(); }
+  onEventUpdated() { this.loadEvents(); }*/
 }

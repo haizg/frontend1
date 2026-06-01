@@ -36,8 +36,9 @@
     "createevent": "Create your events",
     "createeventbtn": "Create an event",
     "createeventbtndsc": "Organize your next event",
-    "consulter": "View my event"
-
+    "consulter": "View my event",
+    "recommended": "Recommended for you",
+    "analyzepreference": "Analyzing your preferences"
   },
   "joincta": {
     "join": "Join Invitini",

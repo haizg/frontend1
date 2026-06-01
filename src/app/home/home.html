@@ -79,11 +79,11 @@
 
     <h2 class="recommendations-title">
       <i class="fa-solid fa-wand-magic-sparkles"></i>
-      Recommandés pour vous
+      {{ 'home.recommended' | translate }}
     </h2>
 
     <div *ngIf="isLoadingRecommendations" class="reco-loading">
-      <i class="fa-solid fa-spinner fa-spin"></i> Analyse de vos préférences...
+      <i class="fa-solid fa-spinner fa-spin"></i> {{ 'home.analyzepreference' | translate }}
     </div>
 
     <div class="recommendations-grid" *ngIf="!isLoadingRecommendations">

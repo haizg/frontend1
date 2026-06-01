@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateLangService } from '../services/translate-lang.service';
 
 @Component({
   selector: 'app-verify-account',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './verify-account.html',
   styleUrls: ['./verify-account.css']
 })
@@ -20,6 +22,8 @@ export class VerifyAccount implements OnInit {
     private route: ActivatedRoute,
     private apiService : ApiService,
     public router: Router,
+    private translate: TranslateService,
+     private translateLang: TranslateLangService
   ) {}
 
   ngOnInit() {
@@ -28,7 +32,7 @@ export class VerifyAccount implements OnInit {
       if (!token) {
         this.isVerifying = false;
         this.isVerified = false;
-        this.errorMessage = 'Token de vérification manquant';
+        this.errorMessage = this.translate.instant('verifyaccount.missing_token');
         return;
       }
       this.verifyToken(token);
@@ -41,7 +45,7 @@ export class VerifyAccount implements OnInit {
         next: (response: any) => {
           this.isVerifying = false;
           this.isVerified = true;
-          this.successMessage = response.message || 'Compte vérifié avec succès!';
+          this.successMessage = response.message || '';
           setTimeout(() => {
             this.router.navigate(['/home']);
           }, 3000);
@@ -53,7 +57,7 @@ export class VerifyAccount implements OnInit {
           if (error.error?.error) {
             this.errorMessage = error.error.error;
           } else {
-            this.errorMessage = 'Erreur lors de la vérification du compte';
+        this.errorMessage = error.error?.error || this.translate.instant('verifyaccount.error_fallback');
           }
         }
       });

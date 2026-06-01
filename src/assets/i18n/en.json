@@ -472,5 +472,17 @@
     "not_today_msg": "Attendance scanning is only available on the day of the event.",
     "ok": "OK",
     "camera_error": "Unable to access camera"
+    },
+  "verifyaccount": {
+    "verifying_title": "Verifying…",
+    "verifying_text": "Please wait",
+    "success_title": "Account verified!",
+    "redirect_text": "Redirecting to the home page in 3 seconds...",
+    "goto_home": "Go to home now",
+    "error_title": "Verification failed",
+    "help_text": "The verification link may have expired or already been used. Please sign up again or contact support.",
+    "back_home": "Back to home",
+    "missing_token": "Verification token missing",
+    "error_fallback": "Error verifying account"
   }
 }

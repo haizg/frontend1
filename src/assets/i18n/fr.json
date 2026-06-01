@@ -471,6 +471,18 @@
     "not_today_msg": "Le scan des présences n'est possible que le jour de l'événement.",
     "ok": "OK",
     "camera_error": "Impossible d'accéder à la caméra"
+  },
+  "verifyaccount": {
+    "verifying_title": "Vérification en cours...",
+    "verifying_text": "Veuillez patienter",
+    "success_title": "Compte vérifié !",
+    "redirect_text": "Redirection vers la page d'accueil dans 3 secondes...",
+    "goto_home": "Aller à l'accueil maintenant",
+    "error_title": "Vérification échouée",
+    "help_text": "Le lien de vérification a peut-être expiré ou a déjà été utilisé. Veuillez vous inscrire à nouveau ou contacter le support.",
+    "back_home": "Retour à l'accueil",
+    "missing_token": "Token de vérification manquant",
+    "error_fallback": "Erreur lors de la vérification du compte"
   }
 
 }

@@ -457,6 +457,20 @@
     "cancel": "Annuler",
     "success": "Inscription enregistrée ! Veuillez confirmer votre participation en cliquant sur le lien envoyé à votre email.",
     "error": "Une erreur est survenue. Veuillez réessayer."
+  },
+  "scanevent": {
+    "back": "Retour à l'événement",
+    "title": "Scanner les QR codes",
+    "subtitle": "Pointez la caméra sur le QR code du participant",
+    "success_title": "Présence enregistrée !",
+    "already_title": "Déjà enregistré",
+    "error_title": "QR code invalide",
+    "next_scan": "Scanner le suivant",
+    "retry": "Réessayer",
+    "not_today_title": "Scan non disponible",
+    "not_today_msg": "Le scan des présences n'est possible que le jour de l'événement.",
+    "ok": "OK",
+    "camera_error": "Impossible d'accéder à la caméra"
   }
 
 }

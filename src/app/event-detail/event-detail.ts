@@ -349,28 +349,36 @@ export class EventDetail implements OnInit {
 
   checkCanReview(eventId: number) {
     if (!this.isLoggedIn || this.userRole !== 'ROLE_USER') return;
-    this.apiService.canReviewEvent(eventId).subscribe({
-      next: (res: any) => {
-        if (res.canReview) {
-          this.canReview = true;
-          this.alreadyReviewed = false;
-        } else {
-          this.canReview = false;
-          const userStr = localStorage.getItem('user');
-          const currentUser = userStr ? JSON.parse(userStr) : null;
-          if (currentUser) {
-            this.alreadyReviewed = this.reviews.some(
-              r => r.userPrenom === currentUser.prenom && r.userNom === currentUser.nom
-            );
-          } else {
-            this.alreadyReviewed = false;
-          }
-        }
-        this.cdr.markForCheck();
-      },
-      error: () => {}
-    });
-  }
+     this.apiService.canReviewEvent(eventId).subscribe({
+       next: (res: any) => {
+         if (res.canReview) {
+           this.canReview = true;
+           this.alreadyReviewed = false;
+         } else {
+           this.canReview = false;
+           this.apiService.getEventReviews(eventId).subscribe({
+             next: (reviews: any[]) => {
+               this.reviews = reviews;
+               const userStr = localStorage.getItem('user');
+               const currentUser = userStr ? JSON.parse(userStr) : null;
+               if (currentUser) {
+                 this.alreadyReviewed = this.reviews.some(
+                   r => r.userPrenom === currentUser.prenom && r.userNom === currentUser.nom
+                 );
+               } else {
+                 this.alreadyReviewed = false;
+               }
+               this.cdr.markForCheck();
+             },
+             error: () => { this.cdr.markForCheck(); }
+           });
+           return;
+         }
+         this.cdr.markForCheck();
+       },
+       error: () => {}
+     });
+   }
 
   setReviewRating(rating: number) { this.reviewRating = rating; }
 
@@ -385,6 +393,7 @@ export class EventDetail implements OnInit {
         this.alreadyReviewed = true;
         this.isSubmittingReview = false;
         this.loadReviews(this.event!.id);
+        this.checkCanReview(this.event!.id);
         this.cdr.markForCheck();
       },
       error: (err: any) => {

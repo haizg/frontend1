@@ -4,10 +4,10 @@
   <div class="scan-header">
     <a [routerLink]="['/events', eventId]" class="back-btn">
       <i class="fa-solid fa-arrow-left"></i>
-      Retour à l'événement
+      {{ 'scanevent.back' | translate }}
     </a>
-    <h1><i class="fa-solid fa-qrcode"></i> Scanner les QR codes</h1>
-    <p class="scan-subtitle">Pointez la caméra sur le QR code du participant</p>
+    <h1><i class="fa-solid fa-qrcode"></i> {{ 'scanevent.title' | translate }}</h1>
+    <p class="scan-subtitle">{{ 'scanevent.subtitle' | translate }}t</p>
   </div>
 
   <div class="scan-container">
@@ -32,18 +32,18 @@
       <!-- Success -->
       <div class="result-card result-success" *ngIf="scanResult.status === 'SUCCESS'">
         <i class="fa-solid fa-circle-check"></i>
-        <h3>Présence enregistrée !</h3>
+        <h3>{{ 'scanevent.success_title' | translate }}</h3>
         <p>{{ scanResult.email }}</p>
         <button class="btn-next-scan" (click)="resetScan()">
           <i class="fa-solid fa-qrcode"></i>
-          Scanner le suivant
+          {{ 'scanevent.next_scan' | translate }}
         </button>
       </div>
 
       <!-- Already scanned -->
       <div class="result-card result-warning" *ngIf="scanResult.status === 'ALREADY_SCANNED'">
         <i class="fa-solid fa-triangle-exclamation"></i>
-        <h3>Déjà enregistré</h3>
+        <h3>{{ 'scanevent.already_title' | translate }}</h3>
         <p>{{ scanResult.email }}</p>
         <button class="btn-next-scan" (click)="resetScan()">
           Scanner le suivant
@@ -53,7 +53,7 @@
       <!-- Error -->
       <div class="result-card result-error" *ngIf="scanResult.status === 'ERROR'">
         <i class="fa-solid fa-circle-xmark"></i>
-        <h3>QR code invalide</h3>
+        <h3>{{ 'scanevent.error_title' | translate }}</h3>
         <p>{{ scanResult.message }}</p>
         <button class="btn-next-scan" (click)="resetScan()">
           Réessayer
@@ -64,9 +64,9 @@
     <!-- Wrong day -->
     <div class="result-card result-warning" *ngIf="scanResult?.error === 'NOT_TODAY'">
       <i class="fa-solid fa-calendar-xmark"></i>
-      <h3>Scan non disponible</h3>
-      <p>Le scan des présences n'est possible que le jour de l'événement.</p>
-      <button class="btn-next-scan" (click)="resetScan()">OK</button>
+      <h3>{{ 'scanevent.not_today_title' | translate }}</h3>
+      <p>{{ 'scanevent.not_today_msg' | translate }}</p>
+      <button class="btn-next-scan" (click)="resetScan()"> {{ 'scanevent.ok' | translate }} </button>
     </div>
 
     <div class="scan-error" *ngIf="scanError">

@@ -458,5 +458,19 @@
     "cancel": "Cancel",
     "success": "Registration recorded! Please confirm your participation by clicking the link sent to your email.",
     "error": "Something went wrong. Please try again."
+  },
+  "scanevent": {
+    "back": "Back to event",
+    "title": "Scan QR Codes",
+    "subtitle": "Point the camera at the participant's QR code",
+    "success_title": "Attendance recorded!",
+    "already_title": "Already recorded",
+    "error_title": "Invalid QR code",
+    "next_scan": "Scan next",
+    "retry": "Try again",
+    "not_today_title": "Scan not available",
+    "not_today_msg": "Attendance scanning is only available on the day of the event.",
+    "ok": "OK",
+    "camera_error": "Unable to access camera"
   }
 }

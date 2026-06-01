@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -23,7 +23,8 @@ export class Popup {
   constructor(
     private modalService: ModalService,
     private apiService: ApiService,
-    private userService: UserService
+    private userService: UserService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -50,14 +51,16 @@ export class Popup {
         this.isLoading = false;
         this.canClose  = false;
         this.message   = 'success';
+        this.cdr.markForCheck();
         setTimeout(() => {
           this.canClose = true;
           this.close();
-        }, 10000);
+        }, 5000);
       },
       error: () => {
         this.isLoading = false;
         this.message   = 'error';
+        this.cdr.markForCheck();
       }
     });
   }

@@ -475,7 +475,7 @@
   "verifyaccount": {
     "verifying_title": "Vérification en cours...",
     "verifying_text": "Veuillez patienter",
-    "success_title": "Compte vérifié !",
+    "success_title": "Compte vérifié ",
     "redirect_text": "Redirection vers la page d'accueil dans 3 secondes...",
     "goto_home": "Aller à l'accueil maintenant",
     "error_title": "Vérification échouée",

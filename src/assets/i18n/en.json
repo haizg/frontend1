@@ -476,7 +476,7 @@
   "verifyaccount": {
     "verifying_title": "Verifying…",
     "verifying_text": "Please wait",
-    "success_title": "Account verified!",
+    "success_title": "Account verified",
     "redirect_text": "Redirecting to the home page in 3 seconds...",
     "goto_home": "Go to home now",
     "error_title": "Verification failed",

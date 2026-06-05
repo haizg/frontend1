@@ -38,7 +38,7 @@ export class AdminDashboard implements OnInit{
   flaggedReviews: any[] = [];
   flaggedReviewsLoaded = false;
 
-  // Detail panel
+
   selectedUser: any = null;
   selectedOrg: any = null;
   userEvents: any[] = [];

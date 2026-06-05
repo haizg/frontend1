@@ -32,7 +32,7 @@
     <div class="home-stat">
       <i class="fa-solid fa-calendar-days"></i>
       <span class="home-stat-num">{{ events.length }}+</span>
-      <span class="home-stat-label">Événements</span>
+      <span class="home-stat-label">{{ 'home.events' | translate }}</span>
     </div>
     <div class="home-stat">
       <i class="fa-solid fa-users"></i>
@@ -42,12 +42,12 @@
     <div class="home-stat">
       <i class="fa-solid fa-location-dot"></i>
       <span class="home-stat-num">5+</span>
-      <span class="home-stat-label">Villes</span>
+      <span class="home-stat-label">{{ 'home.city' | translate }}</span>
     </div>
     <div class="home-stat">
       <i class="fa-solid fa-flag"></i>
       <span class="home-stat-num">🇹🇳</span>
-      <span class="home-stat-label">Tunisie</span>
+      <span class="home-stat-label">{{ 'home.tunisia' | translate }}</span>
     </div>
   </section>
 
@@ -65,7 +65,7 @@
           <span class="btn-text">
             <strong>{{ 'home.createeventbtn' | translate }}</strong>
             <small *ngIf="isAdminVerified">{{ 'home.createeventbtndsc' | translate }}</small>
-            <small *ngIf="!isAdminVerified" style="color:red;">Compte non vérifié — Attendre l'approbation de l'administrateur</small>
+            <small *ngIf="!isAdminVerified" style="color:red;">{{ 'home.orgnotverified' | translate }}</small>
           </span>
         </button>
       </div>
@@ -195,7 +195,7 @@
       </div>
     </div>
 
-    <p *ngIf="!isLoadingEvents && events.length === 0" class="no-events">No events available yet.</p>
+    <p *ngIf="!isLoadingEvents && events.length === 0" class="no-events">{{ 'home.noeventsavailable' | translate }}</p>
   </section>
 
   <ng-container *ngIf="!isLoggedIn">

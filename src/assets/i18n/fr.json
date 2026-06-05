@@ -38,7 +38,12 @@
     "createeventbtndsc": "Organisez votre prochain événement",
     "consulter": "Consulter mon événement",
     "recommended": "Recommandés pour vous",
-    "analyzepreference": "Analyse de vos préférences..."
+    "analyzepreference": "Analyse de vos préférences...",
+    "events": "Événements",
+    "city": "Villes",
+    "tunisia": "Tunisie",
+    "orgnotverified": "Compte non vérifié - Attendre l'approbation de l'administrateur",
+    "noeventsavailable": "Aucun événement disponible pour le moment"
   },
   "joincta": {
     "join": "Rejoignez Invitini",
